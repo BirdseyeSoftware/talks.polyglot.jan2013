@@ -1,0 +1,223 @@
+* preamble                                                         :noexport:
+  :PROPERTIES:
+  :ID:       85cae6d5-b9cd-477a-82ae-d66ddee43a71
+  :ADDED:    [2013-01-15 Tue 14:15]
+  :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
+  :END:
+#+FILETAGS: birdseye
+#+CATEGORY: bsw
+#+STARTUP: hidestars hideblocks
+* Pre-Introduction
+  :PROPERTIES:
+  :ID:       d4947084-29bd-4a26-b914-ecabcbf86a9b
+  :ADDED:    [2013-01-15 Tue 15:17]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+  Warm up // animated gif of an arcade game
+  youtube Contra Video
+* Introduction
+  :PROPERTIES:
+  :ID:       f7b0f8fe-8407-496e-b98a-e18a42382b89
+  :ADDED:    [2013-01-15 Tue 15:17]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+** The problems of browser side UI development
+   :PROPERTIES:
+   :ID:       44a57f51-624a-4813-923d-72041ef4d591
+   :ADDED:    [2013-01-15 Tue 15:29]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+
+    - which framework / style / fad to adopt
+    - callback and binding hell
+    - tight coupling either to view code or to frameworks
+    - testing requires a lot of mocks and fixtures (repetitious)
+
+** Goals and outline
+   :PROPERTIES:
+   :ID:       76beec65-39bf-4a8e-a092-5259c6acdc43
+   :ADDED:    [2013-01-15 Tue 15:29]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+* Reducers 101
+  :PROPERTIES:
+  :ID:       b4bdbf7e-466b-4c81-9593-3967e83d65ed
+  :ADDED:    [2013-01-15 Tue 15:19]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+- http://www.globalnerdy.com/2008/09/03/enumerating-enumerable-a-cute-trick-for-explaining-inject-reduce-fold/
+- syntactic 'inject'ion of operator between args
+- show basics of left fold with integers or some non-event inputs
+* What is event sourcing? 
+  :PROPERTIES:
+  :ID:       e6eec775-a4d7-4340-ad52-fd8cdf46d14c
+  :ADDED:    [2013-01-15 Tue 15:19]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+- short standard def, non-functional
+  - link to a few examples, mention CQRS, etc.
+- emphasize difference between event-driven and event-sourced
+  extremely simple canvas drawing example:
+  Dual pane:  the first pane is event driven and histories discarded,
+  the second is event sourced and a history is persistent
+  - event history is the 'source' of truth, not the current state
+  - current state is derived
+- redefine in terms of `reduce`. show with simple event history
+    
+
+* Event sourcing FTW 
+  :PROPERTIES:
+  :ID:       92922c70-3855-48ca-8b1a-3ef1c989a16a
+  :ADDED:    [2013-01-15 Tue 15:50]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+** Server-side
+   :PROPERTIES:
+   :ID:       5f0aef28-04a6-4949-8c9e-80caf3d47eb1
+   :ADDED:    [2013-01-15 Tue 15:51]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+Mention and provides links to a couple server-side examples.
+Mention CQRS.
+http://msdn.microsoft.com/en-us/library/jj591559.aspx
+
+ Benefits listed on msdn:
+ - performance
+ - simplification
+ - audit trail
+ - Integration with other subsystems
+ - Deriving additional business value from the event history
+ - Production troubleshooting
+ - Fixing errors
+ - Testing
+
+Other benefits
+ - easy replication via event pubsub
+ - events/interactions/messages are a natural way of describing
+   software (UIs, etc.) 
+   * structural vs behavioural model *
+
+** Client-side
+   :PROPERTIES:
+   :ID:       7c4a5710-4202-4a3b-aae6-1e435359c903
+   :ADDED:    [2013-01-15 Tue 15:51]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+  - explicit domain events and event loop instead of direct method
+    calls / callback binding to UI events
+  - domain state is a reduction over the domain events (not the UI
+    events)
+  - UI events are translated into domain events
+  - changes in domain state trigger partial view update...
+  - test cases and fixture generation (generative style)
+
+* Compare and contrast with MV* implementation
+  :PROPERTIES:
+  :ID:       ac6087b3-578a-45b7-9085-b4bd5d1b1415
+  :ADDED:    [2013-01-15 Tue 15:52]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+  - problems solved
+  - call graph comparison
+    
+* Super Powers!
+  :PROPERTIES:
+  :ID:       44f98a98-55f2-41ab-a99b-fe32c0c03533
+  :ADDED:    [2013-01-15 Tue 15:54]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+# (video game level-up animation or superhero slide for each)  
+  
+** Rewind Time
+  :PROPERTIES:
+  :ID:       ab68f0c2-244c-4bb8-9b8c-270dfd685e18
+  :ADDED:    [2013-01-15 Tue 15:54]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+# (history replay)
+** Jump through worm-holes 
+   :PROPERTIES:
+   :ID:       69ca5ca6-c257-4a18-a944-de0613fe0032
+   :ADDED:    [2013-01-15 Tue 15:54]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+   
+*** Notes                                                             :notes:
+    :PROPERTIES:
+    :ID:       dc183e93-ea44-4ed4-a8ee-ded9aa2ec4b5
+    :ADDED:    [2013-01-15 Tue 15:58]
+    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+    :END:
+(jump in space and time to particular
+    states in different browsers - browserstack, etc., change code in
+    editor and jump dev browser back to exact same spot in browser UI
+    history for faster dev cycle, watch users realtime via websockets)
+** Visit parallel universes 
+   :PROPERTIES:
+   :ID:       99c70d85-14ad-4ac0-a295-89174cfbcd59
+   :ADDED:    [2013-01-15 Tue 15:55]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+# (same history - different projections/reductions, being able to
+#    fork history in shared applications like revision control,
+#    hand-waving ...)   
+** xray vision 
+   :PROPERTIES:
+   :ID:       2296f643-3130-47c3-9eb2-7af49502b886
+   :ADDED:    [2013-01-15 Tue 15:55]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+# (more declarative design, user intentions captured, what now how)   
+** Hold your breath 
+   :PROPERTIES:
+   :ID:       59b8746a-06a6-445e-a41d-0bfe70ae850a
+   :ADDED:    [2013-01-15 Tue 15:55]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+# Aquaman
+# Offline-sync powers example   
+   
+   
+* Testing benefits
+  :PROPERTIES:
+  :ID:       182de6ac-ea75-4cd2-9167-82c4cd56fcfc
+  :ADDED:    [2013-01-15 Tue 16:48]
+  :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
+  :END:
+** Works well with generative testing
+  :PROPERTIES:
+  :ID:       d002d2cf-8ca5-49c5-b77c-82e0c42661b8
+  :ADDED:    [2013-01-15 Tue 16:48]
+  :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
+  :END:
+** Is simple to model scenarios
+   :PROPERTIES:
+   :ID:       0ec5156f-fa0e-406a-9d67-eed5ff8240bd
+   :ADDED:    [2013-01-15 Tue 16:48]
+   :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
+   :END:
+** Easier state-machine testing
+   :PROPERTIES:
+   :ID:       f45b8d5c-02ac-4a5c-ac65-3420007d59e8
+   :ADDED:    [2013-01-15 Tue 16:49]
+   :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
+   :END:
+- state-space search
+* Other examples
+  :PROPERTIES:
+  :ID:       94533758-7577-46ca-8808-10d51085dd02
+  :ADDED:    [2013-01-15 Tue 16:45]
+  :END:
+
+** Notes
+  :PROPERTIES:
+  :ID:       b4df32ee-901a-47f4-a929-9f2392eb1af1
+  :ADDED:    [2013-01-15 Tue 16:46]
+  :END:
+  - Show dentalle example 
+* Conclusion
+  :PROPERTIES:
+  :ID:       685c789b-d4dc-4840-bc4f-69015642b091
+  :ADDED:    [2013-01-15 Tue 15:17]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
