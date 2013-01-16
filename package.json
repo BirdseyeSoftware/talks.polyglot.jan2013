@@ -1,0 +1,11 @@
+{"name": "talks.polyglot.jan2013",
+ "version": "0.1.0",
+ "description": "",
+ "dependencies": {
+     "coffee-script": "1.4.0",
+     "underscore": "1.4.3",
+     "underscore.string": "2.3.0",
+     "buster": "0.6.12",
+     "browserify": "1.12"
+ }
+}
