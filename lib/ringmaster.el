@@ -3,4 +3,4 @@
   (interactive)
   (save-window-excursion
     (find-file "~/src/talks.polyglot.jan2013/slides.org")
-    (org-export-as-html 3 nil nil nil t)))
+    (org-export-as-html 3)))

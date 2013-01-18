@@ -3,11 +3,15 @@
  "description": "",
  "dependencies": {
      "coffee-script": "1.4.0",
+     "express": "3.0.6",
+     "faye": "0.8.8",
+     "rx": "2.0.2",
+     "rxjs-jquery": "0.0.1",
      "underscore": "1.4.3",
      "underscore.string": "2.3.0",
      "buster": "0.6.10",
      "browserify": "1.12",
      "jquery-browserify": "1.8.1",
-     "faye": "0.8.8"
+     "hammerjs": "0.6.2"
  }
 }

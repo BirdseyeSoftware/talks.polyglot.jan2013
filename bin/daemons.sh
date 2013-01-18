@@ -5,6 +5,11 @@ ROOT_PATH=`pwd`
 PATH=`pwd`/bin:$PATH
 source bin/shared.sh
 
+
+express_server () {
+  $ROOT_PATH/bin/run-server.sh 
+} 
+
 browserify_bundle () {
   $ROOT_PATH/bin/bundle.sh 
 } 
@@ -27,6 +32,8 @@ start() {
     compile_sass &
     compile_coffee &
     browserify_bundle &
+    sleep 0.5 
+    express_server &
     $ROOT_PATH/bin/buster server & # fork to a subshell
     sleep 2 # takes a while for buster server to start
     $ROOT_PATH/bin/phantomjs ./test/phantom.js &

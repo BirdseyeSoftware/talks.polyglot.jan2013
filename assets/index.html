@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="content">Faye testing 2</div>
+    <script type='text/javascript' src='http://vm1i.damnsimple.com:8080/faye/client.js'></script>
+    <script type='text/javascript' src='http://vm1i.damnsimple.com:8080/bundle.js'></script>
+    <script type="text/javascript">
+    var client = new Faye.Client('http://vm1i.damnsimple.com:8080/faye');
+    client.subscribe('/foo', function(msg) {
+      console.log($);
+      $("#content").append(msg)
+    });
+    client.publish('/foo', 123);
+    </script>
+  </body>
+</html>
