@@ -1,14 +1,10 @@
 <!-- extra tags -->   
-    <script type='text/javascript' src='/faye/client.js'></script>
-    <script type='text/javascript' src='/bundle.js'></script>
-    <script type="text/javascript">
-    //var client = new Faye.Client('http://vm1i.damnsimple.com:8080/faye');
-    var client = new Faye.Client('/faye');
-    client.subscribe('/slides', function(slide) {
-      console.log(slide);
-      var $slide = $("#"+slide);
-      $('html,body').animate({scrollTop: $slide.offset().top -15}, 30)
-    });
-    </script>
+    <script src="reveal.js/lib/js/head.min.js"></script>
+    <script src="reveal.js/js/reveal.min.js"></script>
+
+    <script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/hammer.js"></script>
+    <script type="text/javascript" src="/faye/client.js"></script>
+    <script type="text/javascript" src="/bundle.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/jquery.hammer.js"></script>
   </body>
 </html>

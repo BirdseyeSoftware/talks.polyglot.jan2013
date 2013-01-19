@@ -16,6 +16,8 @@ function create_phantomjs_symlink {
     fi
 }
 
+## TODO: git clone, symlink reveal.js
+
 npm install
 PATH=`pwd`/bin:$PATH
 VENDOR_DIR=`pwd`/vendor

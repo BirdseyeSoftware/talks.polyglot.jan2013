@@ -1,3 +1,5 @@
+#+TITLE: The Mighty `Event`
+# a cheatcode to `reduce` complexity and unlock super-powers
 * preamble                                                         :noexport:
   :PROPERTIES:
   :ID:       85cae6d5-b9cd-477a-82ae-d66ddee43a71
@@ -7,14 +9,29 @@
 #+FILETAGS: birdseye
 #+CATEGORY: bsw
 #+STARTUP: hidestars hideblocks
+* 
+  :PROPERTIES:
+  :ID:       1b98e6e2-d6be-4f69-b16b-f7584b4d841f
+  :ADDED:    [2013-01-18 Fri 14:05]
+  :CLOCK-WHEN-ADDED: 53a8d1a0-84d0-4b88-b435-bd9088b200f4
+  :END:
+#  Warm up // animated gif of an arcade game youtube Contra Video
+
 * Pre-Introduction
   :PROPERTIES:
   :ID:       d4947084-29bd-4a26-b914-ecabcbf86a9b
   :ADDED:    [2013-01-15 Tue 15:17]
   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
-  Warm up // animated gif of an arcade game
-  youtube Contra Video
+#+begin_src JavaScript
+function() { void(0); };
+#+end_src
+
+#+begin_src python
+def test():
+    pass
+#+end_src
+
 * Introduction
   :PROPERTIES:
   :ID:       f7b0f8fe-8407-496e-b98a-e18a42382b89
@@ -39,6 +56,7 @@
    :ADDED:    [2013-01-15 Tue 15:29]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
+ [[file:spaghetti-monster.jpg]] 
 * Reducers 101
   :PROPERTIES:
   :ID:       b4bdbf7e-466b-4c81-9593-3967e83d65ed
@@ -147,6 +165,7 @@ Other benefits
     :ID:       dc183e93-ea44-4ed4-a8ee-ded9aa2ec4b5
     :ADDED:    [2013-01-15 Tue 15:58]
     :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+    :HTML_CONTAINER_CLASS: notes
     :END:
 (jump in space and time to particular
     states in different browsers - browserstack, etc., change code in

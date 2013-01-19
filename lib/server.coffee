@@ -28,6 +28,7 @@ faye.asObservable('handshake').subscribe(
 server.configure(->
   server.use(express.static(__dirname + '/../assets'))
   server.use(express.static(__dirname + '/../build'))
-  server.use(faye))
+  server.use(faye)
+  console.log("express server ready"))
 
 server.listen(8080)

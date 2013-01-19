@@ -1,72 +1,118 @@
-# window.$ = require "jquery"
-# window.Rx = require "rx"
-# require "rxjs-jquery"
-eventToKeycode = (ev) ->
-  ev.which
+require "rx/rx.time"
+_ = require "underscore"
 
-isDirectionKey = (keycode) ->
-  keycode == 37 || #left
-  keycode == 39    # right
+## Rx Observables ####################################################
 
-directionKeyToSlideMovement = (keycode) ->
-  if keycode == 37
-    "PrevSlide"
-  else if keycode == 39
-    "NextSlide"
-  else
-    "I don't know"
+exports.hammerAsObservable = hammerAsObservable = ($el, event_type) ->
+  $($el).hammer().bindAsObservable(event_type)
 
-notify = (msg) ->
-  alert(msg)
-  #$("#content").append(msg)
+exports.revealAsObservable = revealAsObservable = (event_type) ->
+  subj = new Rx.Subject()
+  subj.callback = (params) -> subj.onNext(params)
+  Reveal.addEventListener(event_type, subj.callback)
+  subj
 
+######################################################################
 
-window.client = client = new Faye.Client("/faye")
+######################################################################
 
-# THIS ONE WORKS!
-# $(->
-#   $("body#circus").bind("touchstart", (ev) ->
-#     client.publish("/touch", msg: "hello world")))
+NextSlide = ->
+  type: "NextSlide"
 
-$(->
-  $("body#circus").hammer().bind("swipe", (ev) ->
-    ev.preventDefault()
-    #notify(ev.direction)
-    client.publish("/touch", ev.direction)
-    ))
+PrevSlide = ->
+  type: "PrevSlide"
 
-#
-# $(->
-#   touchEvents = $("body#circus").
-#                   bindAsObservable("swipe").
-#                   subscribe(
-#                       ((ev) ->
-#                         ev.preventDefault()
-#                         notify(ev.direction)
-#                         #client.publish("/touch", ev.direction)
-#                         ),
-#                       ((err) -> notify(err)),
-#                       (-> notify("complete"))))
+UpSlide = ->
+  type: "UpSlide"
 
+DownSlide = ->
+  type: "DownSlide"
 
-                      #pub = client.publish("/touch", ev)
-                      #pub.callback(-> notify("Sent successfuly"))
-                      #pub.errback((err) -> notify(err))
+RightSlide = ->
+  type: "RightSlide"
 
+LeftSlide = ->
+  type: "LeftSlide"
 
-  # $("body#circus").bind("touchend", (ev) ->
-  #   notify(ev))
-  # touchEvents = $("body#circus").
-  #                 bindAsObservable("touchstart").
-  #                 throttle(1000).
-  #                 subscribe((ev) ->
-  #                     client.publish("/touch", ev)
-  #                     notify("You have been touched!"))
+keyEventToSlideEvent = (ev) ->
+  ev_map =
+    37: PrevSlide
+    39: NextSlide
+    32: NextSlide
+  ctor = ev_map[ev.which]
+  if ctor?
+    ctor()
 
-  # slideMovements = $("body#circus").
-  #                    keyupAsObservable().
-  #                    where(_.compose(isDirectionKey, eventToKeycode)).
-  #                    select(_.compose(directionKeyToSlideMovement, eventToKeycode))
-  # slideMovements.subscribe(
-  #   (move)-> console.log(move),
-  #   (err) -> console.log(err))
+directionStrToSlideEvent = (direction) ->
+  ev_map =
+    "up": UpSlide
+    "down": DownSlide
+    "right": RightSlide
+    "left":  LeftSlide
+  ctor = ev_map[direction]
+  if ctor?
+    ctor()
+
+revealNavBarObservable = ->
+  $("aside.controls div").
+    liveAsObservable("click").
+    select((ev) ->
+        $el = $(ev.target)
+        cls = $el.attr("class").split(" ")[0]
+        dir = cls.replace("navigate-", "")
+        directionStrToSlideEvent(dir))
+
+swipeEventToSlideEvent = (ev) ->
+  dir = ev.direction
+  rev_dirs =
+    left: "right"
+    right: "left"
+    up: "down"
+    down: "up"
+  directionStrToSlideEvent(rev_dirs[dir])
+
+appendRevealDetails = (ev) ->
+  ev.revealIndices = Reveal.getIndices()
+  ev
+
+appendSlideDOMId = (ev) ->
+  currentSlide = Reveal.getCurrentSlide().id
+  if currentSlide?
+    m = currentSlide.match(/reveal-(.+)/)
+    if m?
+      ev.slideId = m[1]
+  ev
+
+exports.slideEventsObservable = slideEventsObservable = ($el) ->
+  $el = $($el)
+  Rx.Observable.merge(
+    revealNavBarObservable(),
+    hammerAsObservable($el, "swipe").select(swipeEventToSlideEvent),
+    $el.bindAsObservable("keyup").select(keyEventToSlideEvent)).
+    where((n) -> n).
+    select(appendSlideDOMId).
+    select(appendRevealDetails)
+
+######################################################################
+
+exports.handleRemoteSlideEvent = (slideEvent) ->
+  {h, v} = slideEvent.revealIndices
+  Reveal.slide(h, v)
+
+handleRevealCommand = (slideEvent) ->
+  ev_map =
+    PrevSlide: Reveal.prev
+    NextSlide: Reveal.next
+    UpSlide:   Reveal.up
+    DownSlide: Reveal.down
+    RightSlide: Reveal.right
+    LeftSlide: Reveal.left
+  fn = ev_map[slideEvent.type]
+  if fn?
+    fn()
+
+exports.handleSlideEvent = (slideEvent) ->
+  handleRevealCommand(slideEvent)
+
+exports.PrevSlide = PrevSlide
+exports.NextSlide = NextSlide

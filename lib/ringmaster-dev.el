@@ -96,6 +96,10 @@
                     (point-max)
                     file))))
 
+(defun ringmaster-dev/export-slides ()
+  (interactive)
+  (message (dss/local-shell-command-to-string
+            (format "cd %s; bin/export_slides.sh" ringmaster-dev-directory))))
 ;; (defun ringmaster-dev/buster-refresh-static  ()
 ;;   (interactive)
 ;;   (run-with-timer 2 nil
