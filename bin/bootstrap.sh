@@ -16,11 +16,26 @@ function create_phantomjs_symlink {
     fi
 }
 
+function download_and_install_reveal {
+    if command -v git 2>&1 /dev/null; then
+        echo "Download birdseye version of reveal.js"
+        pushd .
+        cd $VENDOR_DIR
+        git clone https://github.com/BirdseyeSoftware/reveal.js
+        cd $ASSETS_DIR
+        ln -s $VENDOR_DIR/reveal.js
+        popd
+    else
+        echo "You need to install git"
+        exit 1
+    fi
+}
 ## TODO: git clone, symlink reveal.js
 
 npm install
 PATH=`pwd`/bin:$PATH
 VENDOR_DIR=`pwd`/vendor
+ASSETS_DIR=`pwd`/assets
 ROOT_DIR=`pwd`
 
 cd bin
@@ -30,6 +45,8 @@ done
 [[ -e coffee ]] || ln -s ../node_modules/coffee-script/bin/coffee coffee
 [[ -e browserify ]] || ln -s ../node_modules/.bin/browserify
 [[ -e phantomjs ]] || create_phantomjs_symlink
+
+download_and_install_reveal
 
 cd $ROOT_DIR
 ## 

@@ -1,10 +1,16 @@
 require "rx/rx.time"
 _ = require "underscore"
 
+net = require "./slides_network"
+
+log = (msg, data...) ->
+  console.log(msg, data...)
+  net.log(msg, data)
+
 ## Rx Observables ####################################################
 
 exports.hammerAsObservable = hammerAsObservable = ($el, event_type) ->
-  $($el).hammer().bindAsObservable(event_type)
+  $($el).bindAsObservable(event_type)
 
 exports.revealAsObservable = revealAsObservable = (event_type) ->
   subj = new Rx.Subject()
@@ -14,62 +20,114 @@ exports.revealAsObservable = revealAsObservable = (event_type) ->
 
 ######################################################################
 
+class Slide
+  constructor: (@id, @hidx, @vidx, @childSlides) ->
+
+class SlideDeck
+  constructor: (@slides) ->
+
+revealSectionToSlide = ($section) ->
+  $section = $($section)
+  id = $section.id
+  hidx = $section.attr("data-index-h")
+  vidx = $section.attr("data-index-v")
+  childSlides = _.map($containerNode.find('section > section'), revealSectionToSlide)
+  new Slide(id, hidx, vidx, childSlides)
+
+domSectionsToSlideDeck = ($containerNode) ->
+  slides = _.map($containerNode.find('div > section'), revealSectionToSlide)
+  new SlideDeck(slides)
+
+revealToSlideDeck = () ->
+  domSectionsToSlideDeck($("div.reveal"))
+window.revealToSlideDeck = revealToSlideDeck
+######################################################################
+EVENTS =
+  ToggleOverview:  {keys: [13]} # enter
+  EnterFullscreen: {keys: [70]} # f
+  TogglePause:     {keys: [66, 190]} # period, b
+  NextSlide:       {keys: [32,34,78]} # space, n, pgdown
+  PrevSlide:       {keys: [33, 80]}   # pgup, p
+  LeftSlide:       {keys: [37, 72]}   # left, h
+  UpSlide:         {keys: [38, 75]} #up, k
+  RightSlide:      {keys: [39, 76]} #right, l
+  DownSlide:       {keys: [40, 74]} #down, j
+  SelectSlide:     {}
+
+KEYS_TO_EVENTS = {}
+for k, v of EVENTS
+  do (k, v) ->
+    ev = EVENTS[k] = -> {type: k}
+    if v.keys?
+      for kcode in v.keys
+        KEYS_TO_EVENTS[kcode] = ev
+
+movements = ["NextSlide", "PrevSlide", "UpSlide", "DownSlide", "RightSlide", "LeftSlide"]
+
+DIRS_TO_EVENTS =
+  up: EVENTS.UpSlide
+  down: EVENTS.DownSlide
+  right: EVENTS.RightSlide
+  left:  EVENTS.LeftSlide
+REV_DIRS_TO_EVENTS =
+  left: EVENTS.RightSlide
+  right: EVENTS.LeftSlide
+  up: EVENTS.DownSlide
+  down: EVENTS.UpSlide
+
+directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
+keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
+
 ######################################################################
 
-NextSlide = ->
-  type: "NextSlide"
+EVENTS_TO_REVEAL_FNS =
+  EnterFullscreen: Reveal.enterFullscreen
+  TogglePause: Reveal.togglePause
+  ToggleOverview: Reveal.toggleOverview
+  PrevSlide: Reveal.prev
+  NextSlide: Reveal.next
+  UpSlide:   Reveal.up
+  DownSlide: Reveal.down
+  RightSlide: Reveal.right
+  LeftSlide: Reveal.left
+  SelectSlide: (ev) ->
+    Reveal.slide(ev.h, ev.v)
+    Reveal.deactivateOverview()
 
-PrevSlide = ->
-  type: "PrevSlide"
+handleRevealCommand = (slideEvent) ->
+  EVENTS_TO_REVEAL_FNS[slideEvent.type]?(slideEvent)
 
-UpSlide = ->
-  type: "UpSlide"
+######################################################################
+is_touch = `'ontouchstart' in document.documentElement`
+#is_touch = document.documentElement.ontouchstart? or window.touch?
 
-DownSlide = ->
-  type: "DownSlide"
-
-RightSlide = ->
-  type: "RightSlide"
-
-LeftSlide = ->
-  type: "LeftSlide"
-
-keyEventToSlideEvent = (ev) ->
-  ev_map =
-    37: PrevSlide
-    39: NextSlide
-    32: NextSlide
-  ctor = ev_map[ev.which]
-  if ctor?
-    ctor()
-
-directionStrToSlideEvent = (direction) ->
-  ev_map =
-    "up": UpSlide
-    "down": DownSlide
-    "right": RightSlide
-    "left":  LeftSlide
-  ctor = ev_map[direction]
-  if ctor?
-    ctor()
+revealOverviewSlidesObservable = ->
+  evType = if is_touch then 'touchstart' else 'click'
+  $("div.reveal.overview section").
+    liveAsObservable(evType).
+    select((ev) ->
+        try
+          $el = $(ev.currentTarget)
+          console.log($el, ev)
+          sev = EVENTS.SelectSlide()
+          sev.h = $el.attr('data-index-h')
+          sev.v = $el.attr('data-index-v')
+          sev
+        catch er
+          null)
 
 revealNavBarObservable = ->
+  evType = if is_touch then 'touchstart' else 'click'
   $("aside.controls div").
-    liveAsObservable("click").
+    bindAsObservable(evType).
     select((ev) ->
-        $el = $(ev.target)
-        cls = $el.attr("class").split(" ")[0]
-        dir = cls.replace("navigate-", "")
-        directionStrToSlideEvent(dir))
-
-swipeEventToSlideEvent = (ev) ->
-  dir = ev.direction
-  rev_dirs =
-    left: "right"
-    right: "left"
-    up: "down"
-    down: "up"
-  directionStrToSlideEvent(rev_dirs[dir])
+        try
+          $el = $(ev.target)
+          cls = $el.attr("class").split(" ")[0]
+          dir = cls.replace("navigate-", "")
+          directionToSlideEvent(dir)
+        catch err
+          null)
 
 appendRevealDetails = (ev) ->
   ev.revealIndices = Reveal.getIndices()
@@ -83,36 +141,48 @@ appendSlideDOMId = (ev) ->
       ev.slideId = m[1]
   ev
 
-exports.slideEventsObservable = slideEventsObservable = ($el) ->
+touchTypes = [
+    "doubletap", "tap",
+    "swipe", "hold",
+    "drag", "dragstart", "dragend",
+    "transform", "transformstart", "transformend"
+    "release"]
+
+mkTouchEventstream = ($el, eventTypes=touchTypes) ->
   $el = $($el)
+  if not $el.data('hammer')
+    $el.hammer()
   Rx.Observable.merge(
+    hammerAsObservable($el, evtype) for evtype in eventTypes)
+
+touchEventToSlideEvent = (ev) ->
+  switch ev.type
+    when "hold" then EVENTS.TogglePause()
+    when "doubletap" then  EVENTS.ToggleOverview()
+    when "swipe" then REV_DIRS_TO_EVENTS[ev.direction]?()
+
+exports.uiSlideEventstream = () ->
+  keyups = $('body').bindAsObservable("keyup")
+  merged = Rx.Observable.merge(
     revealNavBarObservable(),
-    hammerAsObservable($el, "swipe").select(swipeEventToSlideEvent),
-    $el.bindAsObservable("keyup").select(keyEventToSlideEvent)).
-    where((n) -> n).
+    revealOverviewSlidesObservable(),
+    mkTouchEventstream($('body')).select(touchEventToSlideEvent)
+    keyups.select(keyEventToSlideEvent))
+  merged.
+    where((n) -> n).         #drop nulls #TODO: log what leads to null
     select(appendSlideDOMId).
     select(appendRevealDetails)
 
 ######################################################################
 
 exports.handleRemoteSlideEvent = (slideEvent) ->
-  {h, v} = slideEvent.revealIndices
-  Reveal.slide(h, v)
+  console.log("remote", slideEvent)
+  if slideEvent.type in movements
+    {h, v} = slideEvent.revealIndices
+    Reveal.slide(h, v)
+  else
+    handleRevealCommand(slideEvent)
 
-handleRevealCommand = (slideEvent) ->
-  ev_map =
-    PrevSlide: Reveal.prev
-    NextSlide: Reveal.next
-    UpSlide:   Reveal.up
-    DownSlide: Reveal.down
-    RightSlide: Reveal.right
-    LeftSlide: Reveal.left
-  fn = ev_map[slideEvent.type]
-  if fn?
-    fn()
-
-exports.handleSlideEvent = (slideEvent) ->
+exports.handleLocalSlideEvent = (slideEvent) ->
+  log("local", slideEvent)
   handleRevealCommand(slideEvent)
-
-exports.PrevSlide = PrevSlide
-exports.NextSlide = NextSlide

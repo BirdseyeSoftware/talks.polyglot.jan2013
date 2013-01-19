@@ -1,11 +1,5 @@
 rx = require("rx")
-
-tee = (val, fns) ->
-  for fn in fns
-    fn(val)
-
-mktee = (fns...) ->
-  (val) -> tee(val, fns)
+{mktee} = require("./utils")
 
 exports.currentUser = null
 
@@ -72,9 +66,7 @@ transformToReveal = ()->
 setStylesheet = (mode) ->
   $("style").remove()
   $("link[rel=stylesheet]").remove()
-  console.log("styles removed")
   for href in stylesheetMap[mode]
-    console.log("adding style ", href)
     $("head").append(
       $("<link>").attr("href", href).
                   attr("rel", "stylesheet"))
@@ -105,7 +97,7 @@ initialCleanupAndTransform = () ->
   Reveal.addEventListener("ready", unbindRevealEvents)
 
 exports.init = ()->
-  exports.currentUser = window.prompt("Current user")
+  exports.currentUser = "tavis" #window.prompt("Current user")
   initialCleanupAndTransform()
   setPresentationMode(MODES.AUDIENCE)
   Reveal.initialize(

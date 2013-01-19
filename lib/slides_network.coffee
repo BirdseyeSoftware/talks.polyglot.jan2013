@@ -2,7 +2,7 @@ Rx = require "rx"
 slides_view = require "./slides_view"
 
 client = new Faye.Client("/faye")
-exports.isMe = isMe = (clientId) -> client.getClientId == clientId
+exports.isMe = isMe = (clientId) -> client.getClientId() == clientId
 
 ## Rx Observables ####################################################
 
@@ -18,10 +18,15 @@ exports.slideEventsObservable = (channel) ->
     where(([cid, ev]) -> not isMe(cid)).
     select(([cid, ev]) -> ev)
 
-## Subscription functions ############################################
+## pub functions ############################################
 
 exports.publishSlideEvent = (slideEvent) ->
   client.publish("/slides", [client.getClientId(), slideEvent])
 
 
-# exports.client = client
+exports.log = (msg, data) ->
+  client.publish('/debug',
+    [client.getClientId(), msg, data, navigator.userAgent])
+
+# exports.publish = (channel, data) ->
+#   client.publish(channel, data)

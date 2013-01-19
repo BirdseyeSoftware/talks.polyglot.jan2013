@@ -1,6 +1,6 @@
 <!-- extra tags -->   
     <script src="reveal.js/lib/js/head.min.js"></script>
-    <script src="reveal.js/js/reveal.min.js"></script>
+    <script src="reveal.js/js/reveal.js"></script> <!-- TODO: use minified -->
 
     <script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/hammer.js"></script>
     <script type="text/javascript" src="/faye/client.js"></script>
