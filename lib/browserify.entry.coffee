@@ -8,12 +8,5 @@ if window?
   window.$ = window.jQuery = jQuery
   require "../assets/jquery.macaroon"
   require "rxjs-jquery"
-
-if window?
-  #window.rx_ui = require "./rx_ui"
-  slides_main = require "./slides_main"
-  slides_main.main()
-
-
-# $(->
-#   console.log("Hello guys!"))
+  window.app = app = require "./app"
+  app.main()

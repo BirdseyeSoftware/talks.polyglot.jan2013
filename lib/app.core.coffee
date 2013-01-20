@@ -1,22 +1,11 @@
 require "rx/rx.time"
 _ = require "underscore"
 
-net = require "./slides_network"
-
+#TODO: move this
+net = require "./app.net"
 log = (msg, data...) ->
   console.log(msg, data...)
   net.log(msg, data)
-
-## Rx Observables ####################################################
-
-exports.hammerAsObservable = hammerAsObservable = ($el, event_type) ->
-  $($el).bindAsObservable(event_type)
-
-exports.revealAsObservable = revealAsObservable = (event_type) ->
-  subj = new Rx.Subject()
-  subj.callback = (params) -> subj.onNext(params)
-  Reveal.addEventListener(event_type, subj.callback)
-  subj
 
 ######################################################################
 
@@ -25,18 +14,26 @@ class Slide
 
 class SlideDeck
   constructor: (@slides) ->
+    @idsToSlides = {}
+    for slide in @slides
+      @idsToSlides[slide.id] = slide
+
+stripRevealIdPrefix = (id) ->
+  if id
+    m = id.match(/reveal-(.+)/)
+    if m? then m[1] else id
 
 indexSlide = (acc, slideSection) ->
   if not acc
-    {h:0, v:0, prevTag: 'DIV'}                  #first slide
+    {h:0, v:0}                  #first slide
   else
     switch slideSection.parentNode.tagName
-      when 'DIV' then {h: 1 + acc.h, v:0, prevTag: 'DIV'}
+      when 'DIV' then {h: 1 + acc.h, v:0}
       when 'SECTION'
-        if acc.prevTag is 'DIV'
-          {h: 1 + acc.h, v: 0, prevTag: 'SECTION'}
+        if not acc.nested
+          {h: 1 + acc.h, v: 0, nested: true}
         else
-          {h: acc.h, v: 1 + acc.v, prevTag: 'SECTION'}
+          {h: acc.h, v: 1 + acc.v, nested: true}
       else {error: slideSection}
 
 scanl = (coll, reducer, init) ->
@@ -50,12 +47,25 @@ domSectionsToSlideDeck = ($containerNode) ->
   sections = _.filter($containerNode.find('section'), (s) -> s.id)
   indices = scanl(sections, indexSlide)
   slides = for [idx, sect] in _.zip(indices, sections)
-    new Slide($(sect).attr('id'), idx.h, idx.v)
+    new Slide(stripRevealIdPrefix($(sect).attr('id')), idx.h, idx.v)
   new SlideDeck(slides)
 
 revealToSlideDeck = () ->
   domSectionsToSlideDeck($("div.reveal"))
+
+######################################################################
+#TODO: refactor / remove window refs
 window.revealToSlideDeck = revealToSlideDeck
+
+window.jumpToSlide = (slide) ->
+  Reveal.slide(slide.h, slide.v)
+  Reveal.deactivateOverview()
+
+window.jumpToSlideId = (slideId) ->
+  slide = revealToSlideDeck().idsToSlides[slideId]
+  Reveal.slide(slide.h, slide.v)
+  Reveal.deactivateOverview()
+
 ######################################################################
 EVENTS =
   ToggleOverview:  {keys: [13]} # enter
@@ -116,14 +126,41 @@ handleRevealCommand = (slideEvent) ->
 is_touch = `'ontouchstart' in document.documentElement`
 #is_touch = document.documentElement.ontouchstart? or window.touch?
 
-revealOverviewSlidesObservable = ->
+touchTypes = [
+    "doubletap", "tap",
+    "swipe", "hold",
+    "drag", "dragstart", "dragend",
+    "transform", "transformstart", "transformend"
+    "release"]
+
+mkTouchEventstream = ($el, eventTypes=touchTypes) ->
+  $el = $($el)
+  if not $el.data('hammer')
+    $el.hammer()
+  Rx.Observable.merge(
+    hammerEventstream($el, evtype) for evtype in eventTypes)
+
+mkClickEventstream = ($el) ->
   evType = if is_touch then 'touchstart' else 'click'
-  $("div.reveal.overview section").
-    liveAsObservable(evType).
+  $($el).liveAsObservable(evType)
+
+
+hammerEventstream = ($el, event_type) ->
+  $($el).bindAsObservable(event_type)
+
+################################################################################
+
+# exports.revealAsObservable = revealAsObservable = (event_type) ->
+#   subj = new Rx.Subject()
+#   subj.callback = (params) -> subj.onNext(params)
+#   Reveal.addEventListener(event_type, subj.callback)
+#   subj
+
+revealOverviewClickEventstream = ->
+  mkClickEventstream("div.reveal.overview section").
     select((ev) ->
         try
           $el = $(ev.currentTarget)
-          console.log($el, ev)
           sev = EVENTS.SelectSlide()
           sev.h = $el.attr('data-index-h')
           sev.v = $el.attr('data-index-v')
@@ -131,10 +168,8 @@ revealOverviewSlidesObservable = ->
         catch er
           null)
 
-revealNavBarObservable = ->
-  evType = if is_touch then 'touchstart' else 'click'
-  $("aside.controls div").
-    bindAsObservable(evType).
+revealNavBarClickEventstream = ->
+  mkClickEventstream("aside.controls div").
     select((ev) ->
         try
           $el = $(ev.target)
@@ -149,26 +184,8 @@ appendRevealDetails = (ev) ->
   ev
 
 appendSlideDOMId = (ev) ->
-  currentSlide = Reveal.getCurrentSlide().id
-  if currentSlide?
-    m = currentSlide.match(/reveal-(.+)/)
-    if m?
-      ev.slideId = m[1]
+  ev.slideId = stripRevealIdPrefix(Reveal.getCurrentSlide().id)
   ev
-
-touchTypes = [
-    "doubletap", "tap",
-    "swipe", "hold",
-    "drag", "dragstart", "dragend",
-    "transform", "transformstart", "transformend"
-    "release"]
-
-mkTouchEventstream = ($el, eventTypes=touchTypes) ->
-  $el = $($el)
-  if not $el.data('hammer')
-    $el.hammer()
-  Rx.Observable.merge(
-    hammerAsObservable($el, evtype) for evtype in eventTypes)
 
 touchEventToSlideEvent = (ev) ->
   switch ev.type
@@ -179,8 +196,8 @@ touchEventToSlideEvent = (ev) ->
 exports.uiSlideEventstream = () ->
   keyups = $('body').bindAsObservable("keyup")
   merged = Rx.Observable.merge(
-    revealNavBarObservable(),
-    revealOverviewSlidesObservable(),
+    revealNavBarClickEventstream(),
+    revealOverviewClickEventstream(),
     mkTouchEventstream($('body')).select(touchEventToSlideEvent)
     keyups.select(keyEventToSlideEvent))
   merged.

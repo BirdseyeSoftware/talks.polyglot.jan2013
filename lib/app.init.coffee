@@ -1,8 +1,6 @@
 rx = require("rx")
 {mktee} = require("./utils")
 
-exports.currentUser = null
-
 MODES =
   AUDIENCE: "AUDIENCE",
   PRESENTER: "PRESENTER"
@@ -99,7 +97,6 @@ initialCleanupAndTransform = () ->
   Reveal.addEventListener("ready", unbindRevealEvents)
 
 exports.init = ()->
-  exports.currentUser = "tavis" #window.prompt("Current user")
   initialCleanupAndTransform()
   setPresentationMode(MODES.AUDIENCE)
   Reveal.initialize(

@@ -7,7 +7,7 @@ browserify_ () {
     $ROOT_PATH/bin/browserify \
         --alias 'jquery:jquery-browserify' -r jquery-browserify \
         --alias 'jQuery:jquery-browserify' -r jquery-browserify \
-        -w -o build/bundle.js lib/entry.coffee > /dev/null 
+        -w -o build/bundle.js lib/browserify.entry.coffee > /dev/null 
 }
 
 main () {
