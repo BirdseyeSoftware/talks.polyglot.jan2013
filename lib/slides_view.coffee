@@ -38,6 +38,8 @@ orgSlideToReveal = ($orgSlide) ->
   if $currentLevelNodes.length > 0 and revealChildSlides.length > 0
     $currentLevelNodes.remove()
     $firstChildSlide = $("<section>").append($currentLevelNodes)
+    $firstChildSlide.attr(id: $revealSlide.attr('id'))
+    $revealSlide.attr(id: null)
     revealChildSlides = [[$firstChildSlide, []]].concat(revealChildSlides)
 
   [$revealSlide, revealChildSlides]
