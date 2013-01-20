@@ -24,15 +24,28 @@ function download_and_install_reveal {
         git clone https://github.com/BirdseyeSoftware/reveal.js
         cd reveal.js
         git checkout birdseye
-        # cd $ASSETS_DIR
-        # ln -s $VENDOR_DIR/reveal.js
+        cd $ASSETS_DIR
+        ln -s $VENDOR_DIR/reveal.js
         popd
     else
         echo "You need to install git"
         exit 1
     fi
 }
-## TODO: git clone, symlink reveal.js
+
+function download_and_install_rrxjs {
+    if command -v git 2>&1 /dev/null; then
+        echo "Download birdseye version of rx.js"
+        pushd .
+        cd $VENDOR_DIR
+        git clone https://github.com/BirdseyeSoftware/rx.js
+        npm install rx.js
+        popd
+    else
+        echo "You need to install git"
+        exit 1
+    fi
+}
 
 npm install
 PATH=`pwd`/bin:$PATH
@@ -49,7 +62,7 @@ done
 [[ -e browserify ]] || ln -s ../node_modules/.bin/browserify
 [[ -e phantomjs ]] || create_phantomjs_symlink
 [[ -e ../assets/reveal.js ]] || download_and_install_reveal
-
+[[ -e ../node_modules/rx ]] || download_and_install_rrxjs
 cd $ROOT_DIR
 ##
 bundle install --binstubs=bin
