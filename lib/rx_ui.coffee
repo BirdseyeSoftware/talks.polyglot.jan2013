@@ -21,21 +21,36 @@ exports.revealAsObservable = revealAsObservable = (event_type) ->
 ######################################################################
 
 class Slide
-  constructor: (@id, @hidx, @vidx, @childSlides) ->
+  constructor: (@id, @h, @v) ->
 
 class SlideDeck
   constructor: (@slides) ->
 
-revealSectionToSlide = ($section) ->
-  $section = $($section)
-  id = $section.id
-  hidx = $section.attr("data-index-h")
-  vidx = $section.attr("data-index-v")
-  childSlides = _.map($containerNode.find('section > section'), revealSectionToSlide)
-  new Slide(id, hidx, vidx, childSlides)
+indexSlide = (acc, slideSection) ->
+  if not acc
+    {h:0, v:0, prevTag: 'DIV'}                  #first slide
+  else
+    switch slideSection.parentNode.tagName
+      when 'DIV' then {h: 1 + acc.h, v:0, prevTag: 'DIV'}
+      when 'SECTION'
+        if acc.prevTag is 'DIV'
+          {h: 1 + acc.h, v: 0, prevTag: 'SECTION'}
+        else
+          {h: acc.h, v: 1 + acc.v, prevTag: 'SECTION'}
+      else {error: slideSection}
+
+scanl = (coll, reducer, init) ->
+  acc = init
+  for el in coll
+    acc = reducer(acc, el)
+    do (acc)->
+      acc
 
 domSectionsToSlideDeck = ($containerNode) ->
-  slides = _.map($containerNode.find('div > section'), revealSectionToSlide)
+  sections = _.filter($containerNode.find('section'), (s) -> s.id)
+  indices = scanl(sections, indexSlide)
+  slides = for [idx, sect] in _.zip(indices, sections)
+    new Slide($(sect).attr('id'), idx.h, idx.v)
   new SlideDeck(slides)
 
 revealToSlideDeck = () ->
