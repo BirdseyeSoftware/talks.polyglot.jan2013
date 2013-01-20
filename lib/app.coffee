@@ -2,6 +2,7 @@ core = require "./app.core"
 auth = require "./app.auth"
 view = require "./app.init"
 net = require "./app.net"
+streams = require "./app.streams"
 
 initEvents = ->
   Reveal.removeEventListeners()
@@ -9,8 +10,11 @@ initEvents = ->
   localEvents.subscribe(core.handleLocalSlideEvent)
   localEvents.subscribe(net.publishSlideEvent)
 
-  remoteSlideStream = net.remoteSlideEventstream()
-  remoteSlideStream.subscribe(core.handleRemoteSlideEvent)
+  streams.remoteSlideEventstream.subscribe(core.handleRemoteSlideEvent)
+
+  streams.log.subscribe(([msg, data]) ->
+    console.log(msg, data...)
+    net.log(msg, data))
 
 main = ->
   $ ->

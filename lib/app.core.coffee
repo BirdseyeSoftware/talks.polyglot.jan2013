@@ -1,12 +1,7 @@
 require "rx/rx.time"
 _ = require "underscore"
 
-#TODO: move this
-net = require "./app.net"
-log = (msg, data...) ->
-  console.log(msg, data...)
-  net.log(msg, data)
-
+utils = require "./utils"
 ######################################################################
 
 class Slide
@@ -216,5 +211,5 @@ exports.handleRemoteSlideEvent = (slideEvent) ->
     handleRevealCommand(slideEvent)
 
 exports.handleLocalSlideEvent = (slideEvent) ->
-  log("local", slideEvent)
+  utils.log("local", slideEvent)
   handleRevealCommand(slideEvent)
