@@ -1,19 +1,21 @@
 rx_ui = require "./rx_ui"
-slides_view = require "./slides_view"
-slides_network = require "./slides_network"
+auth = require "./slides_auth"
+view = require "./slides_view"
+net = require "./slides_network"
 
 initEvents = ->
   Reveal.removeEventListeners()
   localEvents = rx_ui.uiSlideEventstream()
   localEvents.subscribe(rx_ui.handleLocalSlideEvent)
-  localEvents.subscribe(slides_network.publishSlideEvent)
+  localEvents.subscribe(net.publishSlideEvent)
 
-  remoteSlideStream = slides_network.slideEventsObservable("/slides")
+  remoteSlideStream = net.slideEventsObservable("/slides")
   remoteSlideStream.subscribe(rx_ui.handleRemoteSlideEvent)
 
 main = ->
   $ ->
-    slides_view.init()
+    auth.getCurrentUser()
+    view.init()
     $("body").bind("touchstart", (ev) -> ev.preventDefault())
     setTimeout(initEvents, 340)
 
