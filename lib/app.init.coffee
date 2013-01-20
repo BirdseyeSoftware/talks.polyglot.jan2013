@@ -99,6 +99,7 @@ initialCleanupAndTransform = () ->
 exports.init = ()->
   initialCleanupAndTransform()
   setPresentationMode(MODES.AUDIENCE)
+  $("body").bind("touchstart", (ev) -> ev.preventDefault())
   Reveal.initialize(
     keyboard: false,
     rollingLinks: false

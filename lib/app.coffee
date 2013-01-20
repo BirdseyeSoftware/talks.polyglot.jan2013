@@ -1,26 +1,64 @@
 core = require "./app.core"
+ui = require "./app.ui"
 auth = require "./app.auth"
 view = require "./app.init"
 net = require "./app.net"
 streams = require "./app.streams"
+utils = require "./utils"
+
+################################################################################
+
+EVENTS_TO_REVEAL_FNS =
+  EnterFullscreen: Reveal.enterFullscreen
+  TogglePause: Reveal.togglePause
+  ToggleOverview: Reveal.toggleOverview
+  PrevSlide: Reveal.prev
+  NextSlide: Reveal.next
+  UpSlide:   Reveal.up
+  DownSlide: Reveal.down
+  RightSlide: Reveal.right
+  LeftSlide: Reveal.left
+  SelectSlide: (ev) ->
+    Reveal.slide(ev.h, ev.v)
+    Reveal.deactivateOverview()
+
+handleRevealCommand = (slideEvent) ->
+  EVENTS_TO_REVEAL_FNS[slideEvent.type]?(slideEvent)
+
+handleRevealCommand = handleRevealCommand
+
+handleRemoteSlideEvent = (slideEvent) ->
+  console.log("remote", slideEvent)
+  if slideEvent.type in core.movements
+    {h, v} = slideEvent.revealIndices
+    Reveal.slide(h, v)
+  else
+    handleRevealCommand(slideEvent)
+
+handleLocalSlideEvent = (slideEvent) ->
+  utils.log("local", slideEvent)
+  handleRevealCommand(slideEvent)
+################################################################################
+
+appendRevealDetails = (ev) ->
+  ev.revealIndices = Reveal.getIndices()
+  ev
 
 initEvents = ->
-  Reveal.removeEventListeners()
-  localEvents = core.uiSlideEventstream()
-  localEvents.subscribe(core.handleLocalSlideEvent)
-  localEvents.subscribe(net.publishSlideEvent)
+  ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
+  utils.teeSubscribe(streams.localSlideEventstream,
+    handleLocalSlideEvent,
+    (ev) -> net.publishSlideEvent(appendRevealDetails(ev)))
 
-  streams.remoteSlideEventstream.subscribe(core.handleRemoteSlideEvent)
+  streams.remoteSlideEventstream.subscribe(handleRemoteSlideEvent)
 
-  streams.log.subscribe(([msg, data]) ->
-    console.log(msg, data...)
-    net.log(msg, data))
+  streams.log.subscribe(([msg, data]) -> console.log(msg, data...))
+  streams.log.subscribe(net.log)
 
 main = ->
   $ ->
     auth.getCurrentUser()
     view.init()
-    $("body").bind("touchstart", (ev) -> ev.preventDefault())
     setTimeout(initEvents, 340)
 
 exports.main = main
