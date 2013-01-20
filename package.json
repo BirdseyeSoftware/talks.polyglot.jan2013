@@ -4,6 +4,13 @@
  "dependencies": {
      "coffee-script": "1.4.0",
      "express": "3.0.6",
+     "passport": "0.1.15",
+     "passport-oauth": "0.1.13",
+     "passport-twitter": "0.1.4",
+     "passport-facebook": "0.1.4",
+     "passport-github": "0.1.3",
+     "passport-meetup": "0.1.2",
+     "passport-google-oauth": "0.1.4",
      "faye": "0.8.8",
      "rxjs-jquery": "0.0.1",
      "underscore": "1.4.3",
