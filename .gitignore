@@ -30,3 +30,4 @@ vendor/
 /lib/app*.js
 /lib/browserify.entry.js
 /lib/utils.js
+/lib/channel_names.js
