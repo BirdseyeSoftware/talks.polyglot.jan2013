@@ -2,7 +2,7 @@ function create_phantomjs_symlink {
     if command -v phantomjs 2>&1 /dev/null; then
         echo "Found phantomjs, using it..."
         ln -s `command -v phantomjs` phantomjs
-    else    
+    else
         echo "phantomjs not found, downloading Linux x64 version"
         mkdir -p $VENDOR_DIR
         if [[ ! -d $VENDOR_DIR/phantomjs-1.8.1-linux-x86_64 ]]; then
@@ -22,8 +22,10 @@ function download_and_install_reveal {
         pushd .
         cd $VENDOR_DIR
         git clone https://github.com/BirdseyeSoftware/reveal.js
-        cd $ASSETS_DIR
-        ln -s $VENDOR_DIR/reveal.js
+        cd reveal.js
+        git checkout birdseye
+        # cd $ASSETS_DIR
+        # ln -s $VENDOR_DIR/reveal.js
         popd
     else
         echo "You need to install git"
@@ -42,12 +44,12 @@ cd bin
 for F in ../node_modules/buster/bin/buster*; do
     [[ -e $(basename "$F") ]] || ln -s "$F"
 done
+
 [[ -e coffee ]] || ln -s ../node_modules/coffee-script/bin/coffee coffee
 [[ -e browserify ]] || ln -s ../node_modules/.bin/browserify
 [[ -e phantomjs ]] || create_phantomjs_symlink
-
-download_and_install_reveal
+[[ -e ../assets/reveal.js ]] || download_and_install_reveal
 
 cd $ROOT_DIR
-## 
+##
 bundle install --binstubs=bin
