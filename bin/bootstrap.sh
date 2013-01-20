@@ -25,7 +25,7 @@ function download_and_install_reveal {
         cd reveal.js
         git checkout birdseye
         cd $ASSETS_DIR
-        ln -s $VENDOR_DIR/reveal.js
+        [[ -e reveal.js ]] || ln -s $VENDOR_DIR/reveal.js
         popd
     else
         echo "You need to install git"
