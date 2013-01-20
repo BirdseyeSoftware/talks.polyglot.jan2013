@@ -1,3 +1,4 @@
+_ = require "underscore"
 streams = require "./app.streams"
 
 exports.tee = tee = (val, fns) ->
@@ -9,3 +10,6 @@ exports.mktee = (fns...) ->
 
 exports.log = (msg, data...) ->
   streams.log.onNext([msg, data])
+
+exports.teeSubscribe = (observable, observers...) ->
+  _.map(observers, ((sub) -> observable.subscribe(sub)))

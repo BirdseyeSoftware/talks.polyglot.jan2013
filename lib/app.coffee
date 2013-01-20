@@ -3,24 +3,23 @@ auth = require "./app.auth"
 view = require "./app.init"
 net = require "./app.net"
 streams = require "./app.streams"
+utils = require "./utils"
 
 initEvents = ->
-  Reveal.removeEventListeners()
   localEvents = core.uiSlideEventstream()
-  localEvents.subscribe(core.handleLocalSlideEvent)
-  localEvents.subscribe(net.publishSlideEvent)
+  utils.teeSubscribe(localEvents,
+    core.handleLocalSlideEvent,
+    net.publishSlideEvent)
 
   streams.remoteSlideEventstream.subscribe(core.handleRemoteSlideEvent)
 
-  streams.log.subscribe(([msg, data]) ->
-    console.log(msg, data...)
-    net.log(msg, data))
+  streams.log.subscribe(([msg, data]) -> console.log(msg, data...))
+  streams.log.subscribe(net.log)
 
 main = ->
   $ ->
     auth.getCurrentUser()
     view.init()
-    $("body").bind("touchstart", (ev) -> ev.preventDefault())
     setTimeout(initEvents, 340)
 
 exports.main = main

@@ -29,3 +29,4 @@ vendor/
 /assets/common.css
 /lib/app*.js
 /lib/browserify.entry.js
+/lib/utils.js
