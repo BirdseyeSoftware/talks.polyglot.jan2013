@@ -1,6 +1,131 @@
 Rx = require "rx"
+_ = require "underscore"
 {EVENTS} = require "./app.core"
+{mktee} = require("./utils")
 
+################################################################################
+MODES =
+  AUDIENCE: "AUDIENCE",
+  PRESENTER: "PRESENTER"
+
+stylesheetMap =
+  AUDIENCE: ["/common.css", "/audience.css",
+             "/reveal.js/css/reveal.min.css",
+             "/reveal.js/css/theme/default.css",
+             "/reveal.js/lib/css/zenburn.css"],
+  PRESENTER: ["/common.css", "/presenter.css"]
+  ORG_MODE: ["/common.css", "/presenter.css"]
+
+exports.mode_observable = mode_observable = new Rx.Subject()
+setPresentationMode = (mode) -> mode_observable.onNext(mode)
+
+setStylesheet = (mode) ->
+  $("style").remove()
+  $("link[rel=stylesheet]").remove()
+  for href in stylesheetMap[mode]
+    $("head").append(
+      $("<link>").attr("href", href).
+                  attr("rel", "stylesheet"))
+
+toggleDomElemsForMode = (mode) ->
+  switch mode
+    when MODES.AUDIENCE
+      $("#reveal").show()
+      $("#org-mode-content").hide()
+    when MODES.PRESENTER
+      $("#org-mode-content").show()
+      $("#reveal").hide()
+    when MODES.ORG_MODE
+      $("#org-mode-content").show()
+      $("#reveal").hide()
+
+handleModeChange = mktee(setStylesheet, toggleDomElemsForMode)
+mode_observable.subscribe(handleModeChange)
+
+################################################################################
+# transform org-mode slides to Reveal.js section tags
+orgSlideToReveal = ($orgSlide) ->
+  $orgSlide = $($orgSlide)
+  $revealSlide = $("<section>").html($orgSlide.html())
+  $IDLink = $orgSlide.find("h2 > a, h3 > a, h4 > a")
+  if $IDLink.length > 0
+    id = $($IDLink[0]).attr("id")
+    $orgSlide.attr(id: "org-#{id}")
+    $revealSlide.attr(id: "reveal-#{id}")
+
+  $revealSlide.find("div.notes").remove()
+  slideLevel = parseInt($orgSlide.attr("class").match(/outline-(\d+)/)[1], 10)
+  $childSlides = $revealSlide.find("div.outline-#{slideLevel + 1}")
+  revealChildSlides = _.map($childSlides, orgSlideToReveal)
+  $childSlides.remove()
+  $currentLevelNodes = $revealSlide.children()
+  if $currentLevelNodes.length > 0 and revealChildSlides.length > 0
+    $currentLevelNodes.remove()
+    $firstChildSlide = $("<section>").append($currentLevelNodes)
+    $firstChildSlide.attr(id: $revealSlide.attr('id'))
+    $revealSlide.attr(id: null)
+    revealChildSlides = [[$firstChildSlide, []]].concat(revealChildSlides)
+
+  [$revealSlide, revealChildSlides]
+
+stitchRevealSlides = ($container, [$slide, children]) ->
+  $slide.appendTo($container)
+  _.map(children, (child) -> stitchRevealSlides($slide, child))
+  null
+
+bootstrapRevealContentFromOrg = ()->
+  $orgContent = $("div#content").hide().attr(id: "org-mode-content")
+  $orgSlides = $orgContent.find("div.outline-2")
+
+  $revealSlidesContainer = $("<div>").addClass("slides")
+  $revealContent = $("<div>").
+                     addClass("reveal").
+                     append($revealSlidesContainer).
+                     appendTo($(document.body))
+  for slideTree in _.map($orgSlides, orgSlideToReveal)
+    stitchRevealSlides($revealSlidesContainer, slideTree)
+  ##
+  for code in $revealSlidesContainer.find('pre')
+    $(code).html($("<code>").html($(code).html()))
+
+################################################################################
+# UI bootstrap sequence
+fixAssetsPath = () ->
+  fixPath = (attr_name) ->
+    () ->
+      $el = $(@)
+      if $el.attr(attr_name)?.substring(0,1) != "/"
+        $el.attr(attr_name, "/#{$el.attr(attr_name)}")
+      null
+
+  $("img").each(fixPath("src"))
+  $("script").each(fixPath("src"))
+  $("link").each(fixPath("href"))
+  null
+
+exports.init = () ->
+  # initial UI bootstrapping
+  bootstrapRevealContentFromOrg()
+  setPresentationMode(MODES.AUDIENCE)
+  fixAssetsPath()
+  $("body").bind("touchstart", (ev) -> ev.preventDefault())
+  $("div#table-of-contents h2").remove()
+  $("#preamble, #postamble").remove()
+  bootstrapRevealContentFromOrg()
+  Reveal.addEventListener("ready",
+    -> $("aside.controls > div").unbind()
+    setTimeout((->$("body").show()), 300))
+  Reveal.initialize(
+    keyboard: false,
+    rollingLinks: false
+    history: true
+    dependencies: [
+      {src: 'reveal.js/plugin/highlight/highlight.js', async: true,
+      callback: () -> hljs.initHighlightingOnLoad()}])
+
+################################################################################
+################################################################################
+# ui event to domain event mappings
 EVENT_KEYS =
   ToggleOverview:  [13] # enter
   EnterFullscreen: [70] # f
@@ -34,6 +159,7 @@ directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
 keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
 
 ################################################################################
+# touch ui eventstreams
 has_touch_support = `'ontouchstart' in document.documentElement` or window.touch?
 
 touchTypes = [
@@ -43,22 +169,22 @@ touchTypes = [
     "transform", "transformstart", "transformend"
     "release"]
 
+# hammerEventstream = ($el, event_type) ->
+#   $($el).bindAsObservable(event_type)
+
 mkTouchEventstream = ($el, eventTypes=touchTypes) ->
   $el = $($el)
   if not $el.data('hammer')
     $el.hammer()
   Rx.Observable.merge(
-    hammerEventstream($el, evtype) for evtype in eventTypes)
+    $($el).bindAsObservable(evtype) for evtype in eventTypes)
 
 mkClickEventstream = ($el) ->
   evType = if has_touch_support then 'touchstart' else 'click'
   $($el).liveAsObservable(evType)
 
-hammerEventstream = ($el, event_type) ->
-  $($el).bindAsObservable(event_type)
-
-
 ################################################################################
+# full screen stuff
 isFullscreenActive = () ->
   (document.fullscreenElement or
     document.mozFullScreenElement or
@@ -73,6 +199,8 @@ mkFullscreenChangeEventstream = () ->
     select(isFullscreenActive)
 
 ################################################################################
+# domain eventstream observables from ui events
+
 revealOverviewClickEventstream = ->
   mkClickEventstream("div.reveal.overview section:not(.stack)").
     select((ev) ->
@@ -117,6 +245,7 @@ exports.uiSlideEventstream = () ->
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 
 ######################################################################
+# Reveal.js view update code
 
 cancelFullscreen = () ->
   document.exitFullscreen?()
