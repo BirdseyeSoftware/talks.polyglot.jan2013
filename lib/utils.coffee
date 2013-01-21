@@ -21,3 +21,6 @@ exports.scanl = (coll, reducer, init) ->
     acc = reducer(acc, el)
     do (acc)->
       acc
+
+exports.hasFirebug = () ->
+  console?.exception? and console.table?

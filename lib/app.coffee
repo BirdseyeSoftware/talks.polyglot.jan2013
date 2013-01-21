@@ -9,23 +9,15 @@ utils = require "./utils"
 CURRENT_LOCAL_SLIDE_STATE = null
 
 ################################################################################
-toSlideObj = (slide) ->
-  if slide.constructor is core.Slide
-    slide
-  else
-    new core.Slide(slide.id, slide.h, slide.v, slide.offset)
-
-hasFirebug = () ->
-  console?.exception? and console.table?
 
 logStateChange = (stateChange, msg='state change:') ->
-  if not hasFirebug()
+  if not utils.hasFirebug()
     return
   try
     console.log(msg)
     extraDetails =
-      slideBefore: toSlideObj(stateChange.prevState.slide),
-      slideAfter: toSlideObj(stateChange.newState.slide)
+      slideBefore: stateChange.prevState.slide,
+      slideAfter: stateChange.newState.slide
     console.dir(_.extend(extraDetails, stateChange))
   catch err
     console.error?(err)
@@ -50,8 +42,9 @@ handleRemoteSlideEvent = (stateChange) ->
 
     streams.localSlideEventstream.onNext(ev)
   else
-    # This updates the view but doesn't currently affect the state machine / event history.
-    # Thus, the next local event will resume from the previous local state.
+    # This updates the view but doesn't currently affect the state
+    # machine / event history. Thus, the next local event will resume
+    # from the previous local state.
     ui.updateRevealForPresentationState(stateChange.newState)
 
 aggregateStateOnSlideEvent = (prevState, ev) ->
@@ -59,10 +52,8 @@ aggregateStateOnSlideEvent = (prevState, ev) ->
     newState = core.slideEventReducer(prevState, ev)
     ui.updateRevealForPresentationState(newState)
     streams.localSlideStateChangeStream.onNext(
-      timestamp: new Date(),
-      event: ev,
-      prevState: prevState.serialize(),
-      newState: newState.serialize())
+      new core.StateChange(
+        event: ev, prevState: prevState, newState: newState))
     CURRENT_LOCAL_SLIDE_STATE = newState
     newState
   catch err

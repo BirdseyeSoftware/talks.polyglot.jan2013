@@ -85,8 +85,6 @@ class PresentationState
     if not @slide
       @slide = @slideDeck.get(0)
 
-  serialize: () -> _.omit(@, 'slideDeck')
-
 movementHandler = (state, ev) ->
   slide: move(state.slideDeck, ev.type, state.slide)
   paused: false
@@ -120,6 +118,25 @@ slideEventReducer = (prevState, ev) ->
   _.extend(_.clone(prevState), whatChanged)
 
 ################################################################################
+toSlideObj = (slide) ->
+  if slide.constructor is Slide
+    slide
+  else
+    new Slide(slide.id, slide.h, slide.v, slide.offset)
+
+class StateChange
+  constructor: ({prevState, newState, event, timestamp}) ->
+    @prevState = prevState
+    @newState = newState
+    @event = event
+    @timestamp = timestamp or new Date()
+    # properly rehydrate slides after network transport
+    @prevState.slide = toSlideObj(prevState.slide)
+    @newState.slide = toSlideObj(newState.slide)
+    @prevState = _.omit(prevState, 'slideDeck')
+    @newState = _.omit(newState, 'slideDeck')
+
+################################################################################
 exports.Slide = Slide
 exports.SlideDeck = SlideDeck
 exports.movements = movements
@@ -127,6 +144,7 @@ exports.EVENTS = EVENTS
 exports.Modes = Modes
 exports.slideEventReducer = slideEventReducer
 exports.PresentationState = PresentationState
+exports.StateChange = StateChange
 
 exports._testExports =
   toggle: toggle
