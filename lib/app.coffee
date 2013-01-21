@@ -1,7 +1,7 @@
 core = require "./app.core"
 {revealjsDomToSlideDeck} = require "./app.revealjs_to_slidedeck"
 ui = require "./app.ui"
-auth = require "./app.auth"
+#auth = require "./app.auth"
 view_bootstrap = require "./app.init"
 net = require "./app.net"
 streams = require "./app.streams"
@@ -99,7 +99,7 @@ initEvents = ->
 
 main = ->
   $ ->
-    auth.getCurrentUser()
+    #auth.getCurrentUser()
     view_bootstrap.init()
     setTimeout(initEvents, 300) # delay to ensure reveal dom elems are live
 

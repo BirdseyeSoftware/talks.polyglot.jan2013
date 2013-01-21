@@ -138,10 +138,10 @@ _slideshowRedirect = (service, req, resp) ->
     displayName: req.user.displayName,
     username: req.user.username,
     id: req.user.id)
+  resp.cookie('fayAuthToken', req.sessionID, maxAge: 90000, httpOnly: false)
   resp.redirect("/slideshow/")
   resp.end()
   null
-
 
 slideshowRedirect = (service) ->
   _.bind(_slideshowRedirect, _slideshowRedirect, service)
@@ -214,8 +214,6 @@ server.get('/login/',
 
 server.get('/slideshow/',
   (req, resp) ->
-    # console.log("== slideshow")
-    # console.log(req.user)
     if req.user?
       resp.sendfile("build/slides.html")
     else

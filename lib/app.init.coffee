@@ -62,6 +62,20 @@ transformToReveal = ()->
   for code in $revealSlidesContainer.find('pre')
     $(code).html($("<code>").html($(code).html()))
 
+
+fixAssetsPath = () ->
+  fixPath = (attr_name) ->
+    () ->
+      $el = $(@)
+      if $el.attr(attr_name)?.substring(0,1) != "/"
+        $el.attr(attr_name, "/#{$el.attr(attr_name)}")
+      null
+
+  $("img").each(fixPath("src"))
+  $("script").each(fixPath("src"))
+  $("link").each(fixPath("href"))
+  null
+
 ################################################################################
 setStylesheet = (mode) ->
   $("style").remove()
@@ -98,6 +112,7 @@ initialCleanupAndTransform = () ->
 exports.init = ()->
   initialCleanupAndTransform()
   setPresentationMode(MODES.AUDIENCE)
+  fixAssetsPath()
   $("body").bind("touchstart", (ev) -> ev.preventDefault())
   Reveal.initialize(
     keyboard: false,
