@@ -102,6 +102,7 @@ exports.init = ()->
   Reveal.initialize(
     keyboard: false,
     rollingLinks: false
+    history: true
     dependencies: [
       {src: 'reveal.js/plugin/highlight/highlight.js', async: true,
       callback: () -> hljs.initHighlightingOnLoad()}]
