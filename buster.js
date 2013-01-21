@@ -5,13 +5,14 @@ config['Browser Tests'] = {
     sources: ["build/bundle.js"],
     resources: [{
         path: "/",
-        file: "slides.html"
+        file: "build/slides.html"
     }],
     tests: ["test/browser_test.js"]
 };
 
 config['Node Tests'] = {
     environment: 'node',
-    sources: ["lib/*.js"],
-    tests: ["test/node_test.js"]
+    tests: ["test/node_test.js",
+            "test/app.core.test.js"
+           ]
 };

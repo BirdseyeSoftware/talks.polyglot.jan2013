@@ -12,12 +12,12 @@ EVENTS_TO_REVEAL_FNS =
   EnterFullscreen: Reveal.enterFullscreen
   TogglePause: Reveal.togglePause
   ToggleOverview: Reveal.toggleOverview
-  PrevSlide: Reveal.prev
-  NextSlide: Reveal.next
-  UpSlide:   Reveal.up
-  DownSlide: Reveal.down
-  RightSlide: Reveal.right
-  LeftSlide: Reveal.left
+  Prev: Reveal.prev
+  Next: Reveal.next
+  Up:   Reveal.up
+  Down: Reveal.down
+  Right: Reveal.right
+  Left: Reveal.left
   SelectSlide: (ev) ->
     Reveal.slide(ev.h, ev.v)
     Reveal.deactivateOverview()
@@ -38,11 +38,12 @@ handleRemoteSlideEvent = (slideEvent) ->
 handleLocalSlideEvent = (slideEvent) ->
   utils.log("local", slideEvent)
   handleRevealCommand(slideEvent)
-################################################################################
 
 appendRevealDetails = (ev) ->
   ev.revealIndices = Reveal.getIndices()
   ev
+
+################################################################################
 
 initEvents = ->
   ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
@@ -61,4 +62,5 @@ main = ->
     view.init()
     setTimeout(initEvents, 340)
 
+################################################################################
 exports.main = main
