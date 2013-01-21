@@ -99,9 +99,11 @@ initEvents = ->
 
 main = ->
   $ ->
-    auth.getCurrentUser()
     view_bootstrap.init()
     setTimeout(initEvents, 300) # delay to ensure reveal dom elems are live
+    console.log(auth.getCurrentUser())
+    null
+
 
 ################################################################################
 exports.main = main

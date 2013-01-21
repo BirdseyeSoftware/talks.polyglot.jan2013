@@ -1,11 +1,8 @@
-exports.login = ->
-  username = prompt("Username:")
-  $.macaroon("currentUser", username)
-  username
+getAuthenticationCookie = ->
+  JSON.parse(decodeURIComponent($.macaroon("userSession")))
 
-exports.logout = ->
-  $.macaroon("currentUser", null)
+exports.getAuthToken = ->
+  getAuthenticationCookie()['token']
 
 exports.getCurrentUser = ->
-  $.macaroon("currentUser") ||
-  exports.login()
+  getAuthenticationCookie()['user']

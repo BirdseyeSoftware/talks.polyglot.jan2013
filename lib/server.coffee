@@ -10,7 +10,7 @@ RedisStore = require("connect-redis")(express)
 Pass = require "passport"
 TwitterStrategy = require("passport-twitter").Strategy
 GithubStrategy = require("passport-github").Strategy
-FacebookStrategy = require("passport-facebook").Strategy
+#FacebookStrategy = require("passport-facebook").Strategy
 MeetupStrategy = require("passport-meetup").Strategy
 GoogleStrategy = require("passport-google-oauth").Strategy
 
@@ -68,13 +68,13 @@ Pass.use(
     (token, tokenSecret, profile, done) ->
         done(null, profile)))
 
-Pass.use(
-  new FacebookStrategy(
-    clientID: "331933636921369",
-    clientSecret: "3af8e3b8ff3b20d3043ac7f60765b385",
-    callbackURL:  "http://127.0.0.1:8000/auth/facebook/callback",
-    (accessToken, refreshToken, profile, done) ->
-      done(null, profile)))
+# Pass.use(
+#   new FacebookStrategy(
+#     clientID: "331933636921369",
+#     clientSecret: "3af8e3b8ff3b20d3043ac7f60765b385",
+#     callbackURL:  "http://127.0.0.1:8000/auth/facebook/callback",
+#     (accessToken, refreshToken, profile, done) ->
+#       done(null, profile)))
 
 Pass.use(
   new GithubStrategy(
@@ -133,15 +133,21 @@ server.configure(->
 ## Routes
 
 _slideshowRedirect = (service, req, resp) ->
-  publish(CHANNEL.clientAuthenticated,
+  user =
     provider: service,
     displayName: req.user.displayName,
     username: req.user.username,
-    id: req.user.id)
+    id: req.user.id
+  publish(CHANNEL.clientAuthenticated, user)
+
+  userSession =
+    token: req.sessionID
+    user: user
+  resp.cookie('userSession', JSON.stringify(userSession), maxAge: 90000, secret: false)
+
   resp.redirect("/slideshow/")
   resp.end()
   null
-
 
 slideshowRedirect = (service) ->
   _.bind(_slideshowRedirect, _slideshowRedirect, service)
@@ -159,14 +165,14 @@ server.get(
 
 ## FACEBOOK
 
-server.get(
-  '/auth/facebook',
-  Pass.authenticate('facebook'))
+# server.get(
+#   '/auth/facebook',
+#   Pass.authenticate('facebook'))
 
-server.get(
-  '/auth/facebook/callback',
-  Pass.authenticate('facebook', failureRedirect: '/login/'),
-  slideshowRedirect("facebook"))
+# server.get(
+#   '/auth/facebook/callback',
+#   Pass.authenticate('facebook', failureRedirect: '/login/'),
+#   slideshowRedirect("facebook"))
 
 ## MEETUP
 
@@ -214,8 +220,6 @@ server.get('/login/',
 
 server.get('/slideshow/',
   (req, resp) ->
-    # console.log("== slideshow")
-    # console.log(req.user)
     if req.user?
       resp.sendfile("build/slides.html")
     else
