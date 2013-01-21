@@ -2,7 +2,6 @@ core = require "./app.core"
 {revealjsDomToSlideDeck} = require "./app.revealjs_to_slidedeck"
 ui = require "./app.ui"
 #auth = require "./app.auth"
-view_bootstrap = require "./app.init"
 net = require "./app.net"
 streams = require "./app.streams"
 utils = require "./utils"
@@ -33,6 +32,8 @@ logStateChange = (stateChange, msg='state change:') ->
 
 logRemoteStateChange = (stateChange) ->
   logStateChange(stateChange, 'remote state change:')
+
+################################################################################
 
 MERGE_REMOTE_EVENT_STREAM = true
 handleRemoteSlideEvent = (stateChange) ->
@@ -80,7 +81,7 @@ loadPresentationState = () ->
   CURRENT_LOCAL_SLIDE_STATE = initState
   initState
 
-initEvents = ->
+initEventstreamSubscriptions = ->
   ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
   streams.localSlideEventstream.aggregate(
     loadPresentationState(),
@@ -100,8 +101,9 @@ initEvents = ->
 main = ->
   $ ->
     #auth.getCurrentUser()
-    view_bootstrap.init()
-    setTimeout(initEvents, 300) # delay to ensure reveal dom elems are live
+    auth.getCurrentUser()
+    ui.init()
+    setTimeout(initEventstreamSubscriptions, 300) # delay to ensure reveal dom elems are live
 
 ################################################################################
 exports.main = main
