@@ -1,6 +1,10 @@
-express = require "express"
-Faye = require "faye"
+_ = require "underscore"
 Rx = require "rx"
+Faye = require "faye"
+express = require "express"
+Redis = require "redis"
+RedisStore = require("connect-redis")(express)
+
 Pass = require "passport"
 TwitterStrategy = require("passport-twitter").Strategy
 GithubStrategy = require("passport-github").Strategy
@@ -8,6 +12,11 @@ FacebookStrategy = require("passport-facebook").Strategy
 MeetupStrategy = require("passport-meetup").Strategy
 GoogleStrategy = require("passport-google-oauth").Strategy
 
+################################################################################
+
+redisClient = Redis.createClient()
+
+################################################################################
 ## Faye Config
 
 faye = new Faye.NodeAdapter(mount: "/faye", timeout: 45)
@@ -32,10 +41,17 @@ faye.asObservable('handshake').subscribe(
   (clientId) ->
     console.log("handshake", clientId))
 
+################################################################################
 ## Passport Config
 
-Pass.serializeUser((user, done) -> done(null, user.id))
-Pass.deserializeUser((id, done) -> done(id))
+Pass.serializeUser((user, done) ->
+  done(null, JSON.stringify(user)))
+Pass.deserializeUser((user, done) ->
+  user = JSON.parse(user)
+  if user
+    done(null, user)
+  else
+    done(new Error("Corrupted session"), null))
 
 Pass.use(
   new TwitterStrategy(
@@ -43,8 +59,7 @@ Pass.use(
     consumerSecret: "ulIQ0HAGc1MwCsEraPfaTmJ97BKOMcB1vNRPgoVLOMc",
     callbackURL: "http://127.0.0.1:8000/auth/twitter/callback",
     (token, tokenSecret, profile, done) ->
-        console.log("Authenticated via twitter: ", profile)
-        done(profile.displayName)))
+        done(null, profile)))
 
 Pass.use(
   new FacebookStrategy(
@@ -52,8 +67,7 @@ Pass.use(
     clientSecret: "3af8e3b8ff3b20d3043ac7f60765b385",
     callbackURL:  "http://127.0.0.1:8000/auth/facebook/callback",
     (accessToken, refreshToken, profile, done) ->
-      console.log("Authenticated via facebook:", profile)
-      done(profile)))
+      done(null, profile)))
 
 Pass.use(
   new GithubStrategy(
@@ -61,8 +75,7 @@ Pass.use(
     clientSecret: "9acca4041260868f11e45639ac92c987a3d44433",
     callbackURL: "http://127.0.0.1:8000/auth/github/callback",
     (accessToken, refreshToken, profile, done) ->
-        console.log("Authenticated via github:", profile)
-        done(profile.displayName)))
+        done(null, profile)))
 
 Pass.use(
   new MeetupStrategy(
@@ -70,8 +83,7 @@ Pass.use(
     consumerSecret: "71iohigpn844p24n3qsdmmfsoa",
     callbackURL: "http://127.0.0.1:8000/auth/meetup/callback",
     (accessToken, tokenSecret, profile, done) ->
-        console.log("Authenticated via meetup:", profile)
-        done(profile.displayName)))
+        done(null, profile)))
 
 Pass.use(
   new MeetupStrategy(
@@ -79,8 +91,7 @@ Pass.use(
     consumerSecret: "71iohigpn844p24n3qsdmmfsoa",
     callbackURL: "http://127.0.0.1:8000/auth/meetup/callback",
     (accessToken, tokenSecret, profile, done) ->
-        console.log("Authenticated via meetup:", profile)
-        done(profile.displayName)))
+        done(null, profile)))
 
 Pass.use(
   new GoogleStrategy(
@@ -88,9 +99,9 @@ Pass.use(
     consumerSecret: "zn0JeIBkiMChw-oZGdNpGW1W",
     callbackURL: "http://127.0.0.1:8000/auth/google/callback",
     (accessToken, tokenSecret, profile, done) ->
-        console.log("Authenticated via google:", profile)
-        done(profile.displayName)))
+        done(null, profile)))
 
+################################################################################
 ## Express Config
 
 server = express()
@@ -101,13 +112,33 @@ server.configure(->
 
   server.use(express.cookieParser())
   server.use(express.bodyParser())
-  server.use(express.cookieSession(secret: "ABCDEFGHJIK"))
+  server.use(express.session(
+    store: new RedisStore(client: redisClient)
+    secret: "ABCDEFGHJIK",
+    ))
 
   server.use(Pass.initialize())
   server.use(Pass.session())
+
   console.log("express server ready"))
 
 ####################
+## Routes
+
+_slideshowRedirect = (service, req, resp) ->
+  console.log("====")
+  console.log("Authenticated Successfuly with", service)
+  console.log(req.user)
+  console.log("====")
+  resp.redirect("/slideshow/")
+  resp.end()
+  null
+
+
+slideshowRedirect = (service) ->
+  _.bind(_slideshowRedirect, _slideshowRedirect, service)
+
+## TWITTER
 
 server.get(
   '/auth/twitter',
@@ -115,10 +146,10 @@ server.get(
 
 server.get(
   '/auth/twitter/callback',
-  Pass.authenticate('twitter', failureRedirect: '/login'),
-  (req, resp) ->
-    res.write("Authenticated Successfuly with Twitter")
-    null)
+  Pass.authenticate('twitter', failureRedirect: '/login/'),
+  slideshowRedirect("twitter"))
+
+## FACEBOOK
 
 server.get(
   '/auth/facebook',
@@ -126,10 +157,10 @@ server.get(
 
 server.get(
   '/auth/facebook/callback',
-  Pass.authenticate('facebook', failureRedirect: '/login'),
-  (req, resp) ->
-    res.write("Authenticated Successfuly with Facebook")
-    null)
+  Pass.authenticate('facebook', failureRedirect: '/login/'),
+  slideshowRedirect("facebook"))
+
+## MEETUP
 
 server.get(
   '/auth/meetup',
@@ -137,10 +168,10 @@ server.get(
 
 server.get(
   '/auth/meetup/callback',
-  Pass.authenticate('meetup', failureRedirect: '/login'),
-  (req, resp) ->
-    res.write("Authenticated Successfuly with Meetup")
-    null)
+  Pass.authenticate('meetup', failureRedirect: '/login/'),
+  slideshowRedirect("meetup"))
+
+## GOOGLE
 
 server.get(
   '/auth/google',
@@ -148,10 +179,10 @@ server.get(
 
 server.get(
   '/auth/google/callback',
-  Pass.authenticate('google', failureRedirect: '/login'),
-  (req, resp) ->
-    res.write("Authenticated Successfuly with Google")
-    null)
+  Pass.authenticate('google', failureRedirect: '/login/'),
+  slideshowRedirect("google"))
+
+## GITHUB
 
 server.get(
   '/auth/github',
@@ -159,40 +190,30 @@ server.get(
 
 server.get(
   '/auth/github/callback',
-  Pass.authenticate('github', failureRedirect: '/login'),
-  (req, resp) ->
-    console.log("======")
-    console.log("ON callback is authenticated!")
-    console.log(req.user)
-    console.log(req.session)
-    console.log("======")
-    req.session["roman_was_here"] = "true"
-    resp.redirect("/slideshow")
-    resp.end()
-    null)
+  Pass.authenticate('github', failureRedirect: '/login/'),
+  slideshowRedirect("github"))
 
 ################################################################################
 
-server.get('/login',
+server.get('/login/',
   (req, resp) ->
-    resp.set("Content-Type", "text/html")
-    resp.write("<h1>Login here!</h1>")
-    resp.end()
-    null)
-
-server.get('/slideshow',
-  (req, resp) ->
-    console.log(req.user)
-    console.log(req.session["roman_was_here"])
     if req.user?
-      resp.set("Content-Type", "text/html")
-      resp.write("<h1>The user is: " + JSON.stringify(req.user, null, 2) + "</h1>")
+      resp.redirect("/slideshow/")
+      resp.end()
     else
-      console.log(req.session)
-      resp.redirect("/login")
-
-    resp.end()
+      resp.sendfile("assets/login.html", {}, (err) -> console.log(err))
     null)
 
-app = server.listen(8080)
+server.get('/slideshow/',
+  (req, resp) ->
+    # console.log("== slideshow")
+    # console.log(req.user)
+    if req.user?
+      resp.sendfile("build/slides.html")
+    else
+      resp.redirect("/login/")
+      resp.end()
+    null)
+
+app = server.listen(8000)
 faye.attach(app)
