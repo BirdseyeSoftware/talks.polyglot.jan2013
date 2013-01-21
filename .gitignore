@@ -31,3 +31,4 @@ vendor/
 /lib/browserify.entry.js
 /lib/utils.js
 /lib/channel_names.js
+/test/app.core.test.js
