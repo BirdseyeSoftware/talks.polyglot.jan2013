@@ -5,12 +5,12 @@ EVENT_KEYS =
   ToggleOverview:  [13] # enter
   EnterFullscreen: [70] # f
   TogglePause:     [66, 190] # period, b
-  NextSlide:       [32,34,78] # space, n, pgdown
-  PrevSlide:       [33, 80]   # pgup, p
-  LeftSlide:       [37, 72]   # left, h
-  UpSlide:         [38, 75] #up, k
-  RightSlide:      [39, 76] #right, l
-  DownSlide:       [40, 74] #down, j
+  Next:            [32,34,78] # space, n, pgdown
+  Prev:            [33, 80]   # pgup, p
+  Left:            [37, 72]   # left, h
+  Up:              [38, 75] #up, k
+  Right:           [39, 76] #right, l
+  Down:            [40, 74] #down, j
 
 KEYS_TO_EVENTS = {}
 for evtype, keys of EVENT_KEYS
@@ -19,60 +19,21 @@ for evtype, keys of EVENT_KEYS
     KEYS_TO_EVENTS[kcode] = ev
 
 DIRS_TO_EVENTS =
-  up: EVENTS.UpSlide
-  down: EVENTS.DownSlide
-  right: EVENTS.RightSlide
-  left:  EVENTS.LeftSlide
+  up: EVENTS.Up
+  down: EVENTS.Down
+  right: EVENTS.Right
+  left:  EVENTS.Left
 
 REV_DIRS_TO_EVENTS =
-  left: EVENTS.RightSlide
-  right: EVENTS.LeftSlide
-  up: EVENTS.DownSlide
-  down: EVENTS.UpSlide
+  left: EVENTS.Right
+  right: EVENTS.Left
+  up: EVENTS.Down
+  down: EVENTS.Up
 
 directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
 keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
 
 ################################################################################
-# #TODO: refactor / remove window refs
-window.revealToSlideDeck = revealToSlideDeck
-
-window.jumpToSlide = (slide) ->
-  Reveal.slide(slide.h, slide.v)
-  Reveal.deactivateOverview()
-
-window.jumpToSlideId = (slideId) ->
-  slide = revealToSlideDeck().get(slideId)
-  Reveal.slide(slide.h, slide.v)
-  Reveal.deactivateOverview()
-
-stripRevealIdPrefix = (id) ->
-  if id
-    m = id.match(/reveal-(.+)/)
-    if m? then m[1] else id
-
-indexSlide = (acc, slideSection) ->
-  if not acc
-    {h:0, v:0}                  #first slide
-  else
-    switch slideSection.parentNode.tagName
-      when 'DIV' then {h: 1 + acc.h, v:0}
-      when 'SECTION'
-        if not acc.nested
-          {h: 1 + acc.h, v: 0, nested: true}
-        else
-          {h: acc.h, v: 1 + acc.v, nested: true}
-      else {error: slideSection}
-
-domSectionsToSlideDeck = ($containerNode) ->
-  sections = _.filter($containerNode.find('section'), (s) -> s.id)
-  indices = utils.scanl(sections, indexSlide)
-  slides = for [idx, sect] in _.zip(indices, sections)
-    new Slide(stripRevealIdPrefix($(sect).attr('id')), idx.h, idx.v)
-  new SlideDeck(slides)
-
-revealToSlideDeck = () ->
-  domSectionsToSlideDeck($("div.reveal"))
 
 ################################################################################
 has_touch_support = `'ontouchstart' in document.documentElement` or window.touch?
