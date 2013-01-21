@@ -59,11 +59,28 @@ mkClickEventstream = ($el) ->
 hammerEventstream = ($el, event_type) ->
   $($el).bindAsObservable(event_type)
 
+
+################################################################################
+isFullscreenActive = () ->
+  (document.fullscreenElement or
+    document.mozFullScreenElement or
+    document.webkitFullscreenElement)
+
+fullscreenEventToSlideEvent = (isFull) ->
+  EVENTS.ExitFullscreen() if not isFull # we skip enter events
+
+mkFullscreenChangeEventstream = () ->
+  $(document).bindAsObservable(
+    'webkitfullscreenchange mozfullscreenchange fullscreenchange').
+    select(isFullscreenActive)
+
 ################################################################################
 revealOverviewClickEventstream = ->
-  mkClickEventstream("div.reveal.overview section").
+  mkClickEventstream("div.reveal.overview section:not(.stack)").
     select((ev) ->
         try
+          ev.preventDefault()
+          ev.stopImmediatePropagation()
           $el = $(ev.currentTarget)
           EVENTS.SelectSlide(
             $el.attr('data-index-h'),
@@ -75,6 +92,8 @@ revealNavBarClickEventstream = ->
   mkClickEventstream("aside.controls div").
     select((ev) ->
         try
+          ev.preventDefault()
+          ev.stopImmediatePropagation()
           $el = $(ev.target)
           cls = $el.attr("class").split(" ")[0]
           dir = cls.replace("navigate-", "")
@@ -85,6 +104,7 @@ revealNavBarClickEventstream = ->
 touchEventToSlideEvent = (ev) ->
   switch ev.type
     when "hold" then EVENTS.TogglePause()
+    #when "tap" then EVENTS.Next()
     when "doubletap" then  EVENTS.ToggleOverview()
     when "swipe" then REV_DIRS_TO_EVENTS[ev.direction]?()
 
@@ -93,7 +113,8 @@ exports.uiSlideEventstream = () ->
   merged = Rx.Observable.merge(
     revealNavBarClickEventstream(),
     revealOverviewClickEventstream(),
-    mkTouchEventstream($('body')).select(touchEventToSlideEvent)
+    mkFullscreenChangeEventstream().select(fullscreenEventToSlideEvent),
+    mkTouchEventstream($('body')).select(touchEventToSlideEvent),
     keyups.select(keyEventToSlideEvent))
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 

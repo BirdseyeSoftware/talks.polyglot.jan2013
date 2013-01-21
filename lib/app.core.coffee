@@ -44,10 +44,12 @@ move = (slideDeck, direction, fromSlide) ->
     when "right"
       tryHorVerMove({h: fs.h + 1}, {h: fs.h + 1, v: 0})
 
+################################################################################
 EVENTS =
-  SelectSlide:     (h, v) -> {type: "SelectSlide", h: h, v:v}
+  SelectSlide:     (h, v) -> {type: "SelectSlide", h: h, v: v}
   ToggleOverview:  null
   EnterFullscreen: null
+  ExitFullscreen:  null
   TogglePause:     null
   Next:            null
   Prev:            null
