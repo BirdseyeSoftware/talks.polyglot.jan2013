@@ -9,4 +9,5 @@ if window?
   require "../assets/jquery.macaroon"
   require "rxjs-jquery"
   window.app = app = require "./app"
+  app.core = require("./app.core")
   app.main()

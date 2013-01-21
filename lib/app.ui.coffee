@@ -65,8 +65,9 @@ revealOverviewClickEventstream = ->
     select((ev) ->
         try
           $el = $(ev.currentTarget)
-          EVENTS.SelectSlide($el.attr('data-index-h'),
-            $el.attr('data-index-v'))
+          EVENTS.SelectSlide(
+            $el.attr('data-index-h'),
+            ($el.attr('data-index-v') or 0))
         catch er
           null)
 

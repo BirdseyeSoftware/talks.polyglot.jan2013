@@ -2,6 +2,7 @@ _ = require "underscore"
 
 class Slide
   constructor: (@id, @h, @v, @offset=null) ->
+  toString: () -> "Slide{h: #{@h}, v: #{@v}, offset: #{@offset}}"
 
 class SlideDeck
   constructor: (@slides) ->
@@ -24,23 +25,24 @@ move = (slideDeck, direction, fromSlide) ->
   if not fromSlide
     fromSlide = slideDeck.slides[0]
 
-  tryHorVerMove = (idxs) ->
+  tryHorVerMove = (idxs, fallbackIdxs) ->
     newslide = slideDeck.get(_.extend({h: fromSlide.h, v: fromSlide.v}, idxs))
-    newslide or fromSlide
+    newslide or (fallbackIdxs and tryHorVerMove(fallbackIdxs)) or  fromSlide
 
+  fs = fromSlide
   switch direction
     when "prev"
-      slideDeck.get(Math.max(0, fromSlide.offset - 1))
+      slideDeck.get(Math.max(0, fs.offset - 1))
     when "next"
-      slideDeck.get(Math.min(slideDeck.length - 1, fromSlide.offset + 1))
+      slideDeck.get(Math.min(slideDeck.length - 1, fs.offset + 1))
     when "up"
-      tryHorVerMove(v: fromSlide.v - 1)
+      tryHorVerMove(v: fs.v - 1)
     when "down"
-      tryHorVerMove(v: fromSlide.v + 1)
+      tryHorVerMove(v: fs.v + 1)
     when "left"
-      tryHorVerMove(h: fromSlide.h - 1)
+      tryHorVerMove({h: fs.h - 1}, {h: fs.h - 1, v: 0})
     when "right"
-      tryHorVerMove(h: fromSlide.h + 1)
+      tryHorVerMove({h: fs.h + 1}, {h: fs.h + 1, v: 0})
 
 EVENTS =
   SelectSlide:     (h, v) -> {type: "SelectSlide", h: h, v:v}
@@ -78,8 +80,10 @@ class PresentationState
                 @mode=Modes.normal,
                 @paused=false,
                 @fullscreen=false) ->
-    if not slide
-      @slide = @slideDeck[0]
+    if not @slide
+      @slide = @slideDeck.get(0)
+
+  serialize: () -> _.omit(@, 'slideDeck')
 
 movementHandler = (state, ev) ->
   slide: move(state.slideDeck, ev.type, state.slide)
@@ -90,7 +94,8 @@ EventHandlers =
     mode: toggle(state.mode, [Modes.overview, Modes.normal])
 
   EnterFullscreen: (state, ev) -> fullscreen: true
-  TogglePause: (state, ev) ->  paused: toggle(state.paused)
+  ExitFullscreen: (state, ev) -> fullscreen: false # TODO: trigger from fullscreen dom api
+  TogglePause: (state, ev) -> paused: toggle(state.paused)
 
   SelectSlide: (state, ev) ->
     slide = state.slideDeck.get(ev)
@@ -118,10 +123,10 @@ exports.SlideDeck = SlideDeck
 exports.movements = movements
 exports.EVENTS = EVENTS
 exports.Modes = Modes
+exports.slideEventReducer = slideEventReducer
+exports.PresentationState = PresentationState
 
 exports._testExports =
   toggle: toggle
-  PresentationState: PresentationState
   EventHandlers: EventHandlers
-  slideEventReducer: slideEventReducer
   move: move

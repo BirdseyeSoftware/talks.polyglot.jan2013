@@ -1,4 +1,5 @@
 core = require "./app.core"
+{revealjsDomToSlideDeck} = require "./app.revealjs_to_slidedeck"
 ui = require "./app.ui"
 auth = require "./app.auth"
 view = require "./app.init"
@@ -7,60 +8,104 @@ streams = require "./app.streams"
 utils = require "./utils"
 
 ################################################################################
+isFullscreenActive = () ->
+  document.fullScreen or document.mozFullScreen or document.webkitIsFullScreen
 
-EVENTS_TO_REVEAL_FNS =
-  EnterFullscreen: Reveal.enterFullscreen
-  TogglePause: Reveal.togglePause
-  ToggleOverview: Reveal.toggleOverview
-  Prev: Reveal.prev
-  Next: Reveal.next
-  Up:   Reveal.up
-  Down: Reveal.down
-  Right: Reveal.right
-  Left: Reveal.left
-  SelectSlide: (ev) ->
-    Reveal.slide(ev.h, ev.v)
-    Reveal.deactivateOverview()
+cancelFullscreen = () ->
+  document.exitFullscreen?()
+  document.mozCancelFullScreen?()
+  document.webkitCancelFullscreen?()
 
-handleRevealCommand = (slideEvent) ->
-  EVENTS_TO_REVEAL_FNS[slideEvent.type]?(slideEvent)
+enterFullscreen = () ->
+  Reveal.enterFullscreen()
 
-handleRevealCommand = handleRevealCommand
+updateRevealForPresentationState = (state) ->
+  {h, v} = Reveal.getIndices()
+  slide = state.slide
+  if slide.h != h or slide.v != v
+    Reveal.slide(slide.h, slide.v)
 
-handleRemoteSlideEvent = (slideEvent) ->
-  console.log("remote", slideEvent)
-  if slideEvent.type in core.movements
-    {h, v} = slideEvent.revealIndices
-    Reveal.slide(h, v)
+  if state.paused and not Reveal.isPaused()
+    Reveal.togglePause()
+  else if Reveal.isPaused() and not state.paused
+    Reveal.togglePause()
+
+  if state.mode == 'overview'
+    Reveal.toggleOverview() if not Reveal.isOverviewActive()
   else
-    handleRevealCommand(slideEvent)
+    Reveal.deactivateOverview() if Reveal.isOverviewActive()
 
-handleLocalSlideEvent = (slideEvent) ->
-  utils.log("local", slideEvent)
-  handleRevealCommand(slideEvent)
-
-appendRevealDetails = (ev) ->
-  ev.revealIndices = Reveal.getIndices()
-  ev
+  if state.fullscreen and not isFullscreenActive()
+    enterFullscreen()
+  else if not state.fullscreen and isFullscreenActive()
+    cancelFullscreen()
 
 ################################################################################
 
+toSlideObj = (slide) ->
+  if slide.constructor is core.Slide
+    slide
+  else
+    new core.Slide(slide.id, slide.h, slide.v, slide.offset)
+
+logStateChange = (stateChange, msg='state change:') ->
+  if not console?.exception?        #firebug detection
+    return
+  try
+    console.log(msg)
+    extraDetails =
+      slideBefore: toSlideObj(stateChange.prevState.slide),
+      slideAfter: toSlideObj(stateChange.newState.slide)
+    console.dir(_.extend(extraDetails, stateChange))
+  catch err
+    console.error?(err)
+
+window.mainSlideDeck = null
+
+handleRemoteSlideEvent = (stateChange) ->
+  logStateChange(stateChange, "remote state change:")
+  updateRevealForPresentationState(stateChange.newState)
+
+aggregateStateOnSlideEvent = (prevState, ev) ->
+  try
+    newState = core.slideEventReducer(prevState, ev)
+    updateRevealForPresentationState(newState)
+    streams.localSlideStateChangeStream.onNext(
+      timestamp: new Date(),
+      event: ev,
+      prevState: prevState.serialize(),
+      newState: newState.serialize())
+    newState
+  catch err
+    net.log(err)
+    console?.error?("exception in slide state reducer:",
+      err,
+      "after event:", ev,
+      "previous state: ", prevState,
+      "new state:", newState)
+    prevState                   # leave it at the old state after erro
+
 initEvents = ->
+  window.mainSlideDeck = revealjsDomToSlideDeck()
   ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
-  utils.teeSubscribe(streams.localSlideEventstream,
-    handleLocalSlideEvent,
-    (ev) -> net.publishSlideEvent(appendRevealDetails(ev)))
+
+  initState = new core.PresentationState(window.mainSlideDeck)
+  streams.localSlideEventstream.aggregate(
+    initState, aggregateStateOnSlideEvent).subscribe((finalState)->)
+
+  streams.localSlideStateChangeStream.subscribe(logStateChange)
+  streams.localSlideStateChangeStream.subscribe(net.publishSlideEvent)
 
   streams.remoteSlideEventstream.subscribe(handleRemoteSlideEvent)
 
-  streams.log.subscribe(([msg, data]) -> console.log(msg, data...))
+  streams.log.subscribe(([msg, data]) -> console?.log?(msg, data...))
   streams.log.subscribe(net.log)
 
 main = ->
   $ ->
     auth.getCurrentUser()
     view.init()
-    setTimeout(initEvents, 340)
+    setTimeout(initEvents, 640)
 
 ################################################################################
 exports.main = main
