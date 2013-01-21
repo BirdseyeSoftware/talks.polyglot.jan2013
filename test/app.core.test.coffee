@@ -113,6 +113,7 @@ buster.testCase "app.core",
     null
 
   "slideEventReducer() with sample events": ->
+    #TODO: add test for multiple stacked slide sections in a row
     deck = new SlideDeck(sampleSlides1)
     sampleEvents = [
       [EVENTS.Up(), 0],

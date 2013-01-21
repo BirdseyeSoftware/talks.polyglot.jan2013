@@ -34,8 +34,6 @@ directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
 keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
 
 ################################################################################
-
-################################################################################
 has_touch_support = `'ontouchstart' in document.documentElement` or window.touch?
 
 touchTypes = [
@@ -59,14 +57,32 @@ mkClickEventstream = ($el) ->
 hammerEventstream = ($el, event_type) ->
   $($el).bindAsObservable(event_type)
 
+
+################################################################################
+isFullscreenActive = () ->
+  (document.fullscreenElement or
+    document.mozFullScreenElement or
+    document.webkitFullscreenElement)
+
+fullscreenEventToSlideEvent = (isFull) ->
+  EVENTS.ExitFullscreen() if not isFull # we skip enter events
+
+mkFullscreenChangeEventstream = () ->
+  $(document).bindAsObservable(
+    'webkitfullscreenchange mozfullscreenchange fullscreenchange').
+    select(isFullscreenActive)
+
 ################################################################################
 revealOverviewClickEventstream = ->
-  mkClickEventstream("div.reveal.overview section").
+  mkClickEventstream("div.reveal.overview section:not(.stack)").
     select((ev) ->
         try
+          ev.preventDefault()
+          ev.stopImmediatePropagation()
           $el = $(ev.currentTarget)
-          EVENTS.SelectSlide($el.attr('data-index-h'),
-            $el.attr('data-index-v'))
+          EVENTS.SelectSlide(
+            $el.attr('data-index-h'),
+            ($el.attr('data-index-v') or 0))
         catch er
           null)
 
@@ -74,6 +90,8 @@ revealNavBarClickEventstream = ->
   mkClickEventstream("aside.controls div").
     select((ev) ->
         try
+          ev.preventDefault()
+          ev.stopImmediatePropagation()
           $el = $(ev.target)
           cls = $el.attr("class").split(" ")[0]
           dir = cls.replace("navigate-", "")
@@ -84,6 +102,7 @@ revealNavBarClickEventstream = ->
 touchEventToSlideEvent = (ev) ->
   switch ev.type
     when "hold" then EVENTS.TogglePause()
+    #when "tap" then EVENTS.Next()
     when "doubletap" then  EVENTS.ToggleOverview()
     when "swipe" then REV_DIRS_TO_EVENTS[ev.direction]?()
 
@@ -92,8 +111,41 @@ exports.uiSlideEventstream = () ->
   merged = Rx.Observable.merge(
     revealNavBarClickEventstream(),
     revealOverviewClickEventstream(),
-    mkTouchEventstream($('body')).select(touchEventToSlideEvent)
+    mkFullscreenChangeEventstream().select(fullscreenEventToSlideEvent),
+    mkTouchEventstream($('body')).select(touchEventToSlideEvent),
     keyups.select(keyEventToSlideEvent))
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 
 ######################################################################
+
+cancelFullscreen = () ->
+  document.exitFullscreen?()
+  document.mozCancelFullScreen?()
+  document.webkitCancelFullscreen?()
+
+enterFullscreen = () ->
+  Reveal.enterFullscreen()
+
+updateRevealForPresentationState = (state) ->
+  {h, v} = Reveal.getIndices()
+  slide = state.slide
+  if slide.h != h or slide.v != v
+    Reveal.slide(slide.h, slide.v)
+
+  if state.paused and not Reveal.isPaused()
+    Reveal.togglePause()
+  else if Reveal.isPaused() and not state.paused
+    Reveal.togglePause()
+
+  if state.mode == 'overview'
+    Reveal.toggleOverview() if not Reveal.isOverviewActive()
+  else
+    Reveal.deactivateOverview() if Reveal.isOverviewActive()
+
+  if state.fullscreen and not isFullscreenActive()
+    enterFullscreen()
+  else if not state.fullscreen and isFullscreenActive()
+    cancelFullscreen()
+
+################################################################################
+exports.updateRevealForPresentationState = updateRevealForPresentationState

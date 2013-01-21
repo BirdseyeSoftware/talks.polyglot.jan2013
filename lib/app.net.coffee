@@ -7,7 +7,7 @@ exports.isMe = isMe = (clientId) -> fayeClient.getClientId() == clientId
 initRemoteSlideEventstream = () ->
   fayeClient.subscribe channelNames.slideEvents, ([cid, ev])->
     if not isMe(cid)
-      streams.remoteSlideEventstream.onNext(ev)
+      streams.remoteSlideStateChangeStream.onNext(ev)
 
 initRemoteSlideEventstream()
 
