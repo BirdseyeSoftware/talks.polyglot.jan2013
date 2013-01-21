@@ -87,7 +87,6 @@ handleModeChange = mktee(setStylesheet, toggleDomElemsForMode)
 mode_observable.subscribe(handleModeChange)
 
 unbindRevealEvents = () ->
-  console.log("gone")
   $("aside.controls > div").unbind()
 
 initialCleanupAndTransform = () ->
