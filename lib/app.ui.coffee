@@ -34,8 +34,6 @@ directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
 keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
 
 ################################################################################
-
-################################################################################
 has_touch_support = `'ontouchstart' in document.documentElement` or window.touch?
 
 touchTypes = [
@@ -119,3 +117,35 @@ exports.uiSlideEventstream = () ->
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 
 ######################################################################
+
+cancelFullscreen = () ->
+  document.exitFullscreen?()
+  document.mozCancelFullScreen?()
+  document.webkitCancelFullscreen?()
+
+enterFullscreen = () ->
+  Reveal.enterFullscreen()
+
+updateRevealForPresentationState = (state) ->
+  {h, v} = Reveal.getIndices()
+  slide = state.slide
+  if slide.h != h or slide.v != v
+    Reveal.slide(slide.h, slide.v)
+
+  if state.paused and not Reveal.isPaused()
+    Reveal.togglePause()
+  else if Reveal.isPaused() and not state.paused
+    Reveal.togglePause()
+
+  if state.mode == 'overview'
+    Reveal.toggleOverview() if not Reveal.isOverviewActive()
+  else
+    Reveal.deactivateOverview() if Reveal.isOverviewActive()
+
+  if state.fullscreen and not isFullscreenActive()
+    enterFullscreen()
+  else if not state.fullscreen and isFullscreenActive()
+    cancelFullscreen()
+
+################################################################################
+exports.updateRevealForPresentationState = updateRevealForPresentationState
