@@ -24,21 +24,9 @@ indexSlide = (acc, slideSection) ->
 domSectionsToSlideDeck = ($containerNode) ->
   sections = _.filter($containerNode.find('section'), (s) -> s.id)
   indices = utils.scanl(sections, indexSlide)
-  #console.debug({d: _.zip(indices, sections)})
   slides = for [idx, sect] in _.zip(indices, sections)
     new core.Slide(stripRevealIdPrefix($(sect).attr('id')), idx.h, idx.v)
   new core.SlideDeck(slides)
 
 exports.revealjsDomToSlideDeck = () ->
   domSectionsToSlideDeck($("div.reveal"))
-
-# window.indexSlide = indexSlide
-# window.getslides = exports.revealjsDomToSlideDeck
-# window.jumpToSlide = (slide) ->
-#   Reveal.slide(slide.h, slide.v)
-#   Reveal.deactivateOverview()
-
-# window.jumpToSlideId = (slideId) ->
-#   slide = revealToSlideDeck().get(slideId)
-#   Reveal.slide(slide.h, slide.v)
-#   Reveal.deactivateOverview()
