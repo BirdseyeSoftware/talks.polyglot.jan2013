@@ -161,10 +161,38 @@ server.get(
   '/auth/github/callback',
   Pass.authenticate('github', failureRedirect: '/login'),
   (req, resp) ->
-    res.write("Authenticated Successfuly with Github")
+    console.log("======")
+    console.log("ON callback is authenticated!")
+    console.log(req.user)
+    console.log(req.session)
+    console.log("======")
+    req.session["roman_was_here"] = "true"
+    resp.redirect("/slideshow")
+    resp.end()
     null)
 
-####################
+################################################################################
 
-app = server.listen(8000)
+server.get('/login',
+  (req, resp) ->
+    resp.set("Content-Type", "text/html")
+    resp.write("<h1>Login here!</h1>")
+    resp.end()
+    null)
+
+server.get('/slideshow',
+  (req, resp) ->
+    console.log(req.user)
+    console.log(req.session["roman_was_here"])
+    if req.user?
+      resp.set("Content-Type", "text/html")
+      resp.write("<h1>The user is: " + JSON.stringify(req.user, null, 2) + "</h1>")
+    else
+      console.log(req.session)
+      resp.redirect("/login")
+
+    resp.end()
+    null)
+
+app = server.listen(8080)
 faye.attach(app)
