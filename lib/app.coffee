@@ -93,7 +93,6 @@ main = ->
   $ ->
     ui.init()
     setTimeout(initEventstreamSubscriptions, 300) # delay to ensure reveal dom elems are live
-    console.log(auth.getCurrentUser())
 
 ################################################################################
 exports.main = main
