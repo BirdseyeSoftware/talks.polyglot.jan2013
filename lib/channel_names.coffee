@@ -1,8 +1,8 @@
 # one auth msg per user/login
-exports.clientRegistration = '/authenticated'
+exports.clientAuthenticated = '/authenticated'
 
 # browser registration upon initial page load
-exports.clientRegistration = '/register'
+exports.clientLoadedSlideshow = '/slideshow/loaded'
 
 # presenter to command audience's slaved browsers: state changes, cmds, etc.
 exports.slaves = '/slideshow/slaves'

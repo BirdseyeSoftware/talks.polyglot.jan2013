@@ -7,9 +7,9 @@ MODES =
 
 stylesheetMap =
   AUDIENCE: ["/common.css", "/audience.css",
-             "reveal.js/css/reveal.min.css",
-             "reveal.js/css/theme/default.css",
-             "reveal.js/lib/css/zenburn.css"],
+             "/reveal.js/css/reveal.min.css",
+             "/reveal.js/css/theme/default.css",
+             "/reveal.js/lib/css/zenburn.css"],
   PRESENTER: ["/common.css", "/presenter.css"]
   ORG_MODE: ["/common.css", "/presenter.css"]
 

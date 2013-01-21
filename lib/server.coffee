@@ -5,12 +5,18 @@ express = require "express"
 Redis = require "redis"
 RedisStore = require("connect-redis")(express)
 
+####################
+
 Pass = require "passport"
 TwitterStrategy = require("passport-twitter").Strategy
 GithubStrategy = require("passport-github").Strategy
 FacebookStrategy = require("passport-facebook").Strategy
 MeetupStrategy = require("passport-meetup").Strategy
 GoogleStrategy = require("passport-google-oauth").Strategy
+
+####################
+
+CHANNEL = require "./channel_names"
 
 ################################################################################
 
@@ -20,6 +26,7 @@ redisClient = Redis.createClient()
 ## Faye Config
 
 faye = new Faye.NodeAdapter(mount: "/faye", timeout: 45)
+publish = (args...) -> faye.getClient().publish(args...)
 
 faye.asObservable = (event_type) ->
   subj = new Rx.Subject()
@@ -126,10 +133,11 @@ server.configure(->
 ## Routes
 
 _slideshowRedirect = (service, req, resp) ->
-  console.log("====")
-  console.log("Authenticated Successfuly with", service)
-  console.log(req.user)
-  console.log("====")
+  publish(CHANNEL.clientAuthenticated,
+    provider: service,
+    displayName: req.user.displayName,
+    username: req.user.username,
+    id: req.user.id)
   resp.redirect("/slideshow/")
   resp.end()
   null
@@ -215,5 +223,5 @@ server.get('/slideshow/',
       resp.end()
     null)
 
-app = server.listen(8000)
+app = server.listen(8080)
 faye.attach(app)
