@@ -7,6 +7,8 @@ net = require "./app.net"
 streams = require "./app.streams"
 utils = require "./utils"
 
+CURRENT_LOCAL_SLIDE_STATE = null
+
 ################################################################################
 toSlideObj = (slide) ->
   if slide.constructor is core.Slide
@@ -37,6 +39,14 @@ handleRemoteSlideEvent = (stateChange) ->
   if MERGE_REMOTE_EVENT_STREAM
     ev = stateChange.event
     ev.isRemote = true
+    remoteIdx = _.pick(stateChange.prevState.slide, ['h', 'v'])
+    localSlideIdx = _.pick(CURRENT_LOCAL_SLIDE_STATE.slide, ['h', 'v'])
+    if remoteIdx != localSlideIdx
+      syntheticSyncEvent = core.EVENTS.SelectSlide(remoteIdx.h, remoteIdx.v)
+      syntheticSyncEvent.isRemote = true
+      syntheticSyncEvent.isSynthetic = true
+      streams.localSlideEventstream.onNext(syntheticSyncEvent)
+
     streams.localSlideEventstream.onNext(ev)
   else
     # This updates the view but doesn't currently affect the state machine / event history.
@@ -52,6 +62,7 @@ aggregateStateOnSlideEvent = (prevState, ev) ->
       event: ev,
       prevState: prevState.serialize(),
       newState: newState.serialize())
+    CURRENT_LOCAL_SLIDE_STATE = newState
     newState
   catch err
     net.log(err) #TODO: replace this with an error record
@@ -62,13 +73,18 @@ aggregateStateOnSlideEvent = (prevState, ev) ->
       "new state:", newState)
     prevState                   # leave it at the old state after erro
 
+loadPresentationState = () ->
+  window.mainSlideDeck = deck = revealjsDomToSlideDeck()
+  initSlide = deck.get(Reveal.getIndices())
+  initState = new core.PresentationState(deck, initSlide)
+  CURRENT_LOCAL_SLIDE_STATE = initState
+  initState
+
 initEvents = ->
   ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
-
-  window.mainSlideDeck = revealjsDomToSlideDeck()
-  initState = new core.PresentationState(window.mainSlideDeck)
   streams.localSlideEventstream.aggregate(
-    initState, aggregateStateOnSlideEvent).subscribe((finalState)->)
+    loadPresentationState(),
+    aggregateStateOnSlideEvent).subscribe((finalState)->)
 
   streams.localSlideStateChangeStream.subscribe(logStateChange)
   streams.localSlideStateChangeStream.
