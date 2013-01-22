@@ -100,9 +100,10 @@ initEventstreamSubscriptions = (initSlide) ->
 main = ->
   $ ->
     ui.init()
-    $.ajax('/current_slide/', {timeout: 700}).
-      done(initEventstreamSubscriptions).
-      fail((req, err) -> console?.log?(err); initEventstreamSubscriptions())
+    setTimeout(initEventstreamSubscriptions, 300) # delay to ensure reveal dom elems are live)
+    # $.ajax('/current_slide/', {timeout: 700}).
+    #   done(initEventstreamSubscriptions).
+    #   fail((req, err) -> console?.log?(err); initEventstreamSubscriptions())
 
 ################################################################################
 exports.main = main
