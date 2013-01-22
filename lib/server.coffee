@@ -21,7 +21,7 @@ server.get('/logout/',
     if req.user?
       req.session.auth = null
       req.session.destroy(->)
-    resp.redirect("/login/")
+    resp.redirect("/login/"))
 
 server.get('/slideshow/',
   (req, resp) ->
