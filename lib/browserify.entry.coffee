@@ -13,6 +13,7 @@ if window?
   app.ns =
     utils: require('./utils')
     core: require("./app.core")
+    streams: require("./app.streams")
     ui: require("./app.ui")
     net: require("./app.net")
     auth: require("./app.auth")
