@@ -22,5 +22,5 @@ exports.scanl = (coll, reducer, init) ->
     do (acc)->
       acc
 
-exports.hasFirebug = () ->
-  console?.exception? and console.table?
+exports.consoleDebugEnabled = () ->
+  window.DEBUG or (console?.exception? and console.table?)

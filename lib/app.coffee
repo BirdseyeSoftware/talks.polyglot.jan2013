@@ -13,7 +13,7 @@ exports.getCurrentState = getCurrentState = () -> CURRENT_LOCAL_SLIDE_STATE
 ################################################################################
 
 logStateChange = (stateChange, msg='state change:') ->
-  if not utils.hasFirebug()
+  if not utils.consoleDebugEnabled()
     return
   try
     console.log(msg)
