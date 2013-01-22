@@ -29,17 +29,19 @@ logRemoteStateChange = (stateChange) ->
 
 ################################################################################
 
+indicesMatch = (a, b) ->
+  Number(a.h) == Number(b.h) and Number(a.v) == Number(b.v)
+
 MERGE_REMOTE_EVENT_STREAM = true
 handleRemoteSlideEvent = (stateChange) ->
   if MERGE_REMOTE_EVENT_STREAM
     ev = stateChange.event
     ev.isRemote = true
-    remoteIdx = _.pick(stateChange.prevState.slide, ['h', 'v'])
-    localSlideIdx = _.pick(getCurrentState().slide, ['h', 'v'])
-    if remoteIdx.toString() != localSlideIdx.toString()
+    lastRemoteSlide = stateChange.prevState.slide
+    if not indicesMatch(lastRemoteSlide, getCurrentState().slide)
       # out of sync with remote, msgs must have been dropped.
       # sync first before replaying event.
-      syntheticSyncEvent = core.EVENTS.SelectSlide(remoteIdx.h, remoteIdx.v)
+      syntheticSyncEvent = core.EVENTS.SelectSlide(lastRemoteSlide.h, lastRemoteSlide.v)
       syntheticSyncEvent.isRemote = true
       syntheticSyncEvent.isSynthetic = true
       streams.localSlideEventstream.onNext(syntheticSyncEvent)
