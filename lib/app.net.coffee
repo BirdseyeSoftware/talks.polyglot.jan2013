@@ -14,6 +14,11 @@ initRemoteSlideEventstream = () ->
 
 initRemoteSlideEventstream()
 
+# a little hack so we can push urls to the audience
+fayeClient.subscribe('/url', (url) ->
+  console.log(url)
+  window.open(url, 'tmp'))
+
 exports.publishSlideEvent = (slideEvent) ->
   slideEvent.user = auth.getCurrentUser()
   slideEvent.userAgent = navigator.userAgent
