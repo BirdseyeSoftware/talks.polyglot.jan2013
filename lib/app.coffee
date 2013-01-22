@@ -1,7 +1,6 @@
 core = require "./app.core"
 {revealjsDomToSlideDeck} = require "./app.revealjs_to_slidedeck"
 ui = require "./app.ui"
-#auth = require "./app.auth"
 net = require "./app.net"
 streams = require "./app.streams"
 utils = require "./utils"
@@ -34,7 +33,9 @@ handleRemoteSlideEvent = (stateChange) ->
     ev.isRemote = true
     remoteIdx = _.pick(stateChange.prevState.slide, ['h', 'v'])
     localSlideIdx = _.pick(CURRENT_LOCAL_SLIDE_STATE.slide, ['h', 'v'])
-    if remoteIdx != localSlideIdx
+    if remoteIdx.toString() != localSlideIdx.toString()
+      # out of sync with remote, msgs must have been dropped.
+      # sync first before replaying event.
       syntheticSyncEvent = core.EVENTS.SelectSlide(remoteIdx.h, remoteIdx.v)
       syntheticSyncEvent.isRemote = true
       syntheticSyncEvent.isSynthetic = true
@@ -42,7 +43,7 @@ handleRemoteSlideEvent = (stateChange) ->
 
     streams.localSlideEventstream.onNext(ev)
   else
-    # This updates the view but doesn't currently affect the state
+    # This updates the view but doesn't affect the state
     # machine / event history. Thus, the next local event will resume
     # from the previous local state.
     ui.updateRevealForPresentationState(stateChange.newState)
