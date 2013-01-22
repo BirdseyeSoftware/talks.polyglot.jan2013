@@ -84,6 +84,6 @@ getCurrentPresenterSlide = (callback) ->
     if err
       callback(err, null)
     else
-      callback(null, JSON.parse(record).slide))
+      callback(null, JSON.parse(record).newState.slide))
 exports.getCurrentPresenterSlide = getCurrentPresenterSlide
 ################################################################################
