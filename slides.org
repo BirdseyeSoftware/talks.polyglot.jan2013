@@ -23,40 +23,281 @@
   :ADDED:    [2013-01-15 Tue 15:17]
   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
-** The problems of browser side UI development
+** About Us
+   :PROPERTIES:
+   :ID:       c8957be1-7cb1-4e9c-8851-061af0e51e1c
+   :ADDED:    [2013-01-22 Tue 13:33]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+[[https://github.com/BirdseyeSoftware?tab%3Dmembers%0A][Birdseye Software @ github]]
+
+https://twitter.com/romanandreg/ - functional purist
+
+https://twitter.com/tavisrudd/ - mongrel (aka polyglot)
+** Load this 
+   :PROPERTIES:
+   :ID:       b82b5460-f999-411e-8369-ecf58901d790
+   :ADDED:    [2013-01-22 Tue 14:02]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+http://polyglot.birdseye-sw.com/
+
+right now
+
+** You just loaded our demo
+   :PROPERTIES:
+   :ID:       1cb81f83-e315-40b3-a093-e1fbdf1ca7eb
+   :ADDED:    [2013-01-22 Tue 14:04]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+more on this later ...
+** Our thoughts inspired by 
+   :PROPERTIES:
+   :ID:       cd9f62ee-1cab-4d2a-b755-453b3f1a0657
+   :ADDED:    [2013-01-22 Tue 13:30]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+Rx Form project 
+
+http://rxtest.dentalle.com/
+
+Too big for this talk ...
+
+* Kill
+  :PROPERTIES:
+  :ID:       1ec8b943-f488-4a08-8b63-6e61756b23e2
+  :ADDED:    [2013-01-22 Tue 13:22]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+
+ [[file:assets/spaghetti-monster.jpg]] 
+** But how?
+   :PROPERTIES:
+   :ID:       bcc2468a-7184-442e-85c9-165a676da3d1
+   :ADDED:    [2013-01-22 Tue 13:38]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** 4 step plan
+   :PROPERTIES:
+   :ID:       fc2210ff-2c2b-485b-aeba-00772ff9eef9
+   :ADDED:    [2013-01-22 Tue 14:07]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** Step 1
+   :PROPERTIES:
+   :ID:       64970cb7-5c56-4f20-a60b-e9b8c9152dca
+   :ADDED:    [2013-01-22 Tue 13:39]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+   Separate Model from View
+** MV*
+   :PROPERTIES:
+   :ID:       d9c27aa5-19db-4126-aa7a-6acbbf76026b
+   :ADDED:    [2013-01-22 Tue 13:41]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+http://backbonejs.org/
+
+http://knockoutjs.com/
+
+http://angularjs.org/
+
+http://emberjs.com/
+
+   which do you choose?
+
+** Only gets you so far ...
    :PROPERTIES:
    :ID:       44a57f51-624a-4813-923d-72041ef4d591
    :ADDED:    [2013-01-15 Tue 15:29]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
-
-    - which framework / style / fad to adopt
+    - tight coupling to frameworks
+    - ... and from view code to model code 
     - callback and binding hell
-    - tight coupling either to view code or to frameworks
-    - testing requires a lot of mocks and fixtures (repetitious)
+    - testing requires a lot of mocks and fixtures
 
-** Kill
+** Step 2
    :PROPERTIES:
-   :ID:       76beec65-39bf-4a8e-a092-5259c6acdc43
-   :ADDED:    [2013-01-15 Tue 15:29]
-   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :ID:       d943c85e-398b-409c-84a3-45fbbcc3cf0d
+   :ADDED:    [2013-01-22 Tue 13:46]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
- [[file:spaghetti-monster.jpg]] 
-* We all know Event-Driven
-  :PROPERTIES:
-  :ID:       6f51e563-f4b9-4d4f-81cb-e513feca559a
-  :ADDED:    [2013-01-21 Mon 18:23]
-  :CLOCK-WHEN-ADDED: 3d26f083-9b74-40bb-bca0-a384c7dff118
-  :END:
+   From 
 
-* But, Event Sourcing? 
-  :PROPERTIES:
-  :ID:       e6eec775-a4d7-4340-ad52-fd8cdf46d14c
-  :ADDED:    [2013-01-15 Tue 15:19]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-  :END:
+   "Methods on Mutable Models"
 
-** notes                                                           :noexport:
+   to
+
+   Domain Events 
+
+   on
+
+   Immutable Domain State Records
+
+** Step 3
+   :PROPERTIES:
+   :ID:       7e700bd8-febf-434d-a9b2-83022d12b4ee
+   :ADDED:    [2013-01-22 Tue 13:55]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+UI Event Bindings
+
+publish 
+
+Domain Events
+
+** Step 4
+   :PROPERTIES:
+   :ID:       a901c5d3-2d9a-4a06-b7b3-1d34dd280f2b
+   :ADDED:    [2013-01-22 Tue 13:59]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+"React"
+
+to 
+
+Domain Events
+
+** Summary
+   :PROPERTIES:
+   :ID:       53a716a2-a5ab-4d3e-956d-485a0fbe5bed
+   :ADDED:    [2013-01-22 Tue 14:07]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+Diagram
+* State Reduction 101
+  :PROPERTIES:
+  :ID:       d2c4fe95-c2b2-48c5-9515-a67645a0971e
+  :ADDED:    [2013-01-22 Tue 14:09]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+** Many names
+   :PROPERTIES:
+   :ID:       f653878c-97d0-49ec-814f-3345af8d6930
+   :ADDED:    [2013-01-22 Tue 14:10]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+reduce
+
+inject
+
+foldl
+*** notes                                                          :noexport:
+- http://www.globalnerdy.com/2008/09/03/enumerating-enumerable-a-cute-trick-for-explaining-inject-reduce-fold/
+- syntactic 'inject'ion of operator between args
+- show basics of left fold with integers or some non-event inputs
+
+** Example
+   :PROPERTIES:
+   :ID:       e1a935fd-f3ad-44f6-9b83-b897d73fc312
+   :ADDED:    [2013-01-22 Tue 14:24]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+#+begin_src python
+reduce(operators.plus, range(1, 9))
+#+end_src
+
+#+begin_src ruby
+[1...8].inject(0) {|sum, i| sum + i}
+#+end_src
+
+#+begin_src haskell
+sum = foldl +
+sum  [1..9]
+#+end_src
+
+#+begin_src javascript
+var add = function (prevSum, n) { return prevSum + n; };
+_.reduce([1,2,3,4,5,6,7,8], add)
+// => 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8
+// => ((((1 + 2) + 3) + ..) + 8)
+#+end_src
+
+** Fold 1
+   :PROPERTIES:
+   :ID:       ef8dfd33-05c3-453a-847f-30512d875268
+   :ADDED:    [2013-01-22 Tue 14:13]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+ [[file:assets/fold_1.jpg]] 
+
+** Fold 2
+   :PROPERTIES:
+   :ID:       63a3db05-5bf1-4055-a229-d18b4700627f
+   :ADDED:    [2013-01-22 Tue 14:21]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+ [[file:assets/fold_2.jpg]] 
+
+** Fold 5
+   :PROPERTIES:
+   :ID:       7959543a-fea4-47e2-b37b-c7282b6407d4
+   :ADDED:    [2013-01-22 Tue 14:21]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+ [[file:assets/fold_5.jpg]] 
+
+** Fold 7
+   :PROPERTIES:
+   :ID:       863b994e-2a32-4efb-a465-09bc8d15744e
+   :ADDED:    [2013-01-22 Tue 14:22]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+ [[file:assets/fold_7.jpg]] 
+
+** Fold 8
+   :PROPERTIES:
+   :ID:       f0984215-95d0-49a7-9e66-c571dac4b265
+   :ADDED:    [2013-01-22 Tue 14:22]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+ [[file:assets/fold_8.jpg]] 
+
+** Same principle
+   :PROPERTIES:
+   :ID:       18188680-29e9-405a-9f1f-5de885113285
+   :ADDED:    [2013-01-22 Tue 14:30]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+for "Event Sourcing"
+
+#+begin_src javascript
+M = MOVES
+initialState = { x: 0, y: 0 }
+function reduceLocationState(prevState, ev) {
+  newState = _.clone(prevState)
+  switch(ev)  {
+    case M.LEFT: newState.x -= 1; break;
+    case M.RIGHT: newState.x += 1; break;
+    ...
+  }
+  return newState;
+}
+_.reduce([M.LEFT, M.UP, M.RIGHT], reduceLocationState, initialState)
+// => {x: 0, y: 1}
+#+end_src
+State = a reduction of Events
+
+** Event-Driven ++
+   :PROPERTIES:
+   :ID:       fb998830-abb3-48c1-957d-fb513c1b7c50
+   :ADDED:    [2013-01-22 Tue 13:23]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+   Event-Driven architecture is a pre-requisite.
+
+   ++
+   - events history is the 'source' of truth
+   - current state is derived
+
+*** notes                                                          :noexport:
    :PROPERTIES:
    :ID:       2764747a-929e-48f2-ac7a-50e23d5cee92
    :ADDED:    [2013-01-21 Mon 18:23]
@@ -65,23 +306,17 @@
 - short standard def, non-functional
   - link to a few examples, mention CQRS, etc.
 - emphasize difference between event-driven and event-sourced
-  extremely simple canvas drawing example:
-  Dual pane:  the first pane is event driven and histories discarded,
-  the second is event sourced and a history is persistent
-  - event history is the 'source' of truth, not the current state
-  - current state is derived
-- redefine in terms of `reduce`. show with simple event history
 
-* Reducers 101
-  :PROPERTIES:
-  :ID:       b4bdbf7e-466b-4c81-9593-3967e83d65ed
-  :ADDED:    [2013-01-15 Tue 15:19]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-  :END:
-- http://www.globalnerdy.com/2008/09/03/enumerating-enumerable-a-cute-trick-for-explaining-inject-reduce-fold/
-- syntactic 'inject'ion of operator between args
-- show basics of left fold with integers or some non-event inputs
-* Event sourcing FTW 
+** Also possible in OOP
+   :PROPERTIES:
+   :ID:       32ab6659-f224-44cc-a39c-a4bbf05a548f
+   :ADDED:    [2013-01-22 Tue 13:24]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+Google for CQRS + ES
+
+* Event sourcing FTW
   :PROPERTIES:
   :ID:       92922c70-3855-48ca-8b1a-3ef1c989a16a
   :ADDED:    [2013-01-15 Tue 15:50]
@@ -93,6 +328,17 @@
    :ADDED:    [2013-01-15 Tue 15:51]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
+
+ - Performance
+ - Audit Trail
+ - Simpler integration with other subsystems
+ - Deriving additional business value from the event history
+ - Production troubleshooting
+ - Fixing errors after the fact
+ - Testing 
+ - Easy replication via event pubsub
+ - natural way of describing software (UIs, etc.):
+   *structural vs behavioural model*
 
 *** notes                                                          :noexport:
     :PROPERTIES:
@@ -106,19 +352,15 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
 
  Benefits listed on msdn:
  - Performance
- - Simplification
  - Audit Trail
- - Integration with other subsystems
+ - Simpler integration with other subsystems
  - Deriving additional business value from the event history
  - Production troubleshooting
- - Fixing errors
- - Testing
-
-Other benefits
- - easy replication via event pubsub
- - events/interactions/messages are a natural way of describing
-   software (UIs, etc.) 
-   * structural vs behavioural model *
+ - Fixing errors after the fact
+ - Testing 
+ - Easy replication via event pubsub
+ - natural way of describing software (UIs, etc.) 
+   ==structural vs behavioural model==
 
 ** What about Client-side?
    :PROPERTIES:
@@ -142,6 +384,12 @@ Other benefits
   - test cases and fixture generation (generative style)
 
 
+* Slides Demo
+  :PROPERTIES:
+  :ID:       15c0642f-faec-4eb7-ab75-6aff5ff4a21d
+  :ADDED:    [2013-01-22 Tue 13:29]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
 * Compare and contrast with MV* implementation
   :PROPERTIES:
   :ID:       ac6087b3-578a-45b7-9085-b4bd5d1b1415
