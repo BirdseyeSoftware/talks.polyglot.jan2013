@@ -8,7 +8,7 @@ utils = require "./utils"
 CURRENT_LOCAL_SLIDE_STATE = null
 setSlideState = (state) ->
   CURRENT_LOCAL_SLIDE_STATE = state
-exports.getCurrentState = () -> CURRENT_LOCAL_SLIDE_STATE
+exports.getCurrentState = getCurrentState = () -> CURRENT_LOCAL_SLIDE_STATE
 
 ################################################################################
 
