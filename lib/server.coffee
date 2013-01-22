@@ -49,6 +49,17 @@ server.get("/slide_events/:provider/:id",
           resp.write(JSON.stringify(result))
         resp.end()))
 
+server.get("/slide_questions/",
+  (req, resp) ->
+    resp.set("Content-Type", "application/json")
+    store.getAllSlideQuestions((err, result) ->
+        if err
+          resp.write("{error: 'An error happened'}")
+        else
+          console.log("===> ", result)
+          resp.write(JSON.stringify(result))
+        resp.end()))
+
 ################################################################################
 
 app = server.listen(config.PORT)

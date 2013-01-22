@@ -1,3 +1,4 @@
+_ = require "underscore"
 {getUserKey} = require "./utils"
 redis = require "redis"
 channels = require "./channel_names"
@@ -19,6 +20,35 @@ exports.getSlideEvents = (user, callback) ->
   # 1000 is an arbitrary number here
   userKey = getUserKey(user)
   _redisClient.lrange("#{APP_NS}:slide_events:#{userKey}", 0, 1000, callback)
+
+# FUGLY!!!
+exports.getAllSlideQuestions = (callback) ->
+  partial_results = []
+  _redisClient.keys("#{APP_NS}:questions:*", (err, slides) ->
+      if err
+        callback(err, null)
+      else
+        multi = _redisClient.multi()
+        partial_results = for slide in slides
+          # execute the subcommand
+          multi.smembers(slide)
+
+          # create the result entry
+          partial_result = {}
+          slideId = slide.match(/.+:.+:(.+)/)[1]
+          partial_result.id = slideId
+          partial_result
+
+      multi.exec((err, replies) ->
+        if err
+          callback(err, null)
+        else
+          results = _.reduce(replies, ((acc, reply, index) ->
+            partial_result = partial_results[index]
+            result = {}
+            result[partial_result.id] = reply
+            _.extend(acc, result)), {})
+          callback(null, results)))
 
 ################################################################################
 
