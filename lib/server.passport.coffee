@@ -78,8 +78,7 @@ _slideshowRedirect = (service, req, resp) ->
   userSession =
     token: req.sessionID
     user: user
-  resp.cookie('userSession', JSON.stringify(userSession), maxAge: 90000, secret: false)
-
+  resp.cookie('userSession', JSON.stringify(userSession), {maxAge: 900000, secret: false})
   resp.redirect("/slideshow/")
 
 slideshowRedirect = (service) ->
