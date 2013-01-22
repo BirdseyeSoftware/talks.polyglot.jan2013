@@ -31,7 +31,6 @@ mkUserSlideEventConsumerForRedis = (user) ->
   (stateChangedEvent) ->
     _redisClient.lpush("#{APP_NS}:slide_events:#{userKey}", JSON.stringify(stateChangedEvent))
     if stateChangedEvent.event.type == "AskQuestion"
-      console.log("=> #{APP_NS}:questions:#{JSON.stringify(stateChangedEvent.event)}")
       _redisClient.sadd("#{APP_NS}:questions:#{stateChangedEvent.event.slideId}", userKey)
 
 subscribeToUserSlideEvents = (user) ->

@@ -38,10 +38,14 @@ REV_DIRS_TO_EVENTS =
   up: EVENTS.Down
   down: EVENTS.Up
 
+askQuestion = ->
+  if confirm("Do you want to ask a question later about this slide?")
+    EVENTS.AskQuestion(slideId: window.mainSlideDeck.get(Reveal.getIndices()).id)
+
+
 directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
 keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
-dblclickEventToSlideEvent = (ev) ->
-  EVENTS.AskQuestion(slideId: window.mainSlideDeck.get(Reveal.getIndices()).id)
+dblclickEventToSlideEvent = (ev) -> askQuestion()
 
 ################################################################################
 # touch ui eventstreams
@@ -108,20 +112,19 @@ touchEventToSlideEvent = (ev) ->
   switch ev.type
     when "hold" then EVENTS.TogglePause()
     #when "tap" then EVENTS.Next()
-  
-    when "doubletap" then EVENTS.AskQuestion(slideId: window.mainSlideDeck.get(Reveal.getIndices()).id)
+    when "doubletap" then askQuestion()
     when "swipe" then REV_DIRS_TO_EVENTS[ev.direction]?()
 
 exports.uiSlideEventstream = () ->
   keyups = $('body').bindAsObservable("keyup")
-  dblclicks = $('body').bindAsObservable("dblclick")
+  #dblclicks = $('body').bindAsObservable("dblclick")
   merged = Rx.Observable.merge(
     revealNavBarClickEventstream(),
     revealOverviewClickEventstream(),
     mkFullscreenChangeEventstream().select(fullscreenEventToSlideEvent),
     mkTouchEventstream($('body')).select(touchEventToSlideEvent),
-    keyups.select(keyEventToSlideEvent)
-    dblclicks.select(dblclickEventToSlideEvent))
+    keyups.select(keyEventToSlideEvent))
+    #dblclicks.select(dblclickEventToSlideEvent))
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 
 ################################################################################
