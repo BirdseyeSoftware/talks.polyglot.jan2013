@@ -78,4 +78,12 @@ PRESENTER_USER = {id: 236886, provider: "github"}
 do ->
   subscribe(channels.getUserEventChannelName(PRESENTER_USER), publishEventsFromPresenterToSlaves)
 
+getCurrentPresenterSlide = (callback) ->
+  userKey = getUserKey(PRESENTER_USER)
+  _redisClient.lindex("#{APP_NS}:slide_events:#{userKey}", 1, (err, record) ->
+    if err
+      callback(err, null)
+    else
+      callback(null, JSON.parse(record).slide))
+exports.getCurrentPresenterSlide = getCurrentPresenterSlide
 ################################################################################

@@ -9,7 +9,7 @@
 #+FILETAGS: birdseye
 #+CATEGORY: bsw
 #+STARTUP: hidestars hideblocks
-* _
+* Hello!
   :PROPERTIES:
   :ID:       1b98e6e2-d6be-4f69-b16b-f7584b4d841f
   :ADDED:    [2013-01-18 Fri 14:05]

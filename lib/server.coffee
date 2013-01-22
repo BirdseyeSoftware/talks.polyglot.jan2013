@@ -38,12 +38,22 @@ server.get("/users/",
       resp.write(JSON.stringify(result))
       resp.end()))
 
+server.get("/current_slide/",
+  (req, resp) ->
+    resp.set("Content-Type", "application/json")
+    store.getCurrentPresenterSlide((err, result) ->
+      if err?
+        resp.write("{error: 'An error ocurred'}")
+      else
+        resp.write(JSON.stringify(result))
+      resp.end()))
+
 server.get("/slide_events/:provider/:id",
   (req, resp) ->
     resp.set("Content-Type", "application/json")
     store.getSlideEvents({provider: req.params.provider, id: req.params.id},
       (err, result) ->
-        if error?
+        if err?
           resp.write("{error: 'An error ocurred'}")
         else
           resp.write(JSON.stringify(result))
