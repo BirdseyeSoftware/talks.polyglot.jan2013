@@ -1,8 +1,10 @@
+$ = require "jquery"
 Rx = require "rx"
 _ = require "underscore"
 {EVENTS} = require "./app.core"
 {mktee} = require("./utils")
 
+exports.clientModeChangeEventstream = clientModeChangeEventstream = new Rx.Subject()
 ################################################################################
 MODES =
   AUDIENCE: "AUDIENCE",
@@ -16,8 +18,7 @@ stylesheetMap =
   PRESENTER: ["/common.css", "/presenter.css"]
   ORG_MODE: ["/common.css", "/presenter.css"]
 
-exports.mode_observable = mode_observable = new Rx.Subject()
-setPresentationMode = (mode) -> mode_observable.onNext(mode)
+setPresentationMode = (mode) -> clientModeChangeEventstream.onNext(mode)
 
 setStylesheet = (mode) ->
   $("style").remove()
@@ -40,7 +41,7 @@ toggleDomElemsForMode = (mode) ->
       $("#reveal").hide()
 
 handleModeChange = mktee(setStylesheet, toggleDomElemsForMode)
-mode_observable.subscribe(handleModeChange)
+clientModeChangeEventstream.subscribe(handleModeChange)
 
 ################################################################################
 # transform org-mode slides to Reveal.js section tags
@@ -168,9 +169,6 @@ touchTypes = [
     "drag", "dragstart", "dragend",
     "transform", "transformstart", "transformend"
     "release"]
-
-# hammerEventstream = ($el, event_type) ->
-#   $($el).bindAsObservable(event_type)
 
 mkTouchEventstream = ($el, eventTypes=touchTypes) ->
   $el = $($el)
