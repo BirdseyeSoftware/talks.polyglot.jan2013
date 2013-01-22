@@ -1,8 +1,6 @@
 Rx = require "rx"
 Faye = require "faye"
 
-{server} = require "./server.core"
-
 faye = new Faye.NodeAdapter(mount: "/faye", timeout: 45)
 exports.publish = (args...) -> faye.getClient().publish(args...)
 exports.subscribe = (args...) -> faye.getClient().subscribe(args...)
@@ -14,22 +12,14 @@ faye.asObservable = (event_type) ->
   faye.bind(event_type, subj.callback)
   subj
 
-# faye.asObservable('publish').subscribe(
-#   ([clientId, channel]) ->
-#     console.log("publish", clientId, channel))
+faye.subscribe('subscribe', ([clientId, channel]) ->
+  console.log("FAYE subscribe", clientId, channel))
 
-faye.asObservable('subscribe').subscribe(
-  ([clientId, channel]) ->
-    console.log("subscribe", clientId, channel))
+faye.subscribe('handshake', (clientId) ->
+  console.log("FAYE handshake", clientId))
 
-faye.asObservable('handshake').subscribe(
-  (clientId) ->
-    console.log("handshake", clientId))
+faye.subscribe('disconnect', ([clientId, channel]) ->
+  console.log("FAYE disconnect", clientId, channel))
 
-faye.asObservable('disconnect').subscribe(
-  ([clientId, channel]) ->
-    console.log("disconnect", clientId, channel))
-
-faye.asObservable('unsubscribe').subscribe(
-  ([clientId, channel]) ->
-    console.log("unsubscribe", clientId, channel))
+faye.subscribe('unsubscribe', ([clientId, channel]) ->
+  console.log("FAYE unsubscribe", clientId, channel))
