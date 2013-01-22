@@ -5,4 +5,9 @@ exports.getAuthToken = ->
   getAuthenticationCookie()['token']
 
 exports.getCurrentUser = ->
-  getAuthenticationCookie()['user']
+  try
+    {user, token} = getAuthenticationCookie()
+    user.token = token
+    user
+  catch err
+    console?.exception?(err)

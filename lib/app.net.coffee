@@ -1,6 +1,7 @@
 streams = require "./app.streams"
 channelNames = require "./channel_names"
 utils = require "./utils"
+auth = require "./app.auth"
 
 exports.fayeClient = fayeClient = new Faye.Client("/faye")
 
@@ -14,6 +15,7 @@ initRemoteSlideEventstream = () ->
 initRemoteSlideEventstream()
 
 exports.publishSlideEvent = (slideEvent) ->
+  slideEvent.user = auth.getCurrentUser()
   fayeClient.publish(channelNames.slideEvents,
     [fayeClient.getClientId(), slideEvent])
 
