@@ -12,14 +12,14 @@ faye.asObservable = (event_type) ->
   faye.bind(event_type, subj.callback)
   subj
 
-faye.bind('subscribe', ([clientId, channel]) ->
+faye.bind('subscribe', (clientId, channel) ->
   console.log("FAYE subscribe", clientId, channel))
 
 faye.bind('handshake', (clientId) ->
   console.log("FAYE handshake", clientId))
 
-faye.bind('disconnect', ([clientId, channel]) ->
+faye.bind('disconnect', (clientId, channel) ->
   console.log("FAYE disconnect", clientId, channel))
 
-faye.bind('unsubscribe', ([clientId, channel]) ->
+faye.bind('unsubscribe', (clientId, channel) ->
   console.log("FAYE unsubscribe", clientId, channel))
