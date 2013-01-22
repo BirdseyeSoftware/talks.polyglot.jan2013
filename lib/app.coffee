@@ -29,19 +29,16 @@ logRemoteStateChange = (stateChange) ->
 
 ################################################################################
 
-indicesMatch = (a, b) ->
-  Number(a.h) == Number(b.h) and Number(a.v) == Number(b.v)
-
 MERGE_REMOTE_EVENT_STREAM = true
 handleRemoteSlideEvent = (stateChange) ->
   if MERGE_REMOTE_EVENT_STREAM
     ev = stateChange.event
     ev.isRemote = true
     lastRemoteSlide = stateChange.prevState.slide
-    if not indicesMatch(lastRemoteSlide, getCurrentState().slide)
+    if lastRemoteSlide.id != getCurrentState().slide.id
       # out of sync with remote, msgs must have been dropped.
       # sync first before replaying event.
-      syntheticSyncEvent = core.EVENTS.SelectSlide(lastRemoteSlide.h, lastRemoteSlide.v)
+      syntheticSyncEvent = core.EVENTS.SelectSlide({id: lastRemoteSlide.id})
       syntheticSyncEvent.isRemote = true
       syntheticSyncEvent.isSynthetic = true
       streams.localSlideEventstream.onNext(syntheticSyncEvent)
@@ -64,11 +61,12 @@ aggregateStateOnSlideEvent = (prevState, ev) ->
     newState
   catch err
     net.log(err) #TODO: replace this with an error record
-    console?.error?("exception in slide state reducer:",
+    console?.warn?("exception in slide state reducer:",
       err,
       "after event:", ev,
       "previous state: ", prevState,
       "new state:", newState)
+    console?.error?(err)
     prevState                   # leave it at the old state after erro
 
 loadPresentationState = () ->

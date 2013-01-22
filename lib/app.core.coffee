@@ -46,7 +46,7 @@ move = (slideDeck, direction, fromSlide) ->
 
 ################################################################################
 EVENTS =
-  SelectSlide:     (h, v) -> {type: "SelectSlide", h: h, v: v}
+  SelectSlide:     ({h, v, id}) -> {type: "SelectSlide", h: h, v: v, id: id}
   ToggleOverview:  null
   EnterFullscreen: null
   ExitFullscreen:  null
@@ -98,7 +98,7 @@ EventHandlers =
   TogglePause: (state, ev) -> paused: toggle(state.paused)
 
   SelectSlide: (state, ev) ->
-    slide = state.slideDeck.get(ev)
+    slide = state.slideDeck.get(if ev.id then ev.id else ev)
     {slide: slide, mode: Modes.normal, paused: false}
 
   Next:  movementHandler

@@ -41,11 +41,13 @@ buster.testCase "app.core",
 
   "event ctors": ->
     for evtype, ctor of EVENTS
+      if evtype == 'SelectSlide'
+        continue
       ev = ctor()
       assert ev
       assert ev.type == evtype
     ##
-    selectEvent = EVENTS.SelectSlide(1, 3)
+    selectEvent = EVENTS.SelectSlide({h: 1, v: 3})
     assert selectEvent.h == 1
     assert selectEvent.v == 3
     null
@@ -120,7 +122,7 @@ buster.testCase "app.core",
       [EVENTS.Next(), 1],
       [EVENTS.Next(), 2],
       [EVENTS.Prev(), 1],
-      [EVENTS.SelectSlide(3, 0), 5],
+      [EVENTS.SelectSlide({h: 3, v: 0}), 5],
       [EVENTS.Prev(), 4],
       [EVENTS.Prev(), 3],
       [EVENTS.Down(), 4],

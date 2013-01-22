@@ -84,8 +84,8 @@ revealOverviewClickEventstream = ->
           ev.stopImmediatePropagation()
           $el = $(ev.currentTarget)
           EVENTS.SelectSlide(
-            $el.attr('data-index-h'),
-            ($el.attr('data-index-v') or 0))
+            h: $el.attr('data-index-h'),
+            v: ($el.attr('data-index-v') or 0))
         catch er
           null)
 
