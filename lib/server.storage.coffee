@@ -26,16 +26,16 @@ storeAuthenticatedUserOnRedis = (user) ->
   _redisClient.sadd("#{APP_NS}:authenticated_users", userKey)
   _redisClient.set("#{APP_NS}:#{userKey}:properties", JSON.stringify(user))
 
-storeUserSlideEventsOnRedis = (user) ->
+mkUserSlideEventConsumerForRedis = (user) ->
   userKey = getUserKey(user)
   (slideEvent) ->
     _redisClient.lpush("#{APP_NS}:#{userKey}:slide_events", JSON.stringify(slideEvent))
 
-registerToUserSlideEvent = (user) ->
+subscribeToUserSlideEvents = (user) ->
   userKey  = getUserKey(user, "/")
-  subscribe("#{channels.slideEvents}/#{userKey}", storeUserSlideEventsOnRedis(user))
+  subscribe("#{channels.slideEvents}/#{userKey}", mkUserSlideEventConsumerForRedis(user))
 
 subscribe(channels.clientAuthenticated, storeAuthenticatedUserOnRedis)
-subscribe(channels.clientAuthenticated, registerToUserSlideEvent)
+subscribe(channels.clientAuthenticated, subscribeToUserSlideEvents)
 
 ################################################################################
