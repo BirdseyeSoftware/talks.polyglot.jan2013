@@ -44,6 +44,6 @@ publishEventsFromPresenterToSlaves = (stateChange) ->
 
 PRESENTER_USER = {id: "236886", provider: "github"}
 do ->
-  subscribe(channels.getUserEventChannelName(), publishEventsFromPresenterToSlaves)
+  subscribe(channels.getUserEventChannelName(PRESENTER_USER), publishEventsFromPresenterToSlaves)
 
 ################################################################################
