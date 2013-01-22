@@ -8,12 +8,20 @@ config = require "./server.config"
 
 server.get('/', (req, resp) -> resp.redirect("/slideshow/"))
 
+
 server.get('/login/',
   (req, resp) ->
     if req.user?
       resp.redirect("/slideshow/")
     else
       resp.sendfile("assets/login.html", {}, (err) -> console.log(err)))
+
+server.get('/logout/',
+  (req, resp) ->
+    if req.user?
+      req.session.auth = null
+      req.session.destroy(->)
+    resp.redirect("/login/")
 
 server.get('/slideshow/',
   (req, resp) ->
