@@ -27,8 +27,8 @@ passport.deserializeUser((user, done) ->
 
 passport.use(
   new TwitterStrategy(
-    consumerKey: "UwqwbKAgfcPX4cbCX5dXw",
-    consumerSecret: "ulIQ0HAGc1MwCsEraPfaTmJ97BKOMcB1vNRPgoVLOMc",
+    consumerKey: "QK0wDsMWXRtedQTDreog",
+    consumerSecret: "2AksMWSITLxcELxA2rVJDW2kMx9xJSegbEdzVtfork",
     callbackURL: "#{callback_url_prefix}auth/twitter/callback",
     (token, tokenSecret, profile, done) ->
       done(null, profile)))
