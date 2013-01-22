@@ -6,6 +6,9 @@ streams = require "./app.streams"
 utils = require "./utils"
 
 CURRENT_LOCAL_SLIDE_STATE = null
+setSlideState = (state) ->
+  CURRENT_LOCAL_SLIDE_STATE = state
+exports.getCurrentState = () -> CURRENT_LOCAL_SLIDE_STATE
 
 ################################################################################
 
@@ -32,7 +35,7 @@ handleRemoteSlideEvent = (stateChange) ->
     ev = stateChange.event
     ev.isRemote = true
     remoteIdx = _.pick(stateChange.prevState.slide, ['h', 'v'])
-    localSlideIdx = _.pick(CURRENT_LOCAL_SLIDE_STATE.slide, ['h', 'v'])
+    localSlideIdx = _.pick(getCurrentState().slide, ['h', 'v'])
     if remoteIdx.toString() != localSlideIdx.toString()
       # out of sync with remote, msgs must have been dropped.
       # sync first before replaying event.
@@ -55,7 +58,7 @@ aggregateStateOnSlideEvent = (prevState, ev) ->
     streams.localSlideStateChangeStream.onNext(
       new core.StateChange(
         event: ev, prevState: prevState, newState: newState))
-    CURRENT_LOCAL_SLIDE_STATE = newState
+    setSlideState(newState)
     newState
   catch err
     net.log(err) #TODO: replace this with an error record
@@ -70,7 +73,7 @@ loadPresentationState = () ->
   window.mainSlideDeck = deck = revealjsDomToSlideDeck()
   initSlide = deck.get(Reveal.getIndices())
   initState = new core.PresentationState(deck, initSlide)
-  CURRENT_LOCAL_SLIDE_STATE = initState
+  setSlideState(initState)
   initState
 
 initEventstreamSubscriptions = ->
