@@ -19,6 +19,7 @@ server.get('/login/',
 server.get('/logout/',
   (req, resp) ->
     if req.user?
+      res.clearCookie('userSession')
       req.session.auth = null
       req.session.destroy(->)
     resp.redirect("/login/"))
