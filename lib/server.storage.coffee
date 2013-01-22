@@ -5,8 +5,8 @@ channels = require "./channel_names"
 _redisClient = redis.createClient()
 
 exports.createSessionStore = (express) ->
-   RedisStore = require("connect-redis")(express)
-   new RedisStore(client: _redisClient)
+  RedisStore = require("connect-redis")(express)
+  new RedisStore(client: _redisClient)
 
 exports.getAuthenticatedUsers = (callback) ->
   _redisClient.smembers("authenticatedUsers", callback)
