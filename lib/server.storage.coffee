@@ -40,6 +40,7 @@ subscribe(channels.clientAuthenticated, storeAuthenticatedUserOnRedis)
 subscribe(channels.clientAuthenticated, subscribeToUserSlideEvents)
 
 publishEventsFromPresenterToSlaves = (stateChange) ->
+  console.log("presenter state change: ", stateChange)
   publish(channels.slaveEvents, stateChange)
 
 PRESENTER_USER = {id: "236886", provider: "github"}
