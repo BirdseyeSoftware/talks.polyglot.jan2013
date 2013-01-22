@@ -10,8 +10,12 @@ if window?
   require "rxjs-jquery"
 
   window.app = app = require "./app"
-  app.core = require("./app.core")
-  app.net = require("./app.net")
-  app.log = require("./utils").log
-  app.faye = require("./app.net").fayeClient
+  app.ns =
+    utils: require('./utils')
+    core: require("./app.core")
+    ui: require("./app.ui")
+    net: require("./app.net")
+    auth: require("./app.auth")
+    log: require("./utils").log
+    faye: require("./app.net").fayeClient
   app.main()
