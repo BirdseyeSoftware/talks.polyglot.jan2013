@@ -17,21 +17,6 @@
   :END:
 #  Warm up // animated gif of an arcade game youtube Contra Video
 
-* Pre-Introduction
-  :PROPERTIES:
-  :ID:       d4947084-29bd-4a26-b914-ecabcbf86a9b
-  :ADDED:    [2013-01-15 Tue 15:17]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-  :END:
-#+begin_src JavaScript
-function() { void(0); };
-#+end_src
-
-#+begin_src python
-def test():
-    pass
-#+end_src
-
 * Introduction
   :PROPERTIES:
   :ID:       f7b0f8fe-8407-496e-b98a-e18a42382b89
@@ -50,28 +35,33 @@ def test():
     - tight coupling either to view code or to frameworks
     - testing requires a lot of mocks and fixtures (repetitious)
 
-** Goals and outline
+** Kill
    :PROPERTIES:
    :ID:       76beec65-39bf-4a8e-a092-5259c6acdc43
    :ADDED:    [2013-01-15 Tue 15:29]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
  [[file:spaghetti-monster.jpg]] 
-* Reducers 101
+* We all know Event-Driven
   :PROPERTIES:
-  :ID:       b4bdbf7e-466b-4c81-9593-3967e83d65ed
-  :ADDED:    [2013-01-15 Tue 15:19]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :ID:       6f51e563-f4b9-4d4f-81cb-e513feca559a
+  :ADDED:    [2013-01-21 Mon 18:23]
+  :CLOCK-WHEN-ADDED: 3d26f083-9b74-40bb-bca0-a384c7dff118
   :END:
-- http://www.globalnerdy.com/2008/09/03/enumerating-enumerable-a-cute-trick-for-explaining-inject-reduce-fold/
-- syntactic 'inject'ion of operator between args
-- show basics of left fold with integers or some non-event inputs
-* What is event sourcing? 
+
+* But, Event Sourcing? 
   :PROPERTIES:
   :ID:       e6eec775-a4d7-4340-ad52-fd8cdf46d14c
   :ADDED:    [2013-01-15 Tue 15:19]
   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
+
+** notes                                                           :noexport:
+   :PROPERTIES:
+   :ID:       2764747a-929e-48f2-ac7a-50e23d5cee92
+   :ADDED:    [2013-01-21 Mon 18:23]
+   :CLOCK-WHEN-ADDED: 3d26f083-9b74-40bb-bca0-a384c7dff118
+   :END:
 - short standard def, non-functional
   - link to a few examples, mention CQRS, etc.
 - emphasize difference between event-driven and event-sourced
@@ -81,8 +71,16 @@ def test():
   - event history is the 'source' of truth, not the current state
   - current state is derived
 - redefine in terms of `reduce`. show with simple event history
-    
 
+* Reducers 101
+  :PROPERTIES:
+  :ID:       b4bdbf7e-466b-4c81-9593-3967e83d65ed
+  :ADDED:    [2013-01-15 Tue 15:19]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+- http://www.globalnerdy.com/2008/09/03/enumerating-enumerable-a-cute-trick-for-explaining-inject-reduce-fold/
+- syntactic 'inject'ion of operator between args
+- show basics of left fold with integers or some non-event inputs
 * Event sourcing FTW 
   :PROPERTIES:
   :ID:       92922c70-3855-48ca-8b1a-3ef1c989a16a
@@ -95,14 +93,21 @@ def test():
    :ADDED:    [2013-01-15 Tue 15:51]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
+
+*** notes                                                          :noexport:
+    :PROPERTIES:
+    :ID:       f6442566-6e54-43e6-8bef-68689d21340b
+    :ADDED:    [2013-01-21 Mon 18:20]
+    :CLOCK-WHEN-ADDED: 3d26f083-9b74-40bb-bca0-a384c7dff118
+    :END:
 Mention and provides links to a couple server-side examples.
 Mention CQRS.
 http://msdn.microsoft.com/en-us/library/jj591559.aspx
 
  Benefits listed on msdn:
- - performance
- - simplification
- - audit trail
+ - Performance
+ - Simplification
+ - Audit Trail
  - Integration with other subsystems
  - Deriving additional business value from the event history
  - Production troubleshooting
@@ -115,12 +120,19 @@ Other benefits
    software (UIs, etc.) 
    * structural vs behavioural model *
 
-** Client-side
+** What about Client-side?
    :PROPERTIES:
    :ID:       7c4a5710-4202-4a3b-aae6-1e435359c903
    :ADDED:    [2013-01-15 Tue 15:51]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
+
+*** notes                                                          :noexport:
+    :PROPERTIES:
+    :ID:       5c274cd9-cc57-4edb-890d-58afe977be52
+    :ADDED:    [2013-01-21 Mon 18:22]
+    :CLOCK-WHEN-ADDED: 3d26f083-9b74-40bb-bca0-a384c7dff118
+    :END:
   - explicit domain events and event loop instead of direct method
     calls / callback binding to UI events
   - domain state is a reduction over the domain events (not the UI
@@ -128,6 +140,7 @@ Other benefits
   - UI events are translated into domain events
   - changes in domain state trigger partial view update...
   - test cases and fixture generation (generative style)
+
 
 * Compare and contrast with MV* implementation
   :PROPERTIES:
