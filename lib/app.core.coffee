@@ -57,6 +57,7 @@ EVENTS =
   Up:              null
   Right:           null
   Down:            null
+  AskQuestion:     ({slideId}) -> {type: "AskQuestion", slideId: slideId}
 
 ## cleanup the null constructors
 for k, ctor of EVENTS
@@ -90,6 +91,8 @@ movementHandler = (state, ev) ->
   paused: false
 
 EventHandlers =
+  AskQuestion: (state, ev) ->
+     state
   ToggleOverview: (state, ev) ->
     mode: toggle(state.mode, [Modes.overview, Modes.normal])
 

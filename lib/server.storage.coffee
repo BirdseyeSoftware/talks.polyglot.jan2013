@@ -17,19 +17,22 @@ exports.getAuthenticatedUsers = (callback) ->
 
 exports.getSlideEvents = (provider, user_id, callback) ->
   # 1000 is an arbitrary number here
-  _redisClient.lrange("#{APP_NS}:#{provider}:#{user_id}:slide_events", 0, 1000, callback)
+  _redisClient.lrange("#{APP_NS}:#{provider}:slide_events:#{user_id}", 0, 1000, callback)
 
 ################################################################################
 
 storeAuthenticatedUserOnRedis = (user) ->
   userKey = getUserKey(user)
   _redisClient.sadd("#{APP_NS}:authenticated_users", userKey)
-  _redisClient.set("#{APP_NS}:#{userKey}:properties", JSON.stringify(user))
+  _redisClient.set("#{APP_NS}:properties:#{userKey}", JSON.stringify(user))
 
 mkUserSlideEventConsumerForRedis = (user) ->
   userKey = getUserKey(user)
-  (slideEvent) ->
-    _redisClient.lpush("#{APP_NS}:#{userKey}:slide_events", JSON.stringify(slideEvent))
+  (stateChangedEvent) ->
+    _redisClient.lpush("#{APP_NS}:slide_events:#{userKey}", JSON.stringify(stateChangedEvent))
+    if stateChangedEvent.event.type == "AskQuestion"
+      console.log("=> #{APP_NS}:questions:#{JSON.stringify(stateChangedEvent.event)}")
+      _redisClient.sadd("#{APP_NS}:questions:#{stateChangedEvent.event.slideId}", userKey)
 
 subscribeToUserSlideEvents = (user) ->
   userKey  = getUserKey(user, "/")

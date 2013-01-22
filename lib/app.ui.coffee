@@ -40,6 +40,8 @@ REV_DIRS_TO_EVENTS =
 
 directionToSlideEvent = (dir) -> DIRS_TO_EVENTS[dir]?()
 keyEventToSlideEvent = (ev) ->  KEYS_TO_EVENTS[ev.which]?()
+dblclickEventToSlideEvent = (ev) ->
+  EVENTS.AskQuestion(slideId: window.mainSlideDeck.get(Reveal.getIndices()).id)
 
 ################################################################################
 # touch ui eventstreams
@@ -106,17 +108,20 @@ touchEventToSlideEvent = (ev) ->
   switch ev.type
     when "hold" then EVENTS.TogglePause()
     #when "tap" then EVENTS.Next()
-    when "doubletap" then  EVENTS.ToggleOverview()
+  
+    when "doubletap" then EVENTS.AskQuestion(slideId: window.mainSlideDeck.get(Reveal.getIndices()).id)
     when "swipe" then REV_DIRS_TO_EVENTS[ev.direction]?()
 
 exports.uiSlideEventstream = () ->
   keyups = $('body').bindAsObservable("keyup")
+  dblclicks = $('body').bindAsObservable("dblclick")
   merged = Rx.Observable.merge(
     revealNavBarClickEventstream(),
     revealOverviewClickEventstream(),
     mkFullscreenChangeEventstream().select(fullscreenEventToSlideEvent),
     mkTouchEventstream($('body')).select(touchEventToSlideEvent),
-    keyups.select(keyEventToSlideEvent))
+    keyups.select(keyEventToSlideEvent)
+    dblclicks.select(dblclickEventToSlideEvent))
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 
 ################################################################################
