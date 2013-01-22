@@ -16,6 +16,7 @@ initRemoteSlideEventstream()
 
 exports.publishSlideEvent = (slideEvent) ->
   slideEvent.user = auth.getCurrentUser()
+  slideEvent.userAgent = navigator.userAgent
   fayeClient.publish(channelNames.slideEvents,
     [fayeClient.getClientId(), slideEvent])
 
