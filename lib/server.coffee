@@ -6,28 +6,21 @@ config = require "./server.config"
 
 ################################################################################
 
-server.get('/',
-  (req, resp) ->
-    resp.redirect("/slideshow/")
-    resp.end())
+server.get('/', (req, resp) -> resp.redirect("/slideshow/"))
 
 server.get('/login/',
   (req, resp) ->
     if req.user?
       resp.redirect("/slideshow/")
-      resp.end()
     else
-      resp.sendfile("assets/login.html", {}, (err) -> console.log(err))
-    null)
+      resp.sendfile("assets/login.html", {}, (err) -> console.log(err)))
 
 server.get('/slideshow/',
   (req, resp) ->
     if req.user?
       resp.sendfile("build/slides.html")
     else
-      resp.redirect("/login/")
-      resp.end()
-    null)
+      resp.redirect("/login/"))
 
 server.get("/loggedInUsers",
   (req, resp) ->
