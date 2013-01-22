@@ -29,4 +29,5 @@ vendor/
 /lib/browserify.entry.js
 /lib/utils.js
 /lib/channel_names.js
+/lib/server*js
 /test/app.core.test.js
