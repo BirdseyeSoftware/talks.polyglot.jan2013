@@ -24,3 +24,6 @@ exports.scanl = (coll, reducer, init) ->
 
 exports.consoleDebugEnabled = () ->
   window.DEBUG or (console?.exception? and console.table?)
+
+exports.getUserKey = (user, sep=":") ->
+  "#{user.provider}#{sep}#{user.id}"

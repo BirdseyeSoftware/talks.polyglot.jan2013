@@ -20,10 +20,15 @@ fayeClient.subscribe('/url', (url) ->
   window.open(url, 'tmp'))
 
 exports.publishSlideEvent = (slideEvent) ->
-  slideEvent.user = auth.getCurrentUser()
+  slideEvent.user = user = auth.getCurrentUser()
   slideEvent.userAgent = navigator.userAgent
+  userKey = utils.getUserKey(user, "/")
+
+  userSlideEventsChannel = "#{channelNames.slideEvents}/#{userKey}"
+  fayeClient.publish(userSlideEventsChannel, slideEvent)
   fayeClient.publish(channelNames.slideEvents,
     [fayeClient.getClientId(), slideEvent])
+
 
 exports.log = (msg) ->
   fayeClient.publish('/debug',

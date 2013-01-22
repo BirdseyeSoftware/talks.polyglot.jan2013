@@ -1,5 +1,5 @@
 {server} = require "./server.core"
-{getAuthenticatedUsers} = require "./server.storage"
+store  = require "./server.storage"
 pubsub = require "./server.pubsub"
 require "./server.passport"
 config = require "./server.config"
@@ -25,9 +25,22 @@ server.get('/slideshow/',
 server.get("/users/",
   (req, resp) ->
     resp.set("Content-Type", "application/json")
-    getAuthenticatedUsers((err, result) ->
+    store.getAuthenticatedUsers((err, result) ->
       resp.write(JSON.stringify(result))
       resp.end()))
+
+server.get("/slide_events/:provider/:id",
+  (req, resp) ->
+    resp.set("Content-Type", "application/json")
+    store.getSlideEvents(
+      req.params.provider,
+      req.params.id,
+      (err, result) ->
+        if error?
+          resp.write("{error: 'An error ocurred'}")
+        else
+          resp.write(JSON.stringify(result))
+        resp.end()))
 
 ################################################################################
 

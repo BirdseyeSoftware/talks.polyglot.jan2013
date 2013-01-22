@@ -39,6 +39,9 @@ passport.use(
   new GithubStrategy(
     clientID: "264b30622a456bcf9a3e",
     clientSecret: "9acca4041260868f11e45639ac92c987a3d44433",
+    # Development oauth server
+    #clientID: "6293e3242c96e7802cc9",
+    #clientSecret: "4c1168b0b04d72007e5da74a19af97cb70547b37",
     callbackURL: "#{callback_url_prefix}auth/github/callback",
     (accessToken, refreshToken, profile, done) ->
       done(null, profile)))
