@@ -5,10 +5,12 @@ GithubStrategy = require("passport-github").Strategy
 MeetupStrategy = require("passport-meetup").Strategy
 GoogleStrategy = require("passport-google-oauth").Strategy
 
+config = require "./server.config"
 {server} = require "./server.core"
 {publish} = require "./server.pubsub"
 channels = require "./channel_names"
 
+callback_url_prefix = "http://#{config.HTTP_HOST}:#{config.PORT}/"
 ################################################################################
 
 passport.serializeUser((user, done) ->
@@ -27,41 +29,41 @@ passport.use(
   new TwitterStrategy(
     consumerKey: "UwqwbKAgfcPX4cbCX5dXw",
     consumerSecret: "ulIQ0HAGc1MwCsEraPfaTmJ97BKOMcB1vNRPgoVLOMc",
-    callbackURL: "http://127.0.0.1:8000/auth/twitter/callback",
+    callbackURL: "#{callback_url_prefix}auth/twitter/callback",
     (token, tokenSecret, profile, done) ->
-        done(null, profile)))
+      done(null, profile)))
 
 passport.use(
   new GithubStrategy(
     clientID: "264b30622a456bcf9a3e",
     clientSecret: "9acca4041260868f11e45639ac92c987a3d44433",
-    callbackURL: "http://127.0.0.1:8000/auth/github/callback",
+    callbackURL: "#{callback_url_prefix}auth/github/callback",
     (accessToken, refreshToken, profile, done) ->
-        done(null, profile)))
+      done(null, profile)))
 
 passport.use(
   new MeetupStrategy(
     consumerKey: "4cbrkutic5tpsv066fofjg9oir",
     consumerSecret: "71iohigpn844p24n3qsdmmfsoa",
-    callbackURL: "http://127.0.0.1:8000/auth/meetup/callback",
+    callbackURL: "#{callback_url_prefix}auth/meetup/callback",
     (accessToken, tokenSecret, profile, done) ->
-        done(null, profile)))
+      done(null, profile)))
 
 passport.use(
   new MeetupStrategy(
     consumerKey: "4cbrkutic5tpsv066fofjg9oir",
     consumerSecret: "71iohigpn844p24n3qsdmmfsoa",
-    callbackURL: "http://127.0.0.1:8000/auth/meetup/callback",
+    callbackURL: "#{callback_url_prefix}auth/meetup/callback",
     (accessToken, tokenSecret, profile, done) ->
-        done(null, profile)))
+      done(null, profile)))
 
 passport.use(
   new GoogleStrategy(
     consumerKey: "659551111339.apps.googleusercontent.com",
     consumerSecret: "zn0JeIBkiMChw-oZGdNpGW1W",
-    callbackURL: "http://127.0.0.1:8000/auth/google/callback",
+    callbackURL: "#{callback_url_prefix}auth/google/callback",
     (accessToken, tokenSecret, profile, done) ->
-        done(null, profile)))
+      done(null, profile)))
 
 ################################################################################
 
@@ -80,7 +82,6 @@ _slideshowRedirect = (service, req, resp) ->
 
   resp.redirect("/slideshow/")
   resp.end()
-  null
 
 slideshowRedirect = (service) ->
   _.bind(_slideshowRedirect, _slideshowRedirect, service)

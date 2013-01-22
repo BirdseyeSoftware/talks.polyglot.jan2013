@@ -2,10 +2,14 @@
 {getAuthenticatedUsers} = require "./server.storage"
 pubsub = require "./server.pubsub"
 require "./server.passport"
-
-PORT = 8080
+config = require "./server.config"
 
 ################################################################################
+
+server.get('/',
+  (req, resp) ->
+    resp.redirect("/slideshow/")
+    resp.end())
 
 server.get('/login/',
   (req, resp) ->
@@ -29,10 +33,10 @@ server.get("/loggedInUsers",
   (req, resp) ->
     resp.set("Content-Type", "application/json")
     getAuthenticatedUsers((err, result) ->
-        resp.write(JSON.stringify(result))
-        resp.end()))
+      resp.write(JSON.stringify(result))
+      resp.end()))
 
 ################################################################################
 
-app = server.listen(PORT)
+app = server.listen(config.PORT)
 pubsub.attach(app)
