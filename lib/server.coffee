@@ -10,7 +10,6 @@ RedisStore = require("connect-redis")(express)
 Pass = require "passport"
 TwitterStrategy = require("passport-twitter").Strategy
 GithubStrategy = require("passport-github").Strategy
-#FacebookStrategy = require("passport-facebook").Strategy
 MeetupStrategy = require("passport-meetup").Strategy
 GoogleStrategy = require("passport-google-oauth").Strategy
 
@@ -27,6 +26,7 @@ redisClient = Redis.createClient()
 
 faye = new Faye.NodeAdapter(mount: "/faye", timeout: 45)
 publish = (args...) -> faye.getClient().publish(args...)
+subscribe = (args...) -> faye.getClient().subscribe(args...)
 
 faye.asObservable = (event_type) ->
   subj = new Rx.Subject()
@@ -34,11 +34,9 @@ faye.asObservable = (event_type) ->
   faye.bind(event_type, subj.callback)
   subj
 
-faye.asObservable('publish').subscribe(
-  ([clientId, channel, data]) ->
-    console.log("publish", clientId, channel, data)
-    if data == 123
-      faye.getClient().publish("/foo", 456))
+# faye.asObservable('publish').subscribe(
+#   ([clientId, channel]) ->
+#     console.log("publish", clientId, channel))
 
 faye.asObservable('subscribe').subscribe(
   ([clientId, channel]) ->
@@ -47,6 +45,24 @@ faye.asObservable('subscribe').subscribe(
 faye.asObservable('handshake').subscribe(
   (clientId) ->
     console.log("handshake", clientId))
+
+faye.asObservable('disconnect').subscribe(
+  ([clientId, channel]) ->
+    console.log("disconnect", clientId, channel))
+
+faye.asObservable('unsubscribe').subscribe(
+  ([clientId, channel]) ->
+    console.log("unsubscribe", clientId, channel))
+
+####################
+
+## Redis store of logged in users
+subscribe(CHANNEL.clientAuthenticated, (user) ->
+  console.log("Adding logged in user to redis")
+  userKey = JSON.stringify([user.provider, user.id])
+  redisClient.sadd("authenticatedUsers", userKey)
+  redisClient.set("#{userKey}:properties", JSON.stringify(user)))
+
 
 ################################################################################
 ## Passport Config
@@ -67,14 +83,6 @@ Pass.use(
     callbackURL: "http://127.0.0.1:8000/auth/twitter/callback",
     (token, tokenSecret, profile, done) ->
         done(null, profile)))
-
-# Pass.use(
-#   new FacebookStrategy(
-#     clientID: "331933636921369",
-#     clientSecret: "3af8e3b8ff3b20d3043ac7f60765b385",
-#     callbackURL:  "http://127.0.0.1:8000/auth/facebook/callback",
-#     (accessToken, refreshToken, profile, done) ->
-#       done(null, profile)))
 
 Pass.use(
   new GithubStrategy(
@@ -129,7 +137,7 @@ server.configure(->
 
   console.log("express server ready"))
 
-####################
+################################################################################
 ## Routes
 
 _slideshowRedirect = (service, req, resp) ->
@@ -162,17 +170,6 @@ server.get(
   '/auth/twitter/callback',
   Pass.authenticate('twitter', failureRedirect: '/login/'),
   slideshowRedirect("twitter"))
-
-## FACEBOOK
-
-# server.get(
-#   '/auth/facebook',
-#   Pass.authenticate('facebook'))
-
-# server.get(
-#   '/auth/facebook/callback',
-#   Pass.authenticate('facebook', failureRedirect: '/login/'),
-#   slideshowRedirect("facebook"))
 
 ## MEETUP
 
@@ -207,7 +204,7 @@ server.get(
   Pass.authenticate('github', failureRedirect: '/login/'),
   slideshowRedirect("github"))
 
-################################################################################
+####################
 
 server.get('/login/',
   (req, resp) ->
@@ -226,6 +223,16 @@ server.get('/slideshow/',
       resp.redirect("/login/")
       resp.end()
     null)
+
+
+####################
+
+server.get("/loggedInUsers",
+  (req, resp) ->
+    resp.set("Content-Type", "application/json")
+    redisClient.smembers("authenticatedUsers", (err, result) ->
+        resp.write(JSON.stringify(result))
+        resp.end()))
 
 app = server.listen(8080)
 faye.attach(app)
