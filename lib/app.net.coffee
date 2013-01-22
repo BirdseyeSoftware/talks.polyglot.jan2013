@@ -1,7 +1,9 @@
 streams = require "./app.streams"
 channelNames = require "./channel_names"
+utils = require "./utils"
 
-fayeClient = new Faye.Client("/faye")
+exports.fayeClient = fayeClient = new Faye.Client("/faye")
+
 exports.isMe = isMe = (clientId) -> fayeClient.getClientId() == clientId
 
 initRemoteSlideEventstream = () ->
@@ -18,3 +20,11 @@ exports.publishSlideEvent = (slideEvent) ->
 exports.log = (msg) ->
   fayeClient.publish('/debug',
     [fayeClient.getClientId(), msg, navigator.userAgent])
+
+exports.listenToRemoteDebug = (subscribers...) ->
+  fayeClient.subscribe channelNames.debugEvents, ([cid, ev])->
+    if not isMe(cid)
+      streams.remoteDebugEventstream.onNext(ev)
+
+  if subscribers
+    utils.teeSubscribe(streams.remoteDebugEventstream, subscribers...)

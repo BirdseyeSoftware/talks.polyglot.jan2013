@@ -2,129 +2,11 @@ $ = require "jquery"
 Rx = require "rx"
 _ = require "underscore"
 {EVENTS} = require "./app.core"
-{mktee} = require("./utils")
 
-exports.clientModeChangeEventstream = clientModeChangeEventstream = new Rx.Subject()
-################################################################################
-MODES =
-  AUDIENCE: "AUDIENCE",
-  PRESENTER: "PRESENTER"
+fullscreen = require "./app.ui.fullscreen"
+{init} = require "./app.ui.init"
+{updateRevealForPresentationState} = require "./app.ui.reveal"
 
-stylesheetMap =
-  AUDIENCE: ["/common.css", "/audience.css",
-             "/reveal.js/css/reveal.min.css",
-             "/reveal.js/css/theme/default.css",
-             "/reveal.js/lib/css/zenburn.css"],
-  PRESENTER: ["/common.css", "/presenter.css"]
-  ORG_MODE: ["/common.css", "/presenter.css"]
-
-setPresentationMode = (mode) -> clientModeChangeEventstream.onNext(mode)
-
-setStylesheet = (mode) ->
-  $("style").remove()
-  $("link[rel=stylesheet]").remove()
-  for href in stylesheetMap[mode]
-    $("head").append(
-      $("<link>").attr("href", href).
-                  attr("rel", "stylesheet"))
-
-toggleDomElemsForMode = (mode) ->
-  switch mode
-    when MODES.AUDIENCE
-      $("#reveal").show()
-      $("#org-mode-content").hide()
-    when MODES.PRESENTER
-      $("#org-mode-content").show()
-      $("#reveal").hide()
-    when MODES.ORG_MODE
-      $("#org-mode-content").show()
-      $("#reveal").hide()
-
-handleModeChange = mktee(setStylesheet, toggleDomElemsForMode)
-clientModeChangeEventstream.subscribe(handleModeChange)
-
-################################################################################
-# transform org-mode slides to Reveal.js section tags
-orgSlideToReveal = ($orgSlide) ->
-  $orgSlide = $($orgSlide)
-  $revealSlide = $("<section>").html($orgSlide.html())
-  $IDLink = $orgSlide.find("h2 > a, h3 > a, h4 > a")
-  if $IDLink.length > 0
-    id = $($IDLink[0]).attr("id")
-    $orgSlide.attr(id: "org-#{id}")
-    $revealSlide.attr(id: "reveal-#{id}")
-
-  $revealSlide.find("div.notes").remove()
-  slideLevel = parseInt($orgSlide.attr("class").match(/outline-(\d+)/)[1], 10)
-  $childSlides = $revealSlide.find("div.outline-#{slideLevel + 1}")
-  revealChildSlides = _.map($childSlides, orgSlideToReveal)
-  $childSlides.remove()
-  $currentLevelNodes = $revealSlide.children()
-  if $currentLevelNodes.length > 0 and revealChildSlides.length > 0
-    $currentLevelNodes.remove()
-    $firstChildSlide = $("<section>").append($currentLevelNodes)
-    $firstChildSlide.attr(id: $revealSlide.attr('id'))
-    $revealSlide.attr(id: null)
-    revealChildSlides = [[$firstChildSlide, []]].concat(revealChildSlides)
-
-  [$revealSlide, revealChildSlides]
-
-stitchRevealSlides = ($container, [$slide, children]) ->
-  $slide.appendTo($container)
-  _.map(children, (child) -> stitchRevealSlides($slide, child))
-  null
-
-bootstrapRevealContentFromOrg = ()->
-  $orgContent = $("div#content").hide().attr(id: "org-mode-content")
-  $orgSlides = $orgContent.find("div.outline-2")
-
-  $revealSlidesContainer = $("<div>").addClass("slides")
-  $revealContent = $("<div>").
-                     addClass("reveal").
-                     append($revealSlidesContainer).
-                     appendTo($(document.body))
-  for slideTree in _.map($orgSlides, orgSlideToReveal)
-    stitchRevealSlides($revealSlidesContainer, slideTree)
-  ##
-  for code in $revealSlidesContainer.find('pre')
-    $(code).html($("<code>").html($(code).html()))
-
-################################################################################
-# UI bootstrap sequence
-fixAssetsPath = () ->
-  fixPath = (attr_name) ->
-    () ->
-      $el = $(@)
-      if $el.attr(attr_name)?.substring(0,1) != "/"
-        $el.attr(attr_name, "/#{$el.attr(attr_name)}")
-      null
-
-  $("img").each(fixPath("src"))
-  $("script").each(fixPath("src"))
-  $("link").each(fixPath("href"))
-  null
-
-exports.init = () ->
-  # initial UI bootstrapping
-  bootstrapRevealContentFromOrg()
-  setPresentationMode(MODES.AUDIENCE)
-  fixAssetsPath()
-  $("body").bind("touchstart", (ev) -> ev.preventDefault())
-  $("div#table-of-contents h2").remove()
-  $("#preamble, #postamble").remove()
-  bootstrapRevealContentFromOrg()
-  Reveal.addEventListener("ready",
-    -> $("aside.controls > div").unbind()
-    setTimeout((->$("body").show()), 300))
-  Reveal.initialize(
-    keyboard: false,
-    rollingLinks: false
-    history: true
-    dependencies: [
-      {src: 'reveal.js/plugin/highlight/highlight.js', async: true,
-      callback: () -> hljs.initHighlightingOnLoad()}])
-
-################################################################################
 ################################################################################
 # ui event to domain event mappings
 EVENT_KEYS =
@@ -183,18 +65,13 @@ mkClickEventstream = ($el) ->
 
 ################################################################################
 # full screen stuff
-isFullscreenActive = () ->
-  (document.fullscreenElement or
-    document.mozFullScreenElement or
-    document.webkitFullscreenElement)
-
 fullscreenEventToSlideEvent = (isFull) ->
   EVENTS.ExitFullscreen() if not isFull # we skip enter events
 
 mkFullscreenChangeEventstream = () ->
   $(document).bindAsObservable(
     'webkitfullscreenchange mozfullscreenchange fullscreenchange').
-    select(isFullscreenActive)
+    select(fullscreen.isActive)
 
 ################################################################################
 # domain eventstream observables from ui events
@@ -242,37 +119,6 @@ exports.uiSlideEventstream = () ->
     keyups.select(keyEventToSlideEvent))
   merged.where((n) -> n)         #drop nulls #TODO: log what leads to null
 
-######################################################################
-# Reveal.js view update code
-
-cancelFullscreen = () ->
-  document.exitFullscreen?()
-  document.mozCancelFullScreen?()
-  document.webkitCancelFullscreen?()
-
-enterFullscreen = () ->
-  Reveal.enterFullscreen()
-
-updateRevealForPresentationState = (state) ->
-  {h, v} = Reveal.getIndices()
-  slide = state.slide
-  if slide.h != h or slide.v != v
-    Reveal.slide(slide.h, slide.v)
-
-  if state.paused and not Reveal.isPaused()
-    Reveal.togglePause()
-  else if Reveal.isPaused() and not state.paused
-    Reveal.togglePause()
-
-  if state.mode == 'overview'
-    Reveal.toggleOverview() if not Reveal.isOverviewActive()
-  else
-    Reveal.deactivateOverview() if Reveal.isOverviewActive()
-
-  if state.fullscreen and not isFullscreenActive()
-    enterFullscreen()
-  else if not state.fullscreen and isFullscreenActive()
-    cancelFullscreen()
-
 ################################################################################
 exports.updateRevealForPresentationState = updateRevealForPresentationState
+exports.init = init

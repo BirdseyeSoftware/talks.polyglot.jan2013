@@ -12,3 +12,6 @@ exports.localSlideStateChangeStream = new Rx.Subject()
 
 # remote event / state reductions {event, prevState, newState}
 exports.remoteSlideStateChangeStream = new Rx.Subject()
+
+# incoming remote debug events DO NOT REPUBLISH
+exports.remoteDebugEventstream = new Rx.Subject()
