@@ -69,17 +69,18 @@ aggregateStateOnSlideEvent = (prevState, ev) ->
     console?.error?(err)
     prevState                   # leave it at the old state after erro
 
-loadPresentationState = () ->
+loadPresentationState = (initSlide) ->
   window.mainSlideDeck = deck = revealjsDomToSlideDeck()
-  initSlide = deck.get(Reveal.getIndices())
+  if not initSlide
+    initSlide = deck.get(Reveal.getIndices())
   initState = new core.PresentationState(deck, initSlide)
   setSlideState(initState)
   initState
 
-initEventstreamSubscriptions = ->
+initEventstreamSubscriptions = (initSlide) ->
   ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
   streams.localSlideEventstream.aggregate(
-    loadPresentationState(), aggregateStateOnSlideEvent).
+    loadPresentationState(initSlide), aggregateStateOnSlideEvent).
     subscribe((finalState)->)
     # NOTE: live stream aggregation so final callback never called, but required
 
@@ -99,7 +100,9 @@ initEventstreamSubscriptions = ->
 main = ->
   $ ->
     ui.init()
-    setTimeout(initEventstreamSubscriptions, 300) # delay to ensure reveal dom elems are live
+    $.ajax('/current_slide/', {timeout: 700}).
+      done(initEventstreamSubscriptions).
+      fail((req, err) -> console?.log?(err); initEventstreamSubscriptions())
 
 ################################################################################
 exports.main = main
