@@ -22,7 +22,7 @@ server.get('/slideshow/',
     else
       resp.redirect("/login/"))
 
-server.get("/loggedInUsers",
+server.get("/users/",
   (req, resp) ->
     resp.set("Content-Type", "application/json")
     getAuthenticatedUsers((err, result) ->
