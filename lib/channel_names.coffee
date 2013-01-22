@@ -19,4 +19,4 @@ exports.debugEvents = '/debug'
 
 exports.getUserEventChannelName = (user) ->
   userKey = getUserKey(user, "/")
-  "#/slideshow/events/#{userKey}"
+  "/slideshow/events/#{userKey}"

@@ -7,7 +7,7 @@ exports.fayeClient = fayeClient = new Faye.Client("/faye")
 exports.isMe = isMe = (clientId) -> fayeClient.getClientId() == clientId
 
 CURRENT_USER_CHANNEL = channelNames.getUserEventChannelName(auth.getCurrentUser())
-
+exports.CURRENT_USER_CHANNEL = CURRENT_USER_CHANNEL
 exports.publishSlideStateChange = (stateChange) ->
   stateChange.user = user = auth.getCurrentUser()
   stateChange.userAgent = navigator.userAgent
@@ -27,13 +27,13 @@ exports.listenToRemoteDebug = (subscribers...) ->
     utils.teeSubscribe(streams.remoteDebugEventstream, subscribers...)
 
 # init user remote channel subscription
-do () ->
+do ->
   fayeClient.subscribe CURRENT_USER_CHANNEL, (stateChange)->
     if not isMe(stateChange.fayeCid)
       streams.remoteUserSlideStateChangeStream.onNext(stateChange)
 
 # init slave remote channel subscription
-do () ->
+do ->
   fayeClient.subscribe channelNames.slaveEvents, (stateChange)->
     if not isMe(stateChange.fayeCid)
       streams.remoteSlaveSlideStateChangeStream.onNext(stateChange)

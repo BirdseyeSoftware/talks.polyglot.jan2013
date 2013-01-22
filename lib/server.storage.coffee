@@ -15,9 +15,10 @@ exports.createSessionStore = (express) ->
 exports.getAuthenticatedUsers = (callback) ->
   _redisClient.smembers("#{APP_NS}:authenticated_users", callback)
 
-exports.getSlideEvents = (provider, user_id, callback) ->
+exports.getSlideEvents = (user, callback) ->
   # 1000 is an arbitrary number here
-  _redisClient.lrange("#{APP_NS}:#{provider}:slide_events:#{user_id}", 0, 1000, callback)
+  userKey = getUserKey(user)
+  _redisClient.lrange("#{APP_NS}:slide_events:#{userKey}", 0, 1000, callback)
 
 ################################################################################
 

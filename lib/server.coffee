@@ -41,9 +41,7 @@ server.get("/users/",
 server.get("/slide_events/:provider/:id",
   (req, resp) ->
     resp.set("Content-Type", "application/json")
-    store.getSlideEvents(
-      req.params.provider,
-      req.params.id,
+    store.getSlideEvents({provider: req.params.provider, id: req.params.id},
       (err, result) ->
         if error?
           resp.write("{error: 'An error ocurred'}")
