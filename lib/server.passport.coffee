@@ -81,7 +81,6 @@ _slideshowRedirect = (service, req, resp) ->
   resp.cookie('userSession', JSON.stringify(userSession), maxAge: 90000, secret: false)
 
   resp.redirect("/slideshow/")
-  resp.end()
 
 slideshowRedirect = (service) ->
   _.bind(_slideshowRedirect, _slideshowRedirect, service)
