@@ -29,26 +29,26 @@ logRemoteStateChange = (stateChange) ->
 
 ################################################################################
 
-MERGE_REMOTE_EVENT_STREAM = true
-handleRemoteSlideEvent = (stateChange) ->
-  if MERGE_REMOTE_EVENT_STREAM
-    ev = stateChange.event
-    ev.isRemote = true
-    lastRemoteSlide = stateChange.prevState.slide
-    if lastRemoteSlide.id != getCurrentState().slide.id
-      # out of sync with remote, msgs must have been dropped.
-      # sync first before replaying event.
-      syntheticSyncEvent = core.EVENTS.SelectSlide({id: lastRemoteSlide.id})
-      syntheticSyncEvent.isRemote = true
-      syntheticSyncEvent.isSynthetic = true
-      streams.localSlideEventstream.onNext(syntheticSyncEvent)
+handleSlaveEvent = (stateChange) ->
+  # This updates the view but doesn't affect the state
+  # machine / event history. Thus, the next local event will resume
+  # from the previous local state.
+  ui.updateRevealForPresentationState(stateChange.newState)
 
-    streams.localSlideEventstream.onNext(ev)
-  else
-    # This updates the view but doesn't affect the state
-    # machine / event history. Thus, the next local event will resume
-    # from the previous local state.
-    ui.updateRevealForPresentationState(stateChange.newState)
+handleRemoteSlideEvent = (stateChange) ->
+  # this is for stateChanges from one users' multiple devices
+  ev = stateChange.event
+  ev.isRemote = true
+  lastRemoteSlide = stateChange.prevState.slide
+  if lastRemoteSlide.id != getCurrentState().slide.id
+    # out of sync with remote, msgs must have been dropped.
+    # sync first before replaying event.
+    syntheticSyncEvent = core.EVENTS.SelectSlide({id: lastRemoteSlide.id})
+    syntheticSyncEvent.isRemote = true
+    syntheticSyncEvent.isSynthetic = true
+    streams.localSlideEventstream.onNext(syntheticSyncEvent)
+  ##
+  streams.localSlideEventstream.onNext(ev)
 
 aggregateStateOnSlideEvent = (prevState, ev) ->
   try
@@ -79,16 +79,19 @@ loadPresentationState = () ->
 initEventstreamSubscriptions = ->
   ui.uiSlideEventstream().subscribe(streams.localSlideEventstream)
   streams.localSlideEventstream.aggregate(
-    loadPresentationState(),
-    aggregateStateOnSlideEvent).subscribe((finalState)->)
+    loadPresentationState(), aggregateStateOnSlideEvent).
+    subscribe((finalState)->)
+    # NOTE: live stream aggregation so final callback never called, but required
 
   streams.localSlideStateChangeStream.subscribe(logStateChange)
   streams.localSlideStateChangeStream.
     where((stateChange) -> not stateChange.event.isRemote).
-    subscribe(net.publishSlideEvent)
+    subscribe(net.publishSlideStateChange)
 
-  streams.remoteSlideStateChangeStream.subscribe(logRemoteStateChange)
-  streams.remoteSlideStateChangeStream.subscribe(handleRemoteSlideEvent)
+  streams.remoteUserSlideStateChangeStream.subscribe(logRemoteStateChange)
+  streams.remoteUserSlideStateChangeStream.subscribe(handleRemoteSlideEvent)
+
+  streams.remoteSlaveSlideStateChangeStream.subscribe(handleSlaveEvent)
 
   streams.log.subscribe(([msg, data]) -> console?.log?(msg, data...))
   streams.log.subscribe(net.log)

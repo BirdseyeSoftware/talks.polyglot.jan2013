@@ -1,7 +1,7 @@
 {getUserKey} = require "./utils"
 redis = require "redis"
 channels = require "./channel_names"
-{subscribe} = require "./server.pubsub"
+{subscribe, publish} = require "./server.pubsub"
 
 APP_NS = "polyglot"
 _redisClient = redis.createClient()
@@ -34,10 +34,16 @@ mkUserSlideEventConsumerForRedis = (user) ->
       _redisClient.sadd("#{APP_NS}:questions:#{stateChangedEvent.event.slideId}", userKey)
 
 subscribeToUserSlideEvents = (user) ->
-  userKey  = getUserKey(user, "/")
-  subscribe("#{channels.slideEvents}/#{userKey}", mkUserSlideEventConsumerForRedis(user))
+  subscribe(channels.getUserEventChannelName(user), mkUserSlideEventConsumerForRedis(user))
 
 subscribe(channels.clientAuthenticated, storeAuthenticatedUserOnRedis)
 subscribe(channels.clientAuthenticated, subscribeToUserSlideEvents)
+
+publishEventsFromPresenterToSlaves = (stateChange) ->
+  publish(channels.slaveEvents, stateChange)
+
+PRESENTER_USER = {id: "236886", provider: "github"}
+do ->
+  subscribe(channels.getUserEventChannelName(), publishEventsFromPresenterToSlaves)
 
 ################################################################################
