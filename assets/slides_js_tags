@@ -2,9 +2,9 @@
     <script src="/reveal.js/lib/js/head.min.js"></script>
     <script src="/reveal.js/js/reveal.js"></script> <!-- TODO: use minified -->
 
-    <script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/hammer.js"></script>
+    <script type="text/javascript" src="assets/hammer.js"></script>
     <script type="text/javascript" src="/faye/client.js"></script>
     <script type="text/javascript" src="/bundle.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/jquery.hammer.js"></script>
+    <script type="text/javascript" src="/assets/jquery.hammer.js"></script>
   </body>
 </html>
