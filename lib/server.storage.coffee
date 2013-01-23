@@ -1,5 +1,6 @@
 _ = require "underscore"
 {getUserKey} = require "./utils"
+config = require "./server.config"
 redis = require "redis"
 channels = require "./channel_names"
 {subscribe, publish} = require "./server.pubsub"
@@ -74,12 +75,12 @@ publishEventsFromPresenterToSlaves = (stateChange) ->
   console.log("presenter state change: ", stateChange)
   publish(channels.slaveEvents, stateChange)
 
-PRESENTER_USER = {id: 236886, provider: "github"}
 do ->
-  subscribe(channels.getUserEventChannelName(PRESENTER_USER), publishEventsFromPresenterToSlaves)
+  subscribe(channels.getUserEventChannelName(config.PRESENTER_USER),
+    publishEventsFromPresenterToSlaves)
 
 getCurrentPresenterSlide = (callback) ->
-  userKey = getUserKey(PRESENTER_USER)
+  userKey = getUserKey(config.PRESENTER_USER)
   _redisClient.lindex("#{APP_NS}:slide_events:#{userKey}", 1, (err, record) ->
     if err
       callback(err, null)

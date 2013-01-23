@@ -38,7 +38,13 @@ do ->
     if not isMe(stateChange.fayeCid)
       streams.remoteSlaveSlideStateChangeStream.onNext(stateChange)
 
+PRESENTER_ID = 236886
 # a little hack so we can push urls to the audience
+# PLEASE DON'T BE A DICK AND ABUSE THIS DURING THE PRESENTATION
 fayeClient.subscribe('/url', (url) ->
   console.log(url)
-  window.open(url, 'tmp'))
+  if auth.getCurrentUser().id != PRESENTER_ID
+    window.open(url, 'tmp'))
+
+exports.pushUrl = (url) ->
+  fayeClient.publish('/url_submit', {user: auth.getCurrentUser(), url: url})
