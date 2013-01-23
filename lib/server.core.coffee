@@ -5,6 +5,7 @@ storage  = require "./server.storage"
 exports.server = server = express()
 
 server.configure(->
+  server.use("/assets", express.static(__dirname + '/../assets'))
   server.use(express.static(__dirname + '/../assets'))
   server.use(express.static(__dirname + '/../build'))
 

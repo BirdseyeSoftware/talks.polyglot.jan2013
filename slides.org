@@ -163,14 +163,16 @@ Domain Events
 to 
 
 Domain Events
-
+  
 ** Summary
    :PROPERTIES:
    :ID:       53a716a2-a5ab-4d3e-956d-485a0fbe5bed
    :ADDED:    [2013-01-22 Tue 14:07]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-Diagram
+
+[[file:assets/summary_diag.png]]
+
 * State Reduction 101
   :PROPERTIES:
   :ID:       d2c4fe95-c2b2-48c5-9515-a67645a0971e
@@ -219,6 +221,8 @@ _.reduce([1,2,3,4,5,6,7,8], add)
 // => 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8
 // => ((((1 + 2) + 3) + ..) + 8)
 #+end_src
+
+[[http://www.globalnerdy.com/2008/09/03/enumerating-enumerable-a-cute-trick-for-explaining-inject-reduce-fold/][A Cute Example]]
 
 ** Fold 1
    :PROPERTIES:
@@ -362,12 +366,25 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
  - natural way of describing software (UIs, etc.) 
    ==structural vs behavioural model==
 
+** Similar to 
+   :PROPERTIES:
+   :ID:       c244f1da-da84-4ebb-8010-a86f6080c660
+   :ADDED:    [2013-01-22 Tue 15:14]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+ what people do with Actors (Erlang and Akka)
 ** What about Client-side?
    :PROPERTIES:
    :ID:       7c4a5710-4202-4a3b-aae6-1e435359c903
    :ADDED:    [2013-01-15 Tue 15:51]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
+
+   AKA: 
+
+   reactive 
+
+   functional reactive programming
 
 *** notes                                                          :noexport:
     :PROPERTIES:
@@ -390,80 +407,85 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
   :ADDED:    [2013-01-22 Tue 13:29]
   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
   :END:
-* Compare and contrast with MV* implementation
-  :PROPERTIES:
-  :ID:       ac6087b3-578a-45b7-9085-b4bd5d1b1415
-  :ADDED:    [2013-01-15 Tue 15:52]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-  :END:
-  - problems solved
-  - call graph comparison
-    
-* Super Powers!
-  :PROPERTIES:
-  :ID:       44f98a98-55f2-41ab-a99b-fe32c0c03533
-  :ADDED:    [2013-01-15 Tue 15:54]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-  :END:
-# (video game level-up animation or superhero slide for each)  
-  
-** Rewind Time
-  :PROPERTIES:
-  :ID:       ab68f0c2-244c-4bb8-9b8c-270dfd685e18
-  :ADDED:    [2013-01-15 Tue 15:54]
-  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-  :END:
-# (history replay)
-** Jump through worm-holes 
+** Starting point
    :PROPERTIES:
-   :ID:       69ca5ca6-c257-4a18-a944-de0613fe0032
-   :ADDED:    [2013-01-15 Tue 15:54]
+   :ID:       d26f75e8-e8e7-4af9-97bf-b972d0b0daac
+   :ADDED:    [2013-01-22 Tue 14:57]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+[[https://github.com/hakimel/reveal.js/blob/master/js/reveal.js%0A][Reveal.js @ github]]
+
+All in one
+
+State in the DOM
+
+UI event handling directly bound to state.
+
+** Hard to extend ...
+   :PROPERTIES:
+   :ID:       59bfd992-5211-46a2-be0a-799ca1210eb4
+   :ADDED:    [2013-01-22 Tue 15:01]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+** Skipping an MV* re-implementation
+   :PROPERTIES:
+   :ID:       ac6087b3-578a-45b7-9085-b4bd5d1b1415
+   :ADDED:    [2013-01-15 Tue 15:52]
    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
    :END:
-   
-*** Notes                                                             :notes:
-    :PROPERTIES:
-    :ID:       dc183e93-ea44-4ed4-a8ee-ded9aa2ec4b5
-    :ADDED:    [2013-01-15 Tue 15:58]
-    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-    :HTML_CONTAINER_CLASS: notes
-    :END:
-(jump in space and time to particular
-    states in different browsers - browserstack, etc., change code in
-    editor and jump dev browser back to exact same spot in browser UI
-    history for faster dev cycle, watch users realtime via websockets)
-** Visit parallel universes 
+     
+** Straight to rx.js + faye
    :PROPERTIES:
-   :ID:       99c70d85-14ad-4ac0-a295-89174cfbcd59
-   :ADDED:    [2013-01-15 Tue 15:55]
-   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :ID:       6bc74694-410d-41a5-be72-a6d223d1be1e
+   :ADDED:    [2013-01-22 Tue 15:05]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-# (same history - different projections/reductions, being able to
-#    fork history in shared applications like revision control,
-#    hand-waving ...)   
-** xray vision 
+
+** Rx.js 
    :PROPERTIES:
-   :ID:       2296f643-3130-47c3-9eb2-7af49502b886
-   :ADDED:    [2013-01-15 Tue 15:55]
-   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :ID:       a4d319cc-e8ae-4e0c-93f9-13461d811d63
+   :ADDED:    [2013-01-22 Tue 15:09]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-# (more declarative design, user intentions captured, what now how)   
-** Hold your breath 
+[[https://github.com/Reactive-Extensions/RxJS][Rx.js @ github]]
+
+[[http://msdn.microsoft.com/en-us/data/gg577609.aspx][Rx extension on MSDN]]
+
+from MS' delta team (Erik Meijer, etc.) 
+
+inspired by similar work in Haskell
+
+
+** Faye
    :PROPERTIES:
-   :ID:       59b8746a-06a6-445e-a41d-0bfe70ae850a
-   :ADDED:    [2013-01-15 Tue 15:55]
-   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :ID:       7e92f1ff-a042-4c0d-9788-207b7813a3af
+   :ADDED:    [2013-01-22 Tue 15:09]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-# Aquaman
-# Offline-sync powers example   
-   
-   
+[[http://faye.jcoglan.com/][Faye: great pubsub for js]]
+
+similar to socket.io
+
+** Pipes
+   :PROPERTIES:
+   :ID:       8c793ec5-138d-4826-8128-bb22b507f571
+   :ADDED:    [2013-01-22 Tue 14:54]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+Diagram TODO
 * Testing benefits
   :PROPERTIES:
   :ID:       182de6ac-ea75-4cd2-9167-82c4cd56fcfc
   :ADDED:    [2013-01-15 Tue 16:48]
   :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
   :END:
+** Events can be captured / replayed remotely
+   :PROPERTIES:
+   :ID:       1776eec1-846c-4f45-8f1a-dbf97e10835d
+   :ADDED:    [2013-01-22 Tue 15:12]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 ** Works well with generative testing
   :PROPERTIES:
   :ID:       d002d2cf-8ca5-49c5-b77c-82e0c42661b8
@@ -483,18 +505,81 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
    :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
    :END:
 - state-space search
-* Other examples
+- leverage logic programming
+* Free Super Powers!
   :PROPERTIES:
-  :ID:       94533758-7577-46ca-8808-10d51085dd02
-  :ADDED:    [2013-01-15 Tue 16:45]
+  :ID:       44f98a98-55f2-41ab-a99b-fe32c0c03533
+  :ADDED:    [2013-01-15 Tue 15:54]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+  :END:
+# (video game level-up animation or superhero slide for each)  
+  
+** Time Travel
+  :PROPERTIES:
+  :ID:       ab68f0c2-244c-4bb8-9b8c-270dfd685e18
+  :ADDED:    [2013-01-15 Tue 15:54]
+  :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
 
-** Notes
-  :PROPERTIES:
-  :ID:       b4df32ee-901a-47f4-a929-9f2392eb1af1
-  :ADDED:    [2013-01-15 Tue 16:46]
-  :END:
-  - Show dentalle example 
+history replay
+
+undo
+
+** Jump through worm-holes 
+   :PROPERTIES:
+   :ID:       69ca5ca6-c257-4a18-a944-de0613fe0032
+   :ADDED:    [2013-01-15 Tue 15:54]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+   
+*** Notes                                                             :notes:
+    :PROPERTIES:
+    :ID:       dc183e93-ea44-4ed4-a8ee-ded9aa2ec4b5
+    :ADDED:    [2013-01-15 Tue 15:58]
+    :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+    :HTML_CONTAINER_CLASS: notes
+    :END:
+(jump in space and time to particular
+    states in different browsers - browserstack, etc., change code in
+    editor and jump dev browser back to exact same spot in browser UI
+    history for faster dev cycle, watch users realtime via websockets)
+** Be in multiple places at once
+   :PROPERTIES:
+   :ID:       effdb041-201a-43ec-af82-c3d6a4b07cc8
+   :ADDED:    [2013-01-22 Tue 15:15]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** Visit parallel universes 
+   :PROPERTIES:
+   :ID:       99c70d85-14ad-4ac0-a295-89174cfbcd59
+   :ADDED:    [2013-01-15 Tue 15:55]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+# (same history - different projections/reductions, being able to
+#    fork history in shared applications like revision control,
+#    hand-waving ...)   
+** xray vision 
+   :PROPERTIES:
+   :ID:       2296f643-3130-47c3-9eb2-7af49502b886
+   :ADDED:    [2013-01-15 Tue 15:55]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+declarative design
+
+user intentions captured
+
+what *not* how
+** Hold your breath under water 
+   :PROPERTIES:
+   :ID:       59b8746a-06a6-445e-a41d-0bfe70ae850a
+   :ADDED:    [2013-01-15 Tue 15:55]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+   Offline sync
+# Aquaman
+# Offline-sync powers example   
+   
+   
 * Conclusion
   :PROPERTIES:
   :ID:       685c789b-d4dc-4840-bc4f-69015642b091

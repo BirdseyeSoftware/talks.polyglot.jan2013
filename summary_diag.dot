@@ -1,0 +1,15 @@
+digraph G {
+   graph [ resolution=128, fontname=Helvetica, fontsize=8, ratio=0.8];
+    node [ fontname=Helvetica, fontsize=8];
+    edge [ fontname=Helvetica, fontcolor=gray14, fontsize=8];
+
+  ui_events -> domain_eventstream [label="$.bind"];
+  domain_eventstream -> state_reducer_fn [label="pubsub"];
+  state_reducer_fn -> new_state [label="prev + ev = new_state"];
+  new_state -> view_updater [label="pubsub"];
+  view_updater -> dom_nodes [label="$, templates, ..."];
+  subgraph uiloop {
+     edge[style=dotted]; 
+     dom_nodes -> ui_events;
+  }
+}
