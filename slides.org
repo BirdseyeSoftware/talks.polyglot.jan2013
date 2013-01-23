@@ -504,9 +504,9 @@ similar to socket.io
    :ADDED:    [2013-01-22 Tue 14:54]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-streams
+Rx.js == event streams (aka observables)
 
-channels
+Faye == channels (network pubsub)
 ** [[file:assets/summary_diag.png]]
    :PROPERTIES:
    :ID:       a57873d4-fc80-44bc-9679-2eae31de00f8
@@ -519,6 +519,49 @@ channels
    :ADDED:    [2013-01-22 Tue 16:40]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee#L48][DOM UI Events to Domain events]]
+
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.ui.coffee#L118][Domain events into rx.js eventstream]]
+
+** Consume Domain Events From UI
+   :PROPERTIES:
+   :ID:       94774353-cee0-420d-a683-d11d266a1fcd
+   :ADDED:    [2013-01-22 Tue 16:57]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.coffee#L80][UI Eventstream to domain state reducer]]
+** damn simple domain model
+   :PROPERTIES:
+   :ID:       32496149-7449-46eb-b170-de76e47db7d0
+   :ADDED:    [2013-01-22 Tue 16:59]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee%0A][app.core.coffee]]
+
+Simple records
+
+No Framework subclassing
+
+** Reduce new state
+   :PROPERTIES:
+   :ID:       c38c7462-e4ec-419c-92aa-20ac1c86117c
+   :ADDED:    [2013-01-22 Tue 17:05]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee#L80][Immutable State Record]]
+** [[file:assets/summary_diag.png]]
+   :PROPERTIES:
+   :ID:       0497cb0e-d173-46bd-9797-26e474c4cc6e
+   :ADDED:    [2013-01-22 Tue 17:07]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** update UI from new state
+   :PROPERTIES:
+   :ID:       feaa114a-1b1b-4490-9994-e76178c3a7af
+   :ADDED:    [2013-01-22 Tue 17:07]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.ui.reveal.coffee#L3][View updater fn]]
 * Testing benefits
   :PROPERTIES:
   :ID:       182de6ac-ea75-4cd2-9167-82c4cd56fcfc
@@ -668,4 +711,10 @@ what *not* how
   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
 
-http://images2.wikia.nocookie.net/__cb20070821233518/uncyclopedia/images/8/8e/Nintendo_staff.gif
+# Haters are going to hate, a bit of up front investment. Worth it!
+**  [[file:assets/nintendo_staff.gif]]
+   :PROPERTIES:
+   :ID:       89b98a5e-3224-4490-8a4b-eff534e91a63
+   :ADDED:    [2013-01-22 Tue 17:09]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
