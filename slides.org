@@ -9,6 +9,39 @@
 #+FILETAGS: birdseye
 #+CATEGORY: bsw
 #+STARTUP: hidestars hideblocks
+* [[file:assets/mario_beat.gif]]
+  :PROPERTIES:
+  :ID:       71a71e4e-356e-46f0-9e51-49cfaa879a30
+  :ADDED:    [2013-01-22 Tue 16:35]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+** notes                                                           :noexport:
+   :PROPERTIES:
+   :ID:       1c5c6e32-0cc1-4bba-aed5-733f7ca8eec2
+   :ADDED:    [2013-01-22 Tue 16:37]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+http://thechive.com/2011/02/24/video-game-gifs-are-what-i-want-to-see-at-the-pearly-gates/
+
+* [[file:assets/vandam.gif]]
+  :PROPERTIES:
+  :ID:       a4486f84-b870-4b48-b701-f0c0547192ef
+  :ADDED:    [2013-01-22 Tue 16:34]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+* [[file:assets/conan.gif]]
+  :PROPERTIES:
+  :ID:       4ddaf7e0-40aa-4674-a9de-7dba9c7d1637
+  :ADDED:    [2013-01-22 Tue 16:33]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+* [[file:assets/mike_tyson_s_punchout.gif]]
+  :PROPERTIES:
+  :ID:       b5a8f5e7-90e4-46ed-8874-51c4a9bd7cde
+  :ADDED:    [2013-01-22 Tue 16:30]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
 * Hello!
   :PROPERTIES:
   :ID:       1b98e6e2-d6be-4f69-b16b-f7584b4d841f
@@ -164,14 +197,12 @@ to
 
 Domain Events
   
-** Summary
+** [[file:assets/summary_diag.png]]
    :PROPERTIES:
    :ID:       53a716a2-a5ab-4d3e-956d-485a0fbe5bed
    :ADDED:    [2013-01-22 Tue 14:07]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-
-[[file:assets/summary_diag.png]]
 
 * State Reduction 101
   :PROPERTIES:
@@ -473,7 +504,21 @@ similar to socket.io
    :ADDED:    [2013-01-22 Tue 14:54]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-Diagram TODO
+streams
+
+channels
+** [[file:assets/summary_diag.png]]
+   :PROPERTIES:
+   :ID:       a57873d4-fc80-44bc-9679-2eae31de00f8
+   :ADDED:    [2013-01-22 Tue 16:39]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** UI Events
+   :PROPERTIES:
+   :ID:       37b624c8-ebe1-401c-9cb1-93e2058bbadc
+   :ADDED:    [2013-01-22 Tue 16:40]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 * Testing benefits
   :PROPERTIES:
   :ID:       182de6ac-ea75-4cd2-9167-82c4cd56fcfc
@@ -514,6 +559,12 @@ Diagram TODO
   :END:
 # (video game level-up animation or superhero slide for each)  
   
+**  [[file:assets/time_travel.jpg]]
+   :PROPERTIES:
+   :ID:       c66a8b2b-d464-49cc-a067-4abb754872fb
+   :ADDED:    [2013-01-22 Tue 16:12]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 ** Time Travel
   :PROPERTIES:
   :ID:       ab68f0c2-244c-4bb8-9b8c-270dfd685e18
@@ -525,6 +576,12 @@ history replay
 
 undo
 
+**  [[file:assets/jump_through_wormholes.jpg]]
+   :PROPERTIES:
+   :ID:       66b5c2f0-6862-411c-a6d9-699b8160893a
+   :ADDED:    [2013-01-22 Tue 16:15]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 ** Jump through worm-holes 
    :PROPERTIES:
    :ID:       69ca5ca6-c257-4a18-a944-de0613fe0032
@@ -543,10 +600,22 @@ undo
     states in different browsers - browserstack, etc., change code in
     editor and jump dev browser back to exact same spot in browser UI
     history for faster dev cycle, watch users realtime via websockets)
+**  [[file:assets/multiple_places_at_once.jpg]]
+   :PROPERTIES:
+   :ID:       2353f9e6-3791-4254-ab13-b977139d6d25
+   :ADDED:    [2013-01-22 Tue 16:16]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 ** Be in multiple places at once
    :PROPERTIES:
    :ID:       effdb041-201a-43ec-af82-c3d6a4b07cc8
    :ADDED:    [2013-01-22 Tue 15:15]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** [[file:assets/parallel_universes.jpg]]
+   :PROPERTIES:
+   :ID:       75253ce4-8f9e-4d2a-bab4-2038d890b1d2
+   :ADDED:    [2013-01-22 Tue 16:16]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
 ** Visit parallel universes 
@@ -558,6 +627,12 @@ undo
 # (same history - different projections/reductions, being able to
 #    fork history in shared applications like revision control,
 #    hand-waving ...)   
+**  [[file:assets/xray_vision.png]]
+   :PROPERTIES:
+   :ID:       f72e18ee-c94b-46da-91b1-0f0549effc01
+   :ADDED:    [2013-01-22 Tue 16:20]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 ** xray vision 
    :PROPERTIES:
    :ID:       2296f643-3130-47c3-9eb2-7af49502b886
@@ -569,6 +644,12 @@ declarative design
 user intentions captured
 
 what *not* how
+** [[file:assets/breath_under_water.jpg]]
+   :PROPERTIES:
+   :ID:       2afda40e-0dea-4896-ae93-89e9646261da
+   :ADDED:    [2013-01-22 Tue 16:16]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 ** Hold your breath under water 
    :PROPERTIES:
    :ID:       59b8746a-06a6-445e-a41d-0bfe70ae850a
@@ -586,3 +667,5 @@ what *not* how
   :ADDED:    [2013-01-15 Tue 15:17]
   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
+
+http://images2.wikia.nocookie.net/__cb20070821233518/uncyclopedia/images/8/8e/Nintendo_staff.gif
