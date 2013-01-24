@@ -9,13 +9,18 @@
 #+FILETAGS: birdseye
 #+CATEGORY: bsw
 #+STARTUP: hidestars hideblocks
-* [[file:assets/mario_beat.gif]]
+* pre-talk
   :PROPERTIES:
-  :ID:       71a71e4e-356e-46f0-9e51-49cfaa879a30
-  :ADDED:    [2013-01-22 Tue 16:35]
-  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :ID:       e814754d-2e97-4676-8d2b-14768db6c800
+  :ADDED:    [2013-01-24 Thu 09:18]
   :END:
-** notes                                                           :noexport:
+** [[file:assets/mario_beat.gif]]
+   :PROPERTIES:
+   :ID:       71a71e4e-356e-46f0-9e51-49cfaa879a30
+   :ADDED:    [2013-01-22 Tue 16:35]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+*** notes                                                          :noexport:
    :PROPERTIES:
    :ID:       1c5c6e32-0cc1-4bba-aed5-733f7ca8eec2
    :ADDED:    [2013-01-22 Tue 16:37]
@@ -24,24 +29,24 @@
 
 http://thechive.com/2011/02/24/video-game-gifs-are-what-i-want-to-see-at-the-pearly-gates/
 
-* [[file:assets/vandam.gif]]
-  :PROPERTIES:
-  :ID:       a4486f84-b870-4b48-b701-f0c0547192ef
-  :ADDED:    [2013-01-22 Tue 16:34]
-  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-  :END:
-* [[file:assets/conan.gif]]
-  :PROPERTIES:
-  :ID:       4ddaf7e0-40aa-4674-a9de-7dba9c7d1637
-  :ADDED:    [2013-01-22 Tue 16:33]
-  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-  :END:
-* [[file:assets/mike_tyson_s_punchout.gif]]
-  :PROPERTIES:
-  :ID:       b5a8f5e7-90e4-46ed-8874-51c4a9bd7cde
-  :ADDED:    [2013-01-22 Tue 16:30]
-  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-  :END:
+** [[file:assets/vandam.gif]]
+   :PROPERTIES:
+   :ID:       a4486f84-b870-4b48-b701-f0c0547192ef
+   :ADDED:    [2013-01-22 Tue 16:34]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** [[file:assets/conan.gif]]
+   :PROPERTIES:
+   :ID:       4ddaf7e0-40aa-4674-a9de-7dba9c7d1637
+   :ADDED:    [2013-01-22 Tue 16:33]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+** [[file:assets/mike_tyson_s_punchout.gif]]
+   :PROPERTIES:
+   :ID:       b5a8f5e7-90e4-46ed-8874-51c4a9bd7cde
+   :ADDED:    [2013-01-22 Tue 16:30]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
 * Hello!
   :PROPERTIES:
   :ID:       1b98e6e2-d6be-4f69-b16b-f7584b4d841f
@@ -49,13 +54,27 @@ http://thechive.com/2011/02/24/video-game-gifs-are-what-i-want-to-see-at-the-pea
   :CLOCK-WHEN-ADDED: 53a8d1a0-84d0-4b88-b435-bd9088b200f4
   :END:
 #  Warm up // animated gif of an arcade game youtube Contra Video
-
-* Introduction
+ 
+* The Mighty Event
   :PROPERTIES:
   :ID:       f7b0f8fe-8407-496e-b98a-e18a42382b89
   :ADDED:    [2013-01-15 Tue 15:17]
   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
   :END:
+A cheatcode to `reduce` complexity 
+
+and 
+
+unlock super-powers
+** Talk About
+   :PROPERTIES:
+   :ID:       d59d3247-4713-4cff-9ce6-d59b204267f8
+   :ADDED:    [2013-01-24 Thu 09:27]
+   :END:
+"Event Sourcing"
+
+Client-Side (JS in Browser)
+
 ** About Us
    :PROPERTIES:
    :ID:       c8957be1-7cb1-4e9c-8851-061af0e51e1c
@@ -98,111 +117,6 @@ Rx Form project
 http://rxtest.dentalle.com/
 
 Too big for this talk ...
-
-* Kill
-  :PROPERTIES:
-  :ID:       1ec8b943-f488-4a08-8b63-6e61756b23e2
-  :ADDED:    [2013-01-22 Tue 13:22]
-  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-  :END:
-
- [[file:assets/spaghetti-monster.jpg]] 
-** But how?
-   :PROPERTIES:
-   :ID:       bcc2468a-7184-442e-85c9-165a676da3d1
-   :ADDED:    [2013-01-22 Tue 13:38]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-** 4 step plan
-   :PROPERTIES:
-   :ID:       fc2210ff-2c2b-485b-aeba-00772ff9eef9
-   :ADDED:    [2013-01-22 Tue 14:07]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-** Step 1
-   :PROPERTIES:
-   :ID:       64970cb7-5c56-4f20-a60b-e9b8c9152dca
-   :ADDED:    [2013-01-22 Tue 13:39]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-   Separate Model from View
-** MV*
-   :PROPERTIES:
-   :ID:       d9c27aa5-19db-4126-aa7a-6acbbf76026b
-   :ADDED:    [2013-01-22 Tue 13:41]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-
-http://backbonejs.org/
-
-http://knockoutjs.com/
-
-http://angularjs.org/
-
-http://emberjs.com/
-
-   which do you choose?
-
-** Only gets you so far ...
-   :PROPERTIES:
-   :ID:       44a57f51-624a-4813-923d-72041ef4d591
-   :ADDED:    [2013-01-15 Tue 15:29]
-   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-   :END:
-    - tight coupling to frameworks
-    - ... and from view code to model code 
-    - callback and binding hell
-    - testing requires a lot of mocks and fixtures
-
-** Step 2
-   :PROPERTIES:
-   :ID:       d943c85e-398b-409c-84a3-45fbbcc3cf0d
-   :ADDED:    [2013-01-22 Tue 13:46]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-   From 
-
-   "Methods on Mutable Models"
-
-   to
-
-   Domain Events 
-
-   on
-
-   Immutable Domain State Records
-
-** Step 3
-   :PROPERTIES:
-   :ID:       7e700bd8-febf-434d-a9b2-83022d12b4ee
-   :ADDED:    [2013-01-22 Tue 13:55]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-
-UI Event Bindings
-
-publish 
-
-Domain Events
-
-** Step 4
-   :PROPERTIES:
-   :ID:       a901c5d3-2d9a-4a06-b7b3-1d34dd280f2b
-   :ADDED:    [2013-01-22 Tue 13:59]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-"React"
-
-to 
-
-Domain Events
-  
-** [[file:assets/summary_diag.png]]
-   :PROPERTIES:
-   :ID:       53a716a2-a5ab-4d3e-956d-485a0fbe5bed
-   :ADDED:    [2013-01-22 Tue 14:07]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
 
 * State Reduction 101
   :PROPERTIES:
@@ -403,7 +317,14 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
    :ADDED:    [2013-01-22 Tue 15:14]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
- what people do with Actors (Erlang and Akka)
+ what some people do with "Actors"
+
+ (Erlang and Akka)
+** ... Not our Focus
+   :PROPERTIES:
+   :ID:       ab6a6749-b8b0-459e-9016-624bf267d583
+   :ADDED:    [2013-01-24 Thu 11:44]
+   :END:
 ** What about Client-side?
    :PROPERTIES:
    :ID:       7c4a5710-4202-4a3b-aae6-1e435359c903
@@ -432,12 +353,133 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
   - test cases and fixture generation (generative style)
 
 
+* Goal: Kill Complexity
+  :PROPERTIES:
+  :ID:       1ec8b943-f488-4a08-8b63-6e61756b23e2
+  :ADDED:    [2013-01-22 Tue 13:22]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+
+ [[file:assets/spaghetti-monster.jpg]] 
+** But how?
+   :PROPERTIES:
+   :ID:       bcc2468a-7184-442e-85c9-165a676da3d1
+   :ADDED:    [2013-01-22 Tue 13:38]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+* 4 step plan
+  :PROPERTIES:
+  :ID:       fc2210ff-2c2b-485b-aeba-00772ff9eef9
+  :ADDED:    [2013-01-22 Tue 14:07]
+  :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+  :END:
+To Event Sourcing Nirvana
+** Step 1
+   :PROPERTIES:
+   :ID:       64970cb7-5c56-4f20-a60b-e9b8c9152dca
+   :ADDED:    [2013-01-22 Tue 13:39]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+   Separate Model from View
+** Could use MV* for Step 1
+   :PROPERTIES:
+   :ID:       d9c27aa5-19db-4126-aa7a-6acbbf76026b
+   :ADDED:    [2013-01-22 Tue 13:41]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+http://backbonejs.org/
+
+http://knockoutjs.com/
+
+http://angularjs.org/
+
+http://emberjs.com/
+
+   which do you choose?
+
+** Only gets you so far ...
+   :PROPERTIES:
+   :ID:       44a57f51-624a-4813-923d-72041ef4d591
+   :ADDED:    [2013-01-15 Tue 15:29]
+   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
+   :END:
+    - tight coupling to frameworks
+    - ... and from view code to model code 
+    - callback and binding hell
+    - testing requires a lot of mocks and fixtures
+
+** Step 2
+   :PROPERTIES:
+   :ID:       d943c85e-398b-409c-84a3-45fbbcc3cf0d
+   :ADDED:    [2013-01-22 Tue 13:46]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+   From 
+
+   "Methods on Mutable Models"
+
+   to
+
+   Domain Events 
+
+   on
+
+   Immutable Domain State Records
+
+** Step 3
+   :PROPERTIES:
+   :ID:       7e700bd8-febf-434d-a9b2-83022d12b4ee
+   :ADDED:    [2013-01-22 Tue 13:55]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+
+UI Event Bindings
+
+publish 
+
+Domain Events
+
+** Step 4
+   :PROPERTIES:
+   :ID:       a901c5d3-2d9a-4a06-b7b3-1d34dd280f2b
+   :ADDED:    [2013-01-22 Tue 13:59]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+"React"
+
+to 
+
+Domain Events
+  
+** summary diagram
+   :PROPERTIES:
+   :ID:       53a716a2-a5ab-4d3e-956d-485a0fbe5bed
+   :ADDED:    [2013-01-22 Tue 14:07]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+[[file:assets/summary_diag.png]]
 * Slides Demo
   :PROPERTIES:
   :ID:       15c0642f-faec-4eb7-ab75-6aff5ff4a21d
   :ADDED:    [2013-01-22 Tue 13:29]
   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
   :END:
+Event Sourced 
+
+HTML Slideshow
+
+with 
+
+Synchronized 
+
+Remote Control & Slaves
+** Read the code
+   :PROPERTIES:
+   :ID:       342d45f9-b649-4b23-865e-7f0ec115c93a
+   :ADDED:    [2013-01-24 Thu 09:44]
+   :END:
+https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/
 ** Starting point
    :PROPERTIES:
    :ID:       d26f75e8-e8e7-4af9-97bf-b972d0b0daac
@@ -452,26 +494,88 @@ State in the DOM
 
 UI event handling directly bound to state.
 
-** Hard to extend ...
+** Reveal.js is pretty
    :PROPERTIES:
    :ID:       59bfd992-5211-46a2-be0a-799ca1210eb4
    :ADDED:    [2013-01-22 Tue 15:01]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
+But
 
-** Skipping an MV* re-implementation
+hard to extend ...
+* Follow the 4 Step Plan
+  :PROPERTIES:
+  :ID:       525c589c-da1a-4c5c-b6d6-13587c289e11
+  :ADDED:    [2013-01-24 Thu 11:17]
+  :CLOCK-WHEN-ADDED: 950765c2-5a24-4734-ad05-39c8033f8c5b
+  :END:
+** Step 1+2: domain model
    :PROPERTIES:
-   :ID:       ac6087b3-578a-45b7-9085-b4bd5d1b1415
-   :ADDED:    [2013-01-15 Tue 15:52]
-   :CLOCK-WHEN-ADDED: 19abdd4a-3256-4255-85bb-ca6a252024c0
-   :END:
-     
-** Straight to rx.js + faye
-   :PROPERTIES:
-   :ID:       6bc74694-410d-41a5-be72-a6d223d1be1e
-   :ADDED:    [2013-01-22 Tue 15:05]
+   :ID:       32496149-7449-46eb-b170-de76e47db7d0
+   :ADDED:    [2013-01-22 Tue 16:59]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee%0A][code: app.core.coffee]]
+
+Simple records
+
+No Framework subclassing
+
+Reduction of events ⇒ Event Sourced
+   :PROPERTIES:
+   :ID:       ec1d7e53-a272-4ebb-a901-f7dd87c30f76
+   :ADDED:    [2013-01-24 Thu 11:17]
+   :CLOCK-WHEN-ADDED: 950765c2-5a24-4734-ad05-39c8033f8c5b
+   :END:
+** Step 3
+   :PROPERTIES:
+   :ID:       83deb5fb-3efd-4e29-ba25-84488be7fa87
+   :ADDED:    [2013-01-24 Thu 11:19]
+   :CLOCK-WHEN-ADDED: 950765c2-5a24-4734-ad05-39c8033f8c5b
+   :END:
+UI Bindings  \nbsp ⇒ \nbsp Domain Events
+
+[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.ui.coffee][code: app.ui.coffee]]
+
+** Step 4
+   :PROPERTIES:
+   :ID:       7a83de3c-e7aa-4fd9-9cb6-d09c99aafb1c
+   :ADDED:    [2013-01-24 Thu 11:19]
+   :CLOCK-WHEN-ADDED: 950765c2-5a24-4734-ad05-39c8033f8c5b
+   :END:
+"React" to Domain Events
+
+- Reduce new state ([[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.coffee#L55][code]])
+- Update UI with new state ([[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.coffee#L56][code]])
+
+** ... summary diagram
+   :PROPERTIES:
+   :ID:       a57873d4-fc80-44bc-9679-2eae31de00f8
+   :ADDED:    [2013-01-22 Tue 16:39]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+TODO
+* Tools used
+  :PROPERTIES:
+  :ID:       79ae15cf-9c9a-4067-88fa-c7723cd4fcc0
+  :ADDED:    [2013-01-24 Thu 11:08]
+  :CLOCK-WHEN-ADDED: 950765c2-5a24-4734-ad05-39c8033f8c5b
+  :END:
+
+** Pubsub Pipes 
+   :PROPERTIES:
+   :ID:       8c793ec5-138d-4826-8128-bb22b507f571
+   :ADDED:    [2013-01-22 Tue 14:54]
+   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
+   :END:
+DIAGRAM
+Rx.js == event streams (aka observables)
+
+ UI events => Domain Events 
+
+Faye == channels (network pubsub)
+
+ Domain Events => Server => other browsers
 
 ** Rx.js 
    :PROPERTIES:
@@ -498,70 +602,7 @@ inspired by similar work in Haskell
 
 similar to socket.io
 
-** Pipes
-   :PROPERTIES:
-   :ID:       8c793ec5-138d-4826-8128-bb22b507f571
-   :ADDED:    [2013-01-22 Tue 14:54]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-Rx.js == event streams (aka observables)
 
-Faye == channels (network pubsub)
-** [[file:assets/summary_diag.png]]
-   :PROPERTIES:
-   :ID:       a57873d4-fc80-44bc-9679-2eae31de00f8
-   :ADDED:    [2013-01-22 Tue 16:39]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-** UI Events
-   :PROPERTIES:
-   :ID:       37b624c8-ebe1-401c-9cb1-93e2058bbadc
-   :ADDED:    [2013-01-22 Tue 16:40]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee#L48][DOM UI Events to Domain events]]
-
-[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.ui.coffee#L118][Domain events into rx.js eventstream]]
-
-** Consume Domain Events From UI
-   :PROPERTIES:
-   :ID:       94774353-cee0-420d-a683-d11d266a1fcd
-   :ADDED:    [2013-01-22 Tue 16:57]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.coffee#L80][UI Eventstream to domain state reducer]]
-** damn simple domain model
-   :PROPERTIES:
-   :ID:       32496149-7449-46eb-b170-de76e47db7d0
-   :ADDED:    [2013-01-22 Tue 16:59]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee%0A][app.core.coffee]]
-
-Simple records
-
-No Framework subclassing
-
-** Reduce new state
-   :PROPERTIES:
-   :ID:       c38c7462-e4ec-419c-92aa-20ac1c86117c
-   :ADDED:    [2013-01-22 Tue 17:05]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.core.coffee#L80][Immutable State Record]]
-** [[file:assets/summary_diag.png]]
-   :PROPERTIES:
-   :ID:       0497cb0e-d173-46bd-9797-26e474c4cc6e
-   :ADDED:    [2013-01-22 Tue 17:07]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-** update UI from new state
-   :PROPERTIES:
-   :ID:       feaa114a-1b1b-4490-9994-e76178c3a7af
-   :ADDED:    [2013-01-22 Tue 17:07]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-[[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.ui.reveal.coffee#L3][View updater fn]]
 * Testing benefits
   :PROPERTIES:
   :ID:       182de6ac-ea75-4cd2-9167-82c4cd56fcfc
