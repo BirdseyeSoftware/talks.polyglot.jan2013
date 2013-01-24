@@ -25,9 +25,9 @@ move = (slideDeck, direction, fromSlide) ->
   if not fromSlide
     fromSlide = slideDeck.slides[0]
 
-  tryHorVerMove = (idxs, fallbackIdxs) ->
+  tryHorVerMove = (idxs) ->
     newslide = slideDeck.get(_.extend({h: fromSlide.h, v: fromSlide.v}, idxs))
-    newslide or (fallbackIdxs and tryHorVerMove(fallbackIdxs)) or  fromSlide
+    newslide or fromSlide
 
   fs = fromSlide
   switch direction
@@ -40,9 +40,9 @@ move = (slideDeck, direction, fromSlide) ->
     when "down"
       tryHorVerMove(v: fs.v + 1)
     when "left"
-      tryHorVerMove({h: fs.h - 1}, {h: fs.h - 1, v: 0})
+      tryHorVerMove({h: fs.h - 1, v: 0})
     when "right"
-      tryHorVerMove({h: fs.h + 1}, {h: fs.h + 1, v: 0})
+      tryHorVerMove({h: fs.h + 1, v: 0})
 
 ################################################################################
 EVENTS =
@@ -91,8 +91,7 @@ movementHandler = (state, ev) ->
   paused: false
 
 EventHandlers =
-  AskQuestion: (state, ev) ->
-     state
+  AskQuestion: (state, ev) -> state
   ToggleOverview: (state, ev) ->
     mode: toggle(state.mode, [Modes.overview, Modes.normal])
 
