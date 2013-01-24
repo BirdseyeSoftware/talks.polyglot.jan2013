@@ -1,9 +1,0 @@
-* preamble                                                         :noexport:
-  :PROPERTIES:
-  :ID:       85cae6d5-b9cd-477a-82ae-d66ddee43a71
-  :ADDED:    [2013-01-15 Tue 14:15]
-  :CLOCK-WHEN-ADDED: 0561c461-4727-4c1e-9cae-1d057b59f178
-  :END:
-#+FILETAGS: birdseye
-#+CATEGORY: bsw
-#+STARTUP: hidestars hideblocks
