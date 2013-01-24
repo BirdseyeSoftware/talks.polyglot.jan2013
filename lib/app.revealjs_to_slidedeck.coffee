@@ -8,11 +8,11 @@ stripRevealIdPrefix = (id) ->
     if m? then m[1] else id
 
 indexSlide = (acc, slideSection) ->
+  parent = slideSection.parentNode
+  nested = parent.tagName == 'SECTION' and $(parent).hasClass('stack')
   if not acc
-    {h:0, v:0}                  #first slide
+    {h:0, v:0, stackParent: parent if nested} #first slide
   else
-    parent = slideSection.parentNode
-    nested = parent.tagName == 'SECTION' and $(parent).hasClass('stack')
     if not nested
       {h: 1 + acc.h, v:0}
     else
