@@ -9,52 +9,6 @@
 #+FILETAGS: birdseye
 #+CATEGORY: bsw
 #+STARTUP: hidestars hideblocks
-* pre-talk
-  :PROPERTIES:
-  :ID:       e814754d-2e97-4676-8d2b-14768db6c800
-  :ADDED:    [2013-01-24 Thu 09:18]
-  :END:
-** [[file:assets/mario_beat.gif]]
-   :PROPERTIES:
-   :ID:       71a71e4e-356e-46f0-9e51-49cfaa879a30
-   :ADDED:    [2013-01-22 Tue 16:35]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-*** notes                                                          :noexport:
-   :PROPERTIES:
-   :ID:       1c5c6e32-0cc1-4bba-aed5-733f7ca8eec2
-   :ADDED:    [2013-01-22 Tue 16:37]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-
-http://thechive.com/2011/02/24/video-game-gifs-are-what-i-want-to-see-at-the-pearly-gates/
-
-** [[file:assets/vandam.gif]]
-   :PROPERTIES:
-   :ID:       a4486f84-b870-4b48-b701-f0c0547192ef
-   :ADDED:    [2013-01-22 Tue 16:34]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-** [[file:assets/conan.gif]]
-   :PROPERTIES:
-   :ID:       4ddaf7e0-40aa-4674-a9de-7dba9c7d1637
-   :ADDED:    [2013-01-22 Tue 16:33]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-** [[file:assets/mike_tyson_s_punchout.gif]]
-   :PROPERTIES:
-   :ID:       b5a8f5e7-90e4-46ed-8874-51c4a9bd7cde
-   :ADDED:    [2013-01-22 Tue 16:30]
-   :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
-   :END:
-* Hello!
-  :PROPERTIES:
-  :ID:       1b98e6e2-d6be-4f69-b16b-f7584b4d841f
-  :ADDED:    [2013-01-18 Fri 14:05]
-  :CLOCK-WHEN-ADDED: 53a8d1a0-84d0-4b88-b435-bd9088b200f4
-  :END:
-#  Warm up // animated gif of an arcade game youtube Contra Video
- 
 * The Mighty Event
   :PROPERTIES:
   :ID:       f7b0f8fe-8407-496e-b98a-e18a42382b89
