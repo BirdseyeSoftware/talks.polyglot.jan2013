@@ -1,0 +1,14 @@
+This is the source of the slides and the demo (a hacked version of
+Reveal.js) that we presented at
+http://www.meetup.com/PolyglotVancouver/events/97574962/
+
+View the slides here: http://polyglot.birdseye-sw.com/ (login first).
+
+If you login from multiple devices using the same account (e.g. laptop
+and tablet) your state will be synchronized between them.
+
+Touch gestures:
+
+  - double tap to move to next slide
+  - swipe to move in a particular direction
+  - hold one finger down to see the overview
