@@ -110,9 +110,8 @@ revealNavBarClickEventstream = ->
 
 touchEventToSlideEvent = (ev) ->
   switch ev.type
-    when "hold" then EVENTS.TogglePause()
-    #when "tap" then EVENTS.Next()
-    when "doubletap" then askQuestion()
+    when "hold" then EVENTS.ToggleOverview() #EVENTS.TogglePause()
+    when "doubletap" then EVENTS.Next() #askQuestion()
     when "swipe" then REV_DIRS_TO_EVENTS[ev.direction]?()
 
 exports.uiSlideEventstream = () ->
