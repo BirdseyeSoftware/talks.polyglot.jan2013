@@ -265,7 +265,7 @@ http://msdn.microsoft.com/en-us/library/jj591559.aspx
  - natural way of describing software (UIs, etc.) 
    ==structural vs behavioural model==
 
-** Similar to 
+** Similar to                                                      :noexport:
    :PROPERTIES:
    :ID:       c244f1da-da84-4ebb-8010-a86f6080c660
    :ADDED:    [2013-01-22 Tue 15:14]
