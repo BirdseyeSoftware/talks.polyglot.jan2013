@@ -412,6 +412,7 @@ Domain Events
    :ADDED:    [2013-01-22 Tue 14:07]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
+(we're working on a better diag!)
 [[file:assets/summary_diag.png]]
 * Slides Demo
   :PROPERTIES:
@@ -502,13 +503,14 @@ UI Bindings  \nbsp ⇒ \nbsp Domain Events
 - Reduce new state ([[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.coffee#L55][code]])
 - Update UI with new state ([[https://github.com/BirdseyeSoftware/talks.polyglot.jan2013/blob/master/lib/app.coffee#L56][code]])
 
-** ... summary diagram
+** Review
    :PROPERTIES:
    :ID:       a57873d4-fc80-44bc-9679-2eae31de00f8
    :ADDED:    [2013-01-22 Tue 16:39]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-TODO
+(we're working on a better diag!)
+[[file:assets/summary_diag.png]]
 * Tools used
   :PROPERTIES:
   :ID:       79ae15cf-9c9a-4067-88fa-c7723cd4fcc0
@@ -516,18 +518,21 @@ TODO
   :CLOCK-WHEN-ADDED: 950765c2-5a24-4734-ad05-39c8033f8c5b
   :END:
 
-** Pubsub Pipes 
+** 2 Types of Pubsub Pipes 
    :PROPERTIES:
    :ID:       8c793ec5-138d-4826-8128-bb22b507f571
    :ADDED:    [2013-01-22 Tue 14:54]
    :CLOCK-WHEN-ADDED: ae3ae532-9e8d-4017-9e05-6268e73cc66d
    :END:
-DIAGRAM
-Rx.js == event streams (aka observables)
+\nbsp
+
+Rx.js for inproc event streams (aka observables)
 
  UI events => Domain Events 
 
-Faye == channels (network pubsub)
+\nbsp
+
+Faye for network pubsub
 
  Domain Events => Server => other browsers
 
