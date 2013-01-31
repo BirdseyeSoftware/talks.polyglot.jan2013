@@ -7,12 +7,10 @@ config['Browser Tests'] = {
         path: "/",
         file: "build/slides.html"
     }],
-    tests: ["test/browser_test.js"]
+    tests: []
 };
 
 config['Node Tests'] = {
     environment: 'node',
-    tests: ["test/node_test.js",
-            "test/app.core.test.js"
-           ]
+    tests: ["test/app.core.test.js"]
 };

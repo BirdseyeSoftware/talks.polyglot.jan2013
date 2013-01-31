@@ -41,7 +41,7 @@ buster.testCase "app.core",
 
   "event ctors": ->
     for evtype, ctor of EVENTS
-      if evtype == 'SelectSlide'
+      if evtype in ['AskQuestion', 'SelectSlide']
         continue
       ev = ctor()
       assert ev
